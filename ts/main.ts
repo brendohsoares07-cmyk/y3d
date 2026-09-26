@@ -48,6 +48,7 @@ function iniciarBotoesFavoritos(): void {
       const favoritado = alternarFavorito(id);
       marcarFavorito(botao, favoritado);
       mostrarToast(favoritado ? 'Adicionado aos favoritos' : 'Removido dos favoritos');
+      atualizarBadgeFavoritos();
     });
   });
 }
@@ -55,6 +56,38 @@ function iniciarBotoesFavoritos(): void {
 function marcarFavorito(botao: HTMLButtonElement, ativo: boolean): void {
   botao.setAttribute('aria-pressed', String(ativo));
   botao.textContent = ativo ? '♥' : '♡';
+}
+
+/** Bolinha com o número de favoritos, ao lado do ícone de coração no cabeçalho (em todas as páginas). */
+function atualizarBadgeFavoritos(): void {
+  const badge = document.getElementById('fav-count');
+  if (!badge) return;
+  const total = lerFavoritos().length;
+  badge.textContent = String(total);
+  badge.hidden = total === 0;
+}
+
+/** Página favoritos.php: mostra só os cartões de produto cujo id está nos favoritos salvos. */
+function iniciarPaginaFavoritos(): void {
+  const grid = document.getElementById('favoritos-grid');
+  const vazio = document.getElementById('favoritos-vazio');
+  const contagem = document.getElementById('favoritos-contagem');
+  if (!grid || !vazio) return;
+
+  const favoritos = lerFavoritos();
+  const itens = grid.querySelectorAll<HTMLElement>('[data-produto-id]');
+  let visiveis = 0;
+
+  itens.forEach((item) => {
+    const id = Number(item.dataset.produtoId);
+    if (favoritos.includes(id)) {
+      item.hidden = false;
+      visiveis++;
+    }
+  });
+
+  vazio.hidden = visiveis > 0;
+  if (contagem) contagem.textContent = `${visiveis} produto${visiveis === 1 ? '' : 's'}`;
 }
 
 function iniciarSeletorQuantidade(): void {
@@ -162,6 +195,8 @@ function iniciarLoginGoogle(): void {
 
 document.addEventListener('DOMContentLoaded', () => {
   iniciarBotoesFavoritos();
+  atualizarBadgeFavoritos();
+  iniciarPaginaFavoritos();
   iniciarSeletorQuantidade();
   iniciarGaleriaProduto();
   iniciarCalculoFrete();

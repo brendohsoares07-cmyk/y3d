@@ -43,12 +43,41 @@ function iniciarBotoesFavoritos() {
             const favoritado = alternarFavorito(id);
             marcarFavorito(botao, favoritado);
             mostrarToast(favoritado ? 'Adicionado aos favoritos' : 'Removido dos favoritos');
+            atualizarBadgeFavoritos();
         });
     });
 }
 function marcarFavorito(botao, ativo) {
     botao.setAttribute('aria-pressed', String(ativo));
     botao.textContent = ativo ? '♥' : '♡';
+}
+function atualizarBadgeFavoritos() {
+    const badge = document.getElementById('fav-count');
+    if (!badge)
+        return;
+    const total = lerFavoritos().length;
+    badge.textContent = String(total);
+    badge.hidden = total === 0;
+}
+function iniciarPaginaFavoritos() {
+    const grid = document.getElementById('favoritos-grid');
+    const vazio = document.getElementById('favoritos-vazio');
+    const contagem = document.getElementById('favoritos-contagem');
+    if (!grid || !vazio)
+        return;
+    const favoritos = lerFavoritos();
+    const itens = grid.querySelectorAll('[data-produto-id]');
+    let visiveis = 0;
+    itens.forEach((item) => {
+        const id = Number(item.dataset.produtoId);
+        if (favoritos.includes(id)) {
+            item.hidden = false;
+            visiveis++;
+        }
+    });
+    vazio.hidden = visiveis > 0;
+    if (contagem)
+        contagem.textContent = `${visiveis} produto${visiveis === 1 ? '' : 's'}`;
 }
 function iniciarSeletorQuantidade() {
     const menos = document.querySelector('[data-qty-menos]');
@@ -151,6 +180,8 @@ function iniciarLoginGoogle() {
 }
 document.addEventListener('DOMContentLoaded', () => {
     iniciarBotoesFavoritos();
+    atualizarBadgeFavoritos();
+    iniciarPaginaFavoritos();
     iniciarSeletorQuantidade();
     iniciarGaleriaProduto();
     iniciarCalculoFrete();
