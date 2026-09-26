@@ -152,9 +152,10 @@ function iniciarMostrarSenha(): void {
 }
 
 function iniciarLoginGoogle(): void {
+  // Este botão só aparece quando includes/config.php ainda não tem um Client ID do Google configurado.
   document.querySelectorAll('[data-login-google]').forEach((botao) => {
     botao.addEventListener('click', () => {
-      mostrarToast('Login com Google indisponível na versão de demonstração');
+      mostrarToast('Login com Google ainda não configurado: veja includes/config.php');
     });
   });
 }

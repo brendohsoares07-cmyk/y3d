@@ -1,0 +1,4 @@
+<?php
+// Copie este arquivo para includes/config.local.php e cole o seu Client ID do Google.
+// includes/config.local.php está no .gitignore e nunca deve ser commitado.
+define('GOOGLE_CLIENT_ID', 'coloque-aqui-o-seu-client-id.apps.googleusercontent.com');

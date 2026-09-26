@@ -8,3 +8,9 @@ node_modules/
 dist/
 *.log
 .DS_Store
+
+# contas da loja (dados pessoais: não deve ir para o controle de versão)
+/data/usuarios.json
+
+# configuração local com segredos (Client ID do Google)
+includes/config.local.php

@@ -7,6 +7,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 require_once __DIR__ . '/dados_produtos.php';
+require_once __DIR__ . '/contas.php';
 
 if (!isset($_SESSION['carrinho']) || !is_array($_SESSION['carrinho'])) {
     // formato: [ id_produto => quantidade ]
@@ -128,7 +129,7 @@ function y3d_usuario(): ?array
     return isset($_SESSION['usuario']) && is_array($_SESSION['usuario']) ? $_SESSION['usuario'] : null;
 }
 
-/** Como não há campo "nome" no login, deriva o nome a partir do e-mail: gabriel.lima@x.com -> Gabriel Lima */
+/** Só usado como último recurso, se o Google não mandar um nome no perfil. */
 function y3d_nome_do_email(string $email): string
 {
     $parte = explode('@', $email)[0];
@@ -147,15 +148,20 @@ function y3d_iniciais(string $nome): string
     return mb_strtoupper($ini);
 }
 
-/** Registra o login na sessão. A senha NÃO é guardada: só o tamanho, para mostrar mascarada. */
-function y3d_fazer_login(string $email, string $senha): void
+/**
+ * Registra o login na sessão a partir de uma conta real (vinda de contas.php).
+ * A senha não é guardada na sessão, só os dados públicos da conta.
+ */
+function y3d_entrar(array $conta): void
 {
     session_regenerate_id(true);
     $_SESSION['usuario'] = [
-        'nome'          => y3d_nome_do_email($email),
-        'email'         => $email,
-        'senha_tamanho' => mb_strlen($senha),
-        'login_em'      => time(),
+        'id'        => (int) ($conta['id'] ?? 0),
+        'nome'      => (string) ($conta['nome'] ?? ''),
+        'email'     => (string) ($conta['email'] ?? ''),
+        'foto'      => $conta['foto'] ?? null,
+        'google_id' => $conta['google_id'] ?? null,
+        'login_em'  => time(),
     ];
 }
 

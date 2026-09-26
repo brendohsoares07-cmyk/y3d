@@ -32,6 +32,9 @@ unset($_SESSION['flash']);
       <input type="search" name="busca" placeholder="Buscar produtos, modelos ou categorias..." value="<?= htmlspecialchars($_GET['busca'] ?? '') ?>">
     </form>
     <div class="hdr-icons">
+      <a href="<?= htmlspecialchars(INSTAGRAM_URL) ?>" class="ibtn ibtn-instagram" title="Instagram da Y3D Creations" aria-label="Instagram da Y3D Creations" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".9" fill="currentColor"/></svg>
+      </a>
       <a href="<?= $usuarioLogado ? 'conta.php' : 'login.php' ?>" class="ibtn" title="Minha conta">👤</a>
       <button type="button" class="ibtn" id="btn-favoritos" title="Favoritos">♡</button>
       <a href="carrinho.php" class="ibtn" title="Carrinho">

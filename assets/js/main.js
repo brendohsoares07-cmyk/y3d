@@ -103,14 +103,15 @@ function iniciarCalculoFrete() {
     };
     const dinheiro = (valor) => `R$ ${valor.toFixed(2).replace('.', ',')}`;
     const atualizarFrete = () => {
+        var _a, _b;
         const cep = campoCep.value.replace(/\D/g, '');
-        const subtotal = Number(subtotalElemento.dataset.checkoutSubtotal ?? '0');
+        const subtotal = Number((_a = subtotalElemento.dataset.checkoutSubtotal) !== null && _a !== void 0 ? _a : '0');
         if (cep.length !== 8) {
             freteElemento.textContent = 'Informe seu CEP';
             totalElemento.textContent = dinheiro(subtotal);
             return;
         }
-        const frete = subtotal >= 150 ? 0 : (faixasPorRegiao[cep[0]] ?? 39.9);
+        const frete = subtotal >= 150 ? 0 : ((_b = faixasPorRegiao[cep[0]]) !== null && _b !== void 0 ? _b : 39.9);
         freteElemento.textContent = frete === 0 ? 'Grátis' : dinheiro(frete);
         totalElemento.textContent = dinheiro(subtotal + frete);
     };
@@ -141,9 +142,10 @@ function iniciarMostrarSenha() {
     });
 }
 function iniciarLoginGoogle() {
+    // Este botão só aparece quando includes/config.php ainda não tem um Client ID do Google configurado.
     document.querySelectorAll('[data-login-google]').forEach((botao) => {
         botao.addEventListener('click', () => {
-            mostrarToast('Login com Google indisponível na versão de demonstração');
+            mostrarToast('Login com Google ainda não configurado: veja includes/config.php');
         });
     });
 }

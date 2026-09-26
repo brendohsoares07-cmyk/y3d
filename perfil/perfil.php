@@ -8,7 +8,7 @@ if (!$usuario) {
 }
 
 $loginEm = date('d/m/Y \à\s H:i', (int) ($usuario['login_em'] ?? time()));
-$senhaMascarada = str_repeat('•', max(6, min(20, (int) ($usuario['senha_tamanho'] ?? 6))));
+$senhaMascarada = !empty($usuario['google_id']) ? 'Login pelo Google (sem senha na Y3D)' : str_repeat('•', 10);
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">

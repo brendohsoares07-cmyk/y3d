@@ -5,45 +5,44 @@ if (y3d_usuario()) {
     exit;
 }
 
-// Mensagens vindas do fluxo de login com Google (google_login.php redireciona para cá com ?erro=codigo)
-$mensagensGoogle = [
-    'nao_cadastrado'    => 'Essa conta Google ainda não tem cadastro na Y3D Creations. Crie uma conta primeiro.',
-    'token_invalido'    => 'Não foi possível confirmar sua conta Google. Tente novamente.',
-    'sem_configuracao'  => 'O login com Google ainda não foi configurado neste site.',
-    'falha'             => 'Não foi possível falar com o Google agora. Tente novamente em instantes.',
-];
-$codigoErroGoogle = (string) ($_GET['erro'] ?? '');
-$erro = $mensagensGoogle[$codigoErroGoogle] ?? null;
+$erro  = null;
+$nome  = '';
+$email = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = trim($_POST['email'] ?? '');
-    $senha = (string) ($_POST['senha'] ?? '');
+    $nome     = trim($_POST['nome'] ?? '');
+    $email    = trim($_POST['email'] ?? '');
+    $senha    = (string) ($_POST['senha'] ?? '');
+    $confirma = (string) ($_POST['confirma'] ?? '');
 
-    if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    if ($nome === '') {
+        $erro = 'Digite seu nome.';
+    } elseif ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $erro = 'Digite um e-mail válido.';
     } elseif (mb_strlen($senha) < 6) {
         $erro = 'A senha deve ter pelo menos 6 caracteres.';
+    } elseif ($senha !== $confirma) {
+        $erro = 'A confirmação da senha não é igual à senha.';
     } else {
-        $conta = y3d_conta_por_email($email);
-        // mesma mensagem para e-mail inexistente e senha errada (não revela quais e-mails existem)
-        if (!$conta || !y3d_verificar_senha($conta, $senha)) {
-            $erro = 'E-mail ou senha incorretos.';
+        $conta = y3d_criar_conta($nome, $email, $senha);
+        if ($conta === null) {
+            $erro = 'Já existe uma conta com esse e-mail. Tente entrar em vez de cadastrar.';
         } else {
             y3d_entrar($conta);
-            $_SESSION['flash'] = 'Login realizado com sucesso!';
+            $_SESSION['flash'] = 'Conta criada! Bem-vindo(a) à Y3D Creations.';
             header('Location: conta.php');
             exit;
         }
     }
 }
-$lgPrefix = 'lg';
+$lgPrefix = 'cad';
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Entrar · Y3D Creations</title>
+<title>Criar conta · Y3D Creations</title>
 <link rel="stylesheet" href="assets/css/style.css">
 <link rel="icon" type="image/svg+xml" href="assets/img/logo-icon.svg">
 </head>
@@ -59,7 +58,7 @@ $lgPrefix = 'lg';
 
   <section class="lg-side">
     <div class="lg-card">
-      <?php require __DIR__ . '/includes/form_login.php'; ?>
+      <?php require __DIR__ . '/includes/form_cadastro.php'; ?>
     </div>
   </section>
 </div>
