@@ -1,0 +1,79 @@
+# Y3D Creations — 4 serviços: nginx (proxy) → frontend + backend → mysql
+# Uso: cp .env.example .env  e depois  docker compose up --build
+
+name: y3d-creations
+
+services:
+  # ---------- Banco de dados ----------
+  db:
+    image: mysql:8.4
+    restart: unless-stopped
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql # persistência: os dados sobrevivem a reinícios
+      - ./database/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    networks:
+      - db_net # só o backend enxerga o banco
+
+  # ---------- API (Express + TypeScript) ----------
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    environment:
+      PORT: 3000
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_SECONDS: ${JWT_EXPIRES_SECONDS:-7200}
+      ADMIN_EMAILS: ${ADMIN_EMAILS:-}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app_net
+      - db_net
+
+  # ---------- Frontend (React compilado, servido por um Nginx interno) ----------
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    networks:
+      - app_net
+
+  # ---------- Proxy reverso: ÚNICO serviço exposto fora do Docker ----------
+  nginx:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    ports:
+      - "${HTTP_PORT:-80}:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - public_net
+      - app_net
+
+networks:
+  public_net: # com acesso externo: apenas o nginx
+  app_net: # nginx ↔ frontend ↔ backend, sem acesso à internet
+    internal: true
+  db_net: # backend ↔ mysql, sem acesso à internet
+    internal: true
+
+volumes:
+  db_data:

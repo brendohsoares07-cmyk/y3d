@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES2019",
+    "module": "esnext",
+    "rootDir": "./ts",
+    "outDir": "./assets/js",
+    "strict": true,
+    "lib": ["ES2019", "DOM"],
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "sourceMap": false,
+    "noEmitOnError": true
+  },
+  "include": ["ts/**/*.ts"]
+}

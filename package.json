@@ -1,0 +1,11 @@
+{
+  "name": "y3d-creations",
+  "version": "1.0.0",
+  "description": "Y3D Creations - loja de modelos 3D (parte 1/2) em PHP, JS e TypeScript",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.2"
+  }
+}

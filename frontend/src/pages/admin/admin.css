@@ -1,0 +1,66 @@
+/* Painel admin (visual do arquivo original). Tudo dentro de .admin para não afetar o resto do app. */
+.admin {
+  --card: #0e1336; --bg2: #0c1130; --line: #1e2657; --txt: #eef0ff; --mut: #8b92c4;
+  --pink: #ff4fd8; --purple: #7c5cff; --cyan: #22d3ee; --orange: #ff9f43; --green: #34d399;
+  --grad: linear-gradient(135deg, #ff4fd8, #7c5cff);
+}
+.admin h1 { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; display: inline-block; }
+
+/* 1) KPIs em 3D */
+.admin .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 18px; margin-bottom: 22px; perspective: 1000px; }
+.admin .kpi { position: relative; background: linear-gradient(160deg, #131a4a, var(--card)); border: 1px solid var(--line); border-radius: 20px; padding: 20px;
+  transform-style: preserve-3d; transition: transform .15s ease-out, box-shadow .3s; box-shadow: 0 14px 30px rgba(0, 0, 0, .45); }
+.admin .kpi:hover { box-shadow: 0 22px 50px rgba(124, 92, 255, .35), 0 0 0 1px rgba(255, 79, 216, .4); }
+.admin .kpi .ico { width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; font-size: 20px; background: var(--grad);
+  transform: translateZ(30px); box-shadow: 0 10px 20px rgba(124, 92, 255, .5); margin-bottom: 14px; }
+.admin .kpi:nth-child(2) .ico { background: linear-gradient(135deg, #22d3ee, #7c5cff); }
+.admin .kpi:nth-child(3) .ico { background: linear-gradient(135deg, #ff9f43, #ff4fd8); }
+.admin .kpi:nth-child(4) .ico { background: linear-gradient(135deg, #34d399, #22d3ee); }
+.admin .kpi small { color: var(--mut); font-size: 12px; display: block; transform: translateZ(15px); }
+.admin .kpi strong { font-size: 26px; display: block; margin-top: 2px; transform: translateZ(25px); }
+
+/* painéis */
+.admin .admin-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 18px; margin-bottom: 22px; }
+.admin .panel { background: linear-gradient(160deg, #0f1540, var(--card)); border: 1px solid var(--line); border-radius: 20px; padding: 20px; box-shadow: 0 14px 30px rgba(0, 0, 0, .4); }
+.admin .panel h2 { font-size: 16px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+.admin .panel h2 em { font-style: normal; font-size: 11px; color: var(--cyan); letter-spacing: 2px; text-transform: uppercase; }
+.admin .empty { text-align: center; color: var(--mut); padding: 24px; }
+
+/* 2) gráfico de barras */
+.admin .chart { height: 210px; display: flex; align-items: flex-end; gap: 14px; perspective: 700px; padding-top: 10px; }
+.admin .bar { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 6px; font-size: 11px; color: var(--mut); }
+.admin .bar div { width: 100%; max-width: 46px; min-height: 3px; border-radius: 8px 8px 3px 3px; background: linear-gradient(180deg, var(--pink), var(--purple));
+  transform: rotateX(18deg); transform-origin: bottom; box-shadow: 0 0 18px rgba(255, 79, 216, .35), inset 0 2px 0 rgba(255, 255, 255, .35);
+  transition: .3s; animation: admin-grow .9s ease-out both; }
+.admin .bar div:hover { filter: brightness(1.3); transform: rotateX(0) scaleY(1.04); }
+@keyframes admin-grow { from { transform: rotateX(18deg) scaleY(0); } }
+
+/* 2) top clientes */
+.admin .top { padding: 0; margin: 0; }
+.admin .top li { list-style: none; display: flex; justify-content: space-between; align-items: center; padding: 11px 0; border-bottom: 1px dashed var(--line); font-size: 14px; }
+.admin .top li:last-child { border: 0; }
+.admin .top li > span { color: var(--cyan); font-weight: 600; }
+.admin .rank { display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 8px; background: var(--grad); font-size: 12px; margin-right: 10px; font-weight: 700; color: #fff; }
+
+/* 3) tabela de clientes */
+.admin .tools { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+.admin .tools input, .admin .tools select { width: auto; background: var(--bg2); border: 1px solid var(--line); color: var(--txt); padding: 11px 16px; border-radius: 999px; font-size: 14px; }
+.admin .tools input { flex: 1; min-width: 220px; }
+.admin .wrap { overflow-x: auto; }
+.admin table { width: 100%; border-collapse: separate; border-spacing: 0 8px; font-size: 14px; min-width: 700px; background: none; }
+.admin th { text-align: left; color: var(--mut); font-weight: 500; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; padding: 0 14px 4px; background: none; border: 0; }
+.admin td { padding: 14px; background: rgba(19, 26, 74, .55); border: 0; transition: .2s; }
+.admin td:first-child { border-radius: 14px 0 0 14px; }
+.admin td:last-child { border-radius: 0 14px 14px 0; }
+.admin tbody tr:hover td { background: rgba(124, 92, 255, .2); }
+.admin td.empty { border-radius: 14px; }
+.admin .who { display: flex; align-items: center; gap: 12px; }
+.admin .avatar { width: 36px; height: 36px; font-size: 13px; color: #fff; box-shadow: 0 0 18px rgba(255, 79, 216, .5); }
+.admin .cpf { font-family: Consolas, monospace; letter-spacing: .5px; }
+.admin .eye { background: none; border: 1px solid var(--line); color: var(--cyan); border-radius: 8px; padding: 2px 8px; margin-left: 8px; cursor: pointer; font-size: 12px; }
+.admin .eye:hover { background: rgba(34, 211, 238, .15); }
+.admin .tag { padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+.admin .ativo { background: rgba(52, 211, 153, .15); color: var(--green); }
+.admin .inativo { background: rgba(255, 159, 67, .15); color: var(--orange); }
+
+@media (max-width: 900px) { .admin .admin-grid { grid-template-columns: 1fr; } }

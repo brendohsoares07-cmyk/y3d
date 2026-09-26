@@ -1,0 +1,43 @@
+<svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bg-vermelho" cx="30%" cy="20%" r="90%">
+      <stop offset="0%" stop-color="#1b1250"/>
+      <stop offset="55%" stop-color="#0e1029"/>
+      <stop offset="100%" stop-color="#070819"/>
+    </radialGradient>
+    <linearGradient id="glow-vermelho" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff5c7a" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#ff5c7a" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="600" fill="url(#bg-vermelho)"/>
+  <circle cx="150" cy="120" r="190" fill="url(#glow-vermelho)"/>
+  <circle cx="470" cy="470" r="150" fill="url(#glow-vermelho)"/>
+
+  <!-- base do suporte -->
+  <rect x="150" y="430" width="300" height="26" rx="13" fill="#ff5c7a"/>
+  <rect x="150" y="430" width="300" height="26" rx="13" fill="none" stroke="#ff5c7a" stroke-opacity="0.4" stroke-width="2"/>
+
+  <!-- haste central -->
+  <rect x="284" y="200" width="32" height="240" rx="14" fill="#7a2030" stroke="#ff5c7a" stroke-width="4"/>
+
+  <!-- braços em V que seguram o controle -->
+  <path d="M300 220 L190 150" stroke="#7a2030" stroke-width="30" stroke-linecap="round"/>
+  <path d="M300 220 L190 150" stroke="#ff5c7a" stroke-width="30" stroke-linecap="round" stroke-opacity="0.35"/>
+  <path d="M300 220 L410 150" stroke="#7a2030" stroke-width="30" stroke-linecap="round"/>
+  <path d="M300 220 L410 150" stroke="#ff5c7a" stroke-width="30" stroke-linecap="round" stroke-opacity="0.35"/>
+
+  <!-- silhueta do controle apoiado -->
+  <g transform="translate(300 168)">
+    <path d="M-120 10 C-120 -35 -85 -55 -40 -55 L40 -55 C85 -55 120 -35 120 10
+             C120 45 95 60 60 60 C40 60 30 40 0 40 C-30 40 -40 60 -60 60
+             C-95 60 -120 45 -120 10 Z" fill="#7a2030" stroke="#ff5c7a" stroke-width="4" stroke-opacity="0.85"/>
+    <circle cx="-55" cy="-5" r="14" fill="none" stroke="#ff5c7a" stroke-width="4"/>
+    <circle cx="55" cy="-5" r="14" fill="none" stroke="#ff5c7a" stroke-width="4"/>
+    <circle cx="-10" cy="18" r="7" fill="#ff5c7a"/>
+    <circle cx="14" cy="18" r="7" fill="#ff5c7a" fill-opacity="0.6"/>
+  </g>
+
+  <text x="300" y="540" text-anchor="middle" font-family="Arial, sans-serif" font-size="26" font-weight="700" fill="#eef0ff">Suporte para Controle — Vermelho</text>
+  <text x="300" y="568" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#9096c4">Y3D Creations</text>
+</svg>
