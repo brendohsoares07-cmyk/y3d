@@ -27,8 +27,8 @@ const CartContext = createContext<CartContextValue | null>(null);
 const mesmoItem = (a: CartItem, b: CartItem) => a.produtoId === b.produtoId && a.personalizacao === b.personalizacao;
 const MAX_POR_ITEM = 99;
 
-/** Carrinho de compras guardado no navegador, separado por usuário. */
-export function CartProvider({ usuarioId, children }: { usuarioId: number; children: ReactNode }) {
+/** Carrinho de compras guardado no navegador, separado por usuário (ou "convidado" para quem não está logado). */
+export function CartProvider({ usuarioId, children }: { usuarioId: number | string; children: ReactNode }) {
   const [itens, setItens] = useStoredState<CartItem[]>(`y3d_carrinho_${usuarioId}`, []);
 
   const adicionar = useCallback(

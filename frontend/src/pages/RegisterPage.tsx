@@ -1,5 +1,5 @@
 import { FormEvent, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { AuthLayout } from "../components/layout/AuthLayout";
 import { Alert } from "../components/ui/Alert";
 import { Button } from "../components/ui/Button";
@@ -20,6 +20,9 @@ function SenhaChecklist({ senha }: { senha: string }) {
 
 export function RegisterPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const returnTo = searchParams.get("returnTo");
+  const linkLogin = returnTo ? `/login?returnTo=${encodeURIComponent(returnTo)}` : "/login";
   const { values, errors, setErrors, setField } = useFormState<Values>({
     nome: "", email: "", cpf: "", senha: "", confirmarSenha: "",
   });
@@ -45,7 +48,7 @@ export function RegisterPage() {
     setApiError(null);
     try {
       await authApi.register({ nome: values.nome, email: values.email, cpf: values.cpf, senha: values.senha });
-      navigate("/login", { state: { mensagem: "Cadastro realizado! Faça login para continuar." } });
+      navigate(linkLogin, { state: { mensagem: "Cadastro realizado! Faça login para continuar." } });
     } catch (e) {
       setApiError(e instanceof ApiError ? e.message : "Não foi possível cadastrar. Tente novamente.");
     } finally {
@@ -68,7 +71,7 @@ export function RegisterPage() {
           value={values.confirmarSenha} onChange={(v) => setField("confirmarSenha", v)} error={errors.confirmarSenha} />
         <Button type="submit" disabled={saving}>{saving ? "Cadastrando..." : "Cadastrar"}</Button>
         <p className="muted center">
-          Já tem conta? <Link to="/login">Entrar</Link>
+          Já tem conta? <Link to={linkLogin}>Entrar</Link>
         </p>
       </form>
     </AuthLayout>

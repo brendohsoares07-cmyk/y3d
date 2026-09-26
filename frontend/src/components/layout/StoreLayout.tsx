@@ -49,11 +49,17 @@ function Navbar() {
       </nav>
       <div className="store-actions">
         <SearchBox />
-        {usuario?.admin && <Link to="/admin" className="store-manage">Painel admin</Link>}
-        <Link to="/dashboard" className="store-manage">Gestão</Link>
-        <Link to="/loja/conta" className="icon-btn" aria-label="Minha conta" title={usuario?.nome}>
-          <UserIcon />
-        </Link>
+        {usuario ? (
+          <>
+            {usuario.admin && <Link to="/admin" className="store-manage">Painel admin</Link>}
+            <Link to="/dashboard" className="store-manage">Gestão</Link>
+            <Link to="/loja/conta" className="icon-btn" aria-label="Minha conta" title={usuario.nome}>
+              <UserIcon />
+            </Link>
+          </>
+        ) : (
+          <Link to="/login" className="store-manage">Entrar</Link>
+        )}
         <Link to="/loja/checkout" className="icon-btn" aria-label={`Carrinho com ${totalItens} itens`}>
           <CartIcon />
           {totalItens > 0 && <span className="cart-badge">{totalItens}</span>}
@@ -72,14 +78,15 @@ function Footer() {
   );
 }
 
-/** Estrutura da loja: barra de navegação, conteúdo da página e rodapé. Carrinho e favoritos são por usuário. */
+/** Estrutura da loja: barra de navegação, conteúdo da página e rodapé. Carrinho e favoritos são por usuário
+ *  (visitante sem login usa um carrinho "convidado"; favoritar exige login — ver ProductInfo). */
 export function StoreLayout() {
   const { usuario } = useAuth();
-  if (!usuario) return null;
+  const chave = usuario?.id ?? "convidado";
 
   return (
-    <CartProvider key={usuario.id} usuarioId={usuario.id}>
-      <FavoritesProvider key={usuario.id} usuarioId={usuario.id}>
+    <CartProvider key={chave} usuarioId={chave}>
+      <FavoritesProvider key={chave} usuarioId={chave}>
         <div className="store">
           <Navbar />
           <main className="store-main">

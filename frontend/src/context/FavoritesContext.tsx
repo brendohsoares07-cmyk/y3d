@@ -9,8 +9,8 @@ type FavoritesContextValue = {
 
 const FavoritesContext = createContext<FavoritesContextValue | null>(null);
 
-/** Lista de favoritos guardada no navegador, separada por usuário. */
-export function FavoritesProvider({ usuarioId, children }: { usuarioId: number; children: ReactNode }) {
+/** Lista de favoritos guardada no navegador, separada por usuário (ou "convidado" para quem não está logado). */
+export function FavoritesProvider({ usuarioId, children }: { usuarioId: number | string; children: ReactNode }) {
   const [ids, setIds] = useStoredState<number[]>(`y3d_favoritos_${usuarioId}`, []);
 
   const alternar = useCallback(

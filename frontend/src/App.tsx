@@ -32,22 +32,25 @@ export default function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/cadastro" element={<RegisterPage />} />
 
-      <Route element={<ProtectedRoute />}>
-        {/* Loja */}
-        <Route element={<StoreLayout />}>
-          <Route path="/loja" element={<StoreHomePage />} />
-          <Route path="/loja/produtos" element={<ProductsPage />} />
-          <Route path="/loja/produtos/:id" element={<ProductDetailPage />} />
+      {/* Loja: navegação (início, produtos, detalhe) é pública; checkout e conta exigem login */}
+      <Route element={<StoreLayout />}>
+        <Route path="/loja" element={<StoreHomePage />} />
+        <Route path="/loja/produtos" element={<ProductsPage />} />
+        <Route path="/loja/produtos/:id" element={<ProductDetailPage />} />
+        <Route path="/loja/sobre" element={<AboutPage />} />
+        <Route path="/loja/contato" element={<ContactPage />} />
+
+        <Route element={<ProtectedRoute />}>
           <Route path="/loja/checkout" element={<CheckoutPage />} />
-          <Route path="/loja/sobre" element={<AboutPage />} />
-          <Route path="/loja/contato" element={<ContactPage />} />
           <Route path="/loja/conta" element={<AccountPage />}>
             <Route index element={<AccountOrdersPage />} />
             <Route path="perfil" element={<ProfilePage />} />
             <Route path="favoritos" element={<FavoritesPage />} />
           </Route>
         </Route>
+      </Route>
 
+      <Route element={<ProtectedRoute />}>
         {/* Gestão (CRUDs) e painel admin */}
         <Route element={<AppLayout />}>
           <Route path="/dashboard" element={<DashboardPage />} />

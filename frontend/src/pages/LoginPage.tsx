@@ -1,5 +1,5 @@
 import { FormEvent, useState } from "react";
-import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { AuthLayout } from "../components/layout/AuthLayout";
 import { Alert } from "../components/ui/Alert";
 import { Button } from "../components/ui/Button";
@@ -15,13 +15,15 @@ export function LoginPage() {
   const { usuario, login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const returnTo = searchParams.get("returnTo");
   const aviso = (location.state as { mensagem?: string } | null)?.mensagem;
 
   const { values, errors, setErrors, setField } = useFormState<Values>({ email: "", senha: "" });
   const [apiError, setApiError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
-  if (usuario) return <Navigate to="/loja" replace />;
+  if (usuario) return <Navigate to={returnTo || "/loja"} replace />;
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
@@ -36,7 +38,7 @@ export function LoginPage() {
     setApiError(null);
     try {
       await login(values.email.trim(), values.senha);
-      navigate("/loja"); // área logada
+      navigate(returnTo || "/loja"); // área logada, ou de volta pra onde o usuário estava
     } catch (e) {
       setApiError(e instanceof ApiError ? e.message : "Não foi possível entrar. Tente novamente.");
     } finally {
@@ -55,7 +57,8 @@ export function LoginPage() {
           onChange={(v) => setField("senha", v)} error={errors.senha} />
         <Button type="submit" disabled={saving}>{saving ? "Entrando..." : "Entrar"}</Button>
         <p className="muted center">
-          Ainda não tem conta? <Link to="/cadastro">Cadastre-se</Link>
+          Ainda não tem conta?{" "}
+          <Link to={returnTo ? `/cadastro?returnTo=${encodeURIComponent(returnTo)}` : "/cadastro"}>Cadastre-se</Link>
         </p>
       </form>
     </AuthLayout>
