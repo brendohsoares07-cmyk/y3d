@@ -7,17 +7,17 @@ $categoriaAtiva = $_GET['categoria'] ?? 'todos';
 $busca = trim($_GET['busca'] ?? '');
 
 $categoriaImagens = [
-  'todos' => 'assets/img/produtos/dragao-artistico.jpg',
-  'personagens' => 'assets/img/produtos/estatua-anime.jpg',
-  'objetos' => 'assets/img/produtos/organizador-mesa.jpg',
-  'animais' => 'assets/img/produtos/dragao-artistico.jpg',
-  'cenarios' => 'assets/img/produtos/casa-medieval.jpg',
-  'props' => 'assets/img/produtos/pecas-personalizadas.png',
-  'veiculos' => 'assets/img/produtos/caixa-organizadora.jpg',
-  'arquitetura' => 'assets/img/produtos/casa-medieval.jpg',
-  'tecnologia' => 'assets/img/produtos/expositor-colecao.jpg',
-  'game-assets' => 'assets/img/produtos/suporte-controle-gamer.jpg',
-  'personalizados' => 'assets/img/produtos/chaveiro-stitch-azul.jpg',
+  'todos' => 'assets/img/produtos/estatua-guerreira.jpg',
+  'personagens' => 'assets/img/produtos/bailarina-rosa.jpg',
+  'objetos' => 'assets/img/produtos/bandejas-bt21.jpg',
+  'animais' => 'assets/img/produtos/dinossauros-equilibrio.jpg',
+  'cenarios' => 'assets/img/produtos/estatua-guerreira.jpg',
+  'props' => 'assets/img/produtos/estatua-guerreira.jpg',
+  'veiculos' => 'assets/img/produtos/estatua-guerreira.jpg',
+  'arquitetura' => 'assets/img/produtos/estatua-guerreira.jpg',
+  'tecnologia' => 'assets/img/produtos/estatua-guerreira.jpg',
+  'game-assets' => 'assets/img/produtos/estatua-guerreira.jpg',
+  'personalizados' => 'assets/img/produtos/chaveiros-porta-photocard.jpg',
 ];
 
 $lista = $PRODUTOS;

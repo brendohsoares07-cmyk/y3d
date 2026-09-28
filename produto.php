@@ -46,7 +46,9 @@ $imagensGaleria = array_slice(array_values(array_unique($imagensGaleria)), 0, 5)
   <section class="product-buy-panel">
     <div class="product-tags"><span><?= e($categoria) ?></span><span><?= e($produto['formatos'][0]) ?></span></div>
     <h1><?= e($produto['nome']) ?></h1>
+    <?php if ($produto['num_avaliacoes'] > 0): ?>
     <div class="product-rating"><span><?= y3d_estrelas_html($produto['avaliacao']) ?></span> <?= e($produto['avaliacao']) ?> (<?= e($produto['num_avaliacoes']) ?> avaliações)</div>
+    <?php endif; ?>
     <p class="product-price"><?= y3d_formatar_preco($produto['preco']) ?></p>
     <p class="product-description"><?= e($produto['descricao']) ?></p>
 

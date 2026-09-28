@@ -11,7 +11,9 @@
   <button type="button" class="fav-btn" data-fav="<?= $p['id'] ?>" aria-pressed="false" aria-label="Favoritar <?= htmlspecialchars($p['nome']) ?>">♡</button>
   <div class="card-body">
     <a href="produto.php?id=<?= $p['id'] ?>"><h3><?= htmlspecialchars($p['nome']) ?></h3></a>
+    <?php if ($p['num_avaliacoes'] > 0): ?>
     <div class="rate"><span class="st"><?= y3d_estrelas_html($p['avaliacao']) ?></span> <?= $p['avaliacao'] ?> (<?= $p['num_avaliacoes'] ?>)</div>
+    <?php endif; ?>
     <div class="price-row">
       <span class="price"><?= y3d_formatar_preco($p['preco']) ?></span>
       <form action="handlers/carrinho.php" method="post">

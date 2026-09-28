@@ -3,6 +3,10 @@ $tituloPagina = 'Início';
 require_once __DIR__ . '/includes/dados_produtos.php';
 require_once __DIR__ . '/includes/header.php';
 
+// Vitrine principal da home: seis produtos de categorias diferentes.
+$maisVendidos = array_filter($PRODUTOS, fn($p) => in_array($p['id'], [1, 3, 4, 5, 6, 9], true));
+$maisVendidos = array_values($maisVendidos);
+
 // Vídeo real de produção. Se existir assets/video/producao.mp4 ele vira o fundo da hero;
 // caso contrário cai no slideshow com fotos reais das peças.
 $videoProducao = __DIR__ . '/assets/video/producao.mp4';
@@ -47,6 +51,48 @@ $faq = [
 </section>
 
 <?php require __DIR__ . '/includes/marca.php'; ?>
+
+<!-- Catálogo Y3D: navegação por categoria em cartões visuais -->
+<section class="sec">
+  <div class="sec-h"><h2>Catálogo Y3D</h2><a class="more" href="produtos.php">Ver todas as categorias →</a></div>
+  <div class="grid g4">
+    <a class="cat-tile" href="produtos.php?categoria=personalizados"><img src="assets/img/catalogo/chaveiros.png" alt="Chaveiros"></a>
+    <a class="cat-tile" href="produtos.php?categoria=personagens"><img src="assets/img/catalogo/miniaturas-personagens.png" alt="Miniaturas e Personagens"></a>
+    <a class="cat-tile" href="produtos.php?categoria=objetos"><img src="assets/img/catalogo/suportes-celular.png" alt="Suportes para Celular"></a>
+    <a class="cat-tile" href="produtos.php?categoria=cenarios"><img src="assets/img/catalogo/decoracao.png" alt="Decoração"></a>
+    <a class="cat-tile" href="produtos.php?categoria=objetos"><img src="assets/img/catalogo/vasos.png" alt="Vasos"></a>
+    <a class="cat-tile" href="produtos.php?categoria=objetos"><img src="assets/img/catalogo/organizadores.png" alt="Organizadores"></a>
+    <a class="cat-tile" href="produtos.php?categoria=game-assets"><img src="assets/img/catalogo/suportes-controles.png" alt="Suportes para Controles"></a>
+    <a class="cat-tile" href="produtos.php?categoria=props"><img src="assets/img/catalogo/pecas-personalizadas.png" alt="Peças Personalizadas"></a>
+    <a class="cat-tile" href="produtos.php?categoria=personagens"><img src="assets/img/catalogo/estatuetas.png" alt="Estatuetas"></a>
+    <a class="cat-tile" href="produtos.php?categoria=personalizados"><img src="assets/img/catalogo/letreiros-logos.png" alt="Letreiros e Logos"></a>
+    <a class="cat-tile" href="produtos.php?categoria=personalizados"><img src="assets/img/catalogo/brindes-personalizados.png" alt="Brindes e Personalizados"></a>
+    <a class="cat-tile" href="contato.php"><img src="assets/img/catalogo/cta.png" alt="Faça seu orçamento"></a>
+  </div>
+</section>
+
+<!-- Mais vendidos em destaque -->
+<section class="sec featured-products">
+  <div class="featured-products-head">
+    <div><span class="lg-eyebrow">OS FAVORITOS DA COMUNIDADE</span><h2>🔥 Mais vendidos em destaque</h2><p>Seis escolhas de categorias diferentes para começar seu próximo projeto 3D.</p></div>
+    <a class="btn btn-outline btn-sm" href="produtos.php">Ver todos os produtos →</a>
+  </div>
+  <div class="grid g3">
+      <?php foreach ($maisVendidos as $p) include __DIR__ . '/includes/card_produto.php'; ?>
+  </div>
+</section>
+
+<!-- Impressão 3D: banner de serviço, largura total -->
+<section class="sec">
+  <div class="card-panel" style="display:flex;align-items:center;gap:26px;flex-wrap:wrap;background:linear-gradient(135deg,#3a1568,#101a3e)">
+    <div style="font-size:52px;flex:none">🖨️</div>
+    <div style="flex:1;min-width:240px">
+      <h3 style="margin:0 0 4px;font-size:19px"><span class="grad">IMPRESSÃO 3D</span></h3>
+      <p style="color:var(--mute);margin:0">Transforme seus modelos em peças reais! Alta precisão, diversos materiais e atendimento especializado.</p>
+    </div>
+    <a href="contato.php" class="btn btn-grad" style="flex:none">Saiba mais →</a>
+  </div>
+</section>
 
 <!-- Sobre a Y3D + Dúvidas Frequentes -->
 <section class="sec">
