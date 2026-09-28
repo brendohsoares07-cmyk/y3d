@@ -4,7 +4,7 @@ require_once __DIR__ . '/includes/dados_produtos.php';
 require_once __DIR__ . '/includes/header.php';
 
 // Vitrine principal da home: seis produtos de categorias diferentes.
-$maisVendidos = array_filter($PRODUTOS, fn($p) => in_array($p['id'], [1, 3, 4, 5, 6, 9], true));
+$maisVendidos = array_filter($PRODUTOS, fn($p) => in_array($p['id'], [1, 3, 4, 6, 7, 10], true));
 $maisVendidos = array_values($maisVendidos);
 
 // Vídeo real de produção. Se existir assets/video/producao.mp4 ele vira o fundo da hero;
