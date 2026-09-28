@@ -364,40 +364,43 @@ button{font:inherit;cursor:pointer}
 }
 
 /* ===================== RODAPÉ ===================== */
-.ftr{margin-top:48px;border-top:1px solid var(--line);background:linear-gradient(180deg,rgba(16,20,42,.55),rgba(6,7,16,.95));position:relative}
-.ftr::before{content:"";position:absolute;left:0;right:0;top:-1px;height:1px;background:linear-gradient(90deg,transparent,var(--pink),var(--violet),var(--cyan),transparent);opacity:.7}
-.ftr-cta{margin:36px 0 0;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:26px 30px;border-radius:20px;border:1px solid var(--line);background:linear-gradient(120deg,rgba(139,92,246,.22),rgba(255,79,216,.1) 55%,rgba(61,219,242,.12))}
-.ftr-cta h3{margin:0 0 4px;font-size:20px}
-.ftr-cta h3 span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-.ftr-cta p{margin:0;color:var(--mute);font-size:13.5px}
-.ftr-main{display:grid;grid-template-columns:1.3fr .7fr .8fr 1.1fr 1.2fr;gap:34px;padding:40px 0 30px}
-.ftr h4{margin:0 0 14px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#cfd3ff}
-.ftr-brand p{color:var(--mute);font-size:13.5px;margin:12px 0 18px;max-width:28ch}
-.ftr-social{display:flex;gap:10px}
-.ftr-social a{width:38px;height:38px;border-radius:11px;background:var(--raise);border:1px solid var(--line);display:grid;place-items:center;color:#c9cdf5;transition:.15s}
-.ftr-social a:hover{border-color:var(--violet);color:#fff;background:rgba(139,92,246,.2);transform:translateY(-2px)}
-.ftr-social svg{width:18px;height:18px}
-.ftr-nav{display:flex;flex-direction:column;gap:9px;font-size:13.5px;color:var(--mute)}
-.ftr-nav a:hover{color:#fff;transform:translateX(3px)}
-.ftr-nav a{transition:.15s}
-.ftr-contact{display:flex;flex-direction:column;gap:12px;font-size:13.5px;color:var(--mute)}
-.ftr-contact a,.ftr-contact span{display:flex;align-items:center;gap:10px}
-.ftr-contact a:hover{color:#fff}
-.ftr-contact svg{width:18px;height:18px;flex:none}
-.ftr-contact .c-mail svg{color:var(--cyan)}
-.ftr-contact .c-tel svg{color:var(--pink)}
-.ftr-contact .c-pix svg{color:var(--violet)}
-.ftr-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.ftr-gallery a{aspect-ratio:1/1;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:var(--raise);position:relative}
-.ftr-gallery img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
-.ftr-gallery a:hover{border-color:var(--violet)}
-.ftr-gallery a:hover img{transform:scale(1.1)}
-.ftr-bottom{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;border-top:1px solid var(--line);padding:20px 0 26px;font-size:12.5px;color:var(--mute)}
-.ftr-pay{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.ftr-pay em{font-style:normal;margin-right:4px}
-.ftr-pay strong{font-size:11.5px;font-weight:700;letter-spacing:.03em;color:#e4e6ff;padding:5px 11px;border-radius:8px;background:var(--raise);border:1px solid var(--line)}
-@media (max-width:1100px){.ftr-main{grid-template-columns:1fr 1fr 1fr}.ftr-brand,.ftr-gallery-col{grid-column:span 3}.ftr-gallery{grid-template-columns:repeat(6,1fr);max-width:520px}}
-@media (max-width:640px){.ftr-main{grid-template-columns:1fr 1fr}.ftr-brand,.ftr-gallery-col{grid-column:span 2}.ftr-bottom{flex-direction:column;align-items:flex-start}}
+.ftr{--ftr-blue:#1f7bff;margin-top:48px;border-top:1px solid #16233d;background:radial-gradient(900px 380px at 100% 100%,rgba(31,123,255,.13),transparent 65%),#070d1a;color:#dbe3f5}
+.ftr-main{display:grid;grid-template-columns:1.35fr .8fr 1.3fr 1.15fr 1.1fr;gap:38px;padding:52px 0 40px}
+.ftr h4{margin:0 0 6px;font-size:18px;font-weight:700;color:#fff;letter-spacing:0;text-transform:none}
+.ftr-sub{margin:0 0 20px;font-size:14px;color:#c4cfe6}
+.ftr-logo{display:block;width:min(100%,250px)}
+.ftr-logo img{display:block;width:100%;height:auto;border-radius:14px;box-shadow:0 8px 28px rgba(0,0,0,.45)}
+.ftr-brand p{margin:20px 0 22px;font-size:16px;line-height:1.55;color:#c4cfe6;max-width:34ch}
+.ftr-social{display:flex;align-items:center;gap:20px}
+.ftr-social a{color:#fff;display:grid;place-items:center;transition:.15s}
+.ftr-social a:hover{color:var(--ftr-blue);transform:translateY(-2px)}
+.ftr-social svg{width:26px;height:26px}
+.ftr-follow{padding-left:20px;border-left:1px solid #2a3a5c;font-size:14px;color:#fff}
+.ftr-nav,.ftr-feat{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.ftr-nav{gap:16px;margin-top:20px}
+.ftr-nav a{display:flex;align-items:center;gap:14px;font-size:15px;color:#fff;transition:.15s}
+.ftr-nav a:hover{color:#8fc0ff;transform:translateX(3px)}
+.ftr i{display:grid;place-items:center;width:28px;height:28px;flex:none;color:var(--ftr-blue)}
+.ftr i svg{width:26px;height:26px}
+.ftr-pay{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:24px}
+.pay-visa{font:italic 800 25px/1 Arial,sans-serif;color:#fff;letter-spacing:.5px}
+.pay-mc{width:44px;height:29px}
+.pay-elo{font:800 24px/1 Arial,sans-serif;color:#fff;letter-spacing:-1px}
+.pay-elo b{color:#00a4e0}
+.pay-pix{display:inline-flex;align-items:center;gap:3px;font:600 22px/1 Arial,sans-serif;color:#32bcad}
+.pay-pix svg{width:26px;height:26px}
+.ftr-boleto{display:flex;align-items:center;gap:12px;font-size:14px;color:#fff}
+.ftr-boleto svg{width:30px;height:30px;color:#fff;flex:none}
+.ftr-feat{gap:22px}
+.ftr-feat li{display:flex;align-items:flex-start;gap:14px;font-size:13.5px;line-height:1.45;color:#b4c1dc}
+.ftr-feat b{display:block;font-size:14.5px;font-weight:600;color:#fff}
+.ftr-bottom{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;border-top:1px solid #1d2b47;padding:26px 0 34px;font-size:14px;color:#b4c1dc}
+.ftr-end{display:flex;align-items:center;gap:22px;color:#dbe3f5}
+.ftr-end b{color:var(--ftr-blue);font-weight:600}
+.ftr-line{display:block;width:34px;height:1px;background:#3a4a6a}
+.ftr-end img{height:46px;width:auto;border-radius:8px;display:block}
+@media (max-width:1100px){.ftr-main{grid-template-columns:1fr 1fr 1fr}.ftr-brand{grid-column:span 3}}
+@media (max-width:640px){.ftr-main{grid-template-columns:1fr;gap:30px}.ftr-brand{grid-column:auto}.ftr-bottom{flex-direction:column;align-items:flex-start}.ftr-end{flex-wrap:wrap}}
 
 /* campos de formulário (contato) */
 .fld{margin-bottom:16px}
