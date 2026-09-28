@@ -11,7 +11,7 @@ require_once __DIR__ . '/includes/header.php';
       <a href="produtos.php" class="btn btn-grad" style="margin-top:16px">Explorar loja →</a>
     </div>
     <div class="promo" style="align-items:center;text-align:center">
-      <div class="promo-art" style="margin:0"><img src="assets/img/logo-y3d-creations.jpg" alt="Logo Y3D Creations"></div>
+      <div class="promo-art" style="margin:0"><img src="frontend/public/logo-y3d.png" alt="Logo Y3D Creations"></div>
       <div class="grid g3" style="text-align:center">
         <div><b style="font-size:20px">+10k</b><br><span style="color:var(--mute);font-size:12px">Modelos disponíveis</span></div>
         <div><b style="font-size:20px">+5k</b><br><span style="color:var(--mute);font-size:12px">Clientes satisfeitos</span></div>

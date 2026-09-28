@@ -5,7 +5,7 @@ $lgPrefix = $lgPrefix ?? 'lg';
 $erro = $erro ?? null;
 ?>
 <div class="lg-brand">
-  <div class="lg-logo"><img src="assets/img/logo-icon.svg" alt=""><b>Y3D</b></div>
+  <div class="lg-logo"><img src="frontend/public/logo-y3d.png" alt="Y3D Creations"></div>
   <small>IDEIAS GANHAM FORMA</small>
 </div>
 

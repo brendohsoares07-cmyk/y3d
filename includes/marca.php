@@ -1,7 +1,7 @@
 <?php // Faixa da marca: logo Y3D Creations + apresentação ?>
 <section class="sec">
   <div class="brand-band">
-    <img class="brand-logo" src="assets/img/produtos/estatua-harry-potter.png" alt="Logo Y3D Creations" loading="lazy">
+    <img class="brand-logo" src="frontend/public/logo-y3d.png" alt="Logo Y3D Creations" loading="lazy">
     <div class="brand-copy">
       <span class="lg-eyebrow" style="color:var(--cyan)">CONHEÇA A MARCA</span>
       <h2>Y3D <span class="grad">Creations</span></h2>

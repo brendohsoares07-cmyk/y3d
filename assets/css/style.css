@@ -30,7 +30,7 @@ button{font:inherit;cursor:pointer}
 
 /* logo */
 .logo{display:flex;align-items:center;flex:none}
-.logo-ic{width:112px;height:44px;object-fit:contain;object-position:center;border-radius:8px;flex:none;filter:drop-shadow(0 3px 10px rgba(61,219,242,.22))}
+.logo-ic{width:92px;height:62px;object-fit:contain;object-position:center;border-radius:8px;flex:none;filter:drop-shadow(0 3px 10px rgba(61,219,242,.22))}
 .logo .y3d{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .logo small{display:block;font-size:9px;font-weight:600;letter-spacing:.25em;color:var(--mute);margin-top:-2px}
 
@@ -298,9 +298,8 @@ button{font:inherit;cursor:pointer}
 /* cartão */
 .lg-card{width:100%;max-width:460px;border:1px solid var(--lg-line);border-radius:28px;padding:38px 36px 32px;background:linear-gradient(180deg,rgba(23,20,58,.86),rgba(11,11,30,.94));box-shadow:0 30px 80px rgba(60,30,160,.28),inset 0 1px 0 rgba(255,255,255,.05)}
 .lg-brand{display:flex;flex-direction:column;align-items:center;margin-bottom:26px}
-.lg-brand .lg-logo{display:flex;align-items:center;gap:12px}
-.lg-brand img{width:52px;height:52px}
-.lg-brand b{font-size:46px;line-height:1;font-weight:900;letter-spacing:-.02em;color:#fff}
+.lg-brand .lg-logo{display:flex;align-items:center;justify-content:center;width:100%;max-width:180px}
+.lg-brand .lg-logo img{width:100%;height:auto;border-radius:10px}
 .lg-brand small{margin-top:8px;font-size:10.5px;letter-spacing:.42em;color:#c6caf0;font-weight:600;padding-left:.42em}
 .lg-card h1{margin:0 0 6px;font-size:28px;font-weight:800}
 .lg-card h1 span{color:var(--lg)}
@@ -364,12 +363,14 @@ button{font:inherit;cursor:pointer}
 }
 
 /* ===================== RODAPÉ ===================== */
-.ftr{--ftr-blue:#1f7bff;margin-top:48px;border-top:1px solid #16233d;background:radial-gradient(900px 380px at 100% 100%,rgba(31,123,255,.13),transparent 65%),#070d1a;color:#dbe3f5}
-.ftr-main{display:grid;grid-template-columns:1.35fr .8fr 1.3fr 1.15fr 1.1fr;gap:38px;padding:52px 0 40px}
+.ftr{--ftr-blue:#1f7bff;position:relative;margin-top:48px;background:radial-gradient(900px 380px at 100% 100%,rgba(31,123,255,.13),transparent 65%),#070d1a;color:#dbe3f5}
+.ftr::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--pink),var(--violet),var(--cyan))}
+.ftr-main{display:grid;grid-template-columns:1.35fr .8fr 1.3fr 1.15fr 1.1fr;gap:32px;padding:52px 0 40px}
 .ftr h4{margin:0 0 6px;font-size:18px;font-weight:700;color:#fff;letter-spacing:0;text-transform:none}
 .ftr-sub{margin:0 0 20px;font-size:14px;color:#c4cfe6}
-.ftr-logo{display:block;width:min(100%,250px)}
-.ftr-logo img{display:block;width:100%;height:auto;border-radius:14px;box-shadow:0 8px 28px rgba(0,0,0,.45)}
+.ftr-logo{display:block;width:min(100%,220px)}
+.ftr-logo img{display:block;width:100%;height:auto;border-radius:10px}
+.ftr-logo:focus-visible{outline:2px solid var(--cyan);outline-offset:5px;border-radius:10px}
 .ftr-brand p{margin:20px 0 22px;font-size:16px;line-height:1.55;color:#c4cfe6;max-width:34ch}
 .ftr-social{display:flex;align-items:center;gap:20px}
 .ftr-social a{color:#fff;display:grid;place-items:center;transition:.15s}
