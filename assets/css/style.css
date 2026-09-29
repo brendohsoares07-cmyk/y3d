@@ -405,6 +405,11 @@ button{font:inherit;cursor:pointer}
 @media (max-width:1100px){.ftr-main{grid-template-columns:1fr 1fr 1fr}.ftr-brand{grid-column:span 3}}
 @media (max-width:640px){.ftr-main{grid-template-columns:1fr;gap:30px}.ftr-brand{grid-column:auto}.ftr-bottom{flex-direction:column;align-items:flex-start}.ftr-end{flex-wrap:wrap}}
 
+/* botão do WhatsApp (contato) */
+.btn-whats{display:inline-flex;align-items:center;gap:8px;margin-top:22px;padding:9px 16px;border-radius:999px;background:#25d366;color:#fff;font-weight:600;font-size:13px;box-shadow:0 8px 22px rgba(37,211,102,.28);transition:transform .15s,box-shadow .15s,background .15s}
+.btn-whats svg{width:16px;height:16px;flex:none}
+.btn-whats:hover{background:#1fbe5b;transform:translateY(-2px);box-shadow:0 12px 28px rgba(37,211,102,.38)}
+
 /* campos de formulário (contato) */
 .fld{margin-bottom:16px}
 .fld label{display:block;font-size:13px;color:var(--mute);margin-bottom:7px}
