@@ -51,6 +51,7 @@ function marcarFavorito(botao, ativo) {
     botao.setAttribute('aria-pressed', String(ativo));
     botao.textContent = ativo ? '♥' : '♡';
 }
+/** Bolinha com o número de favoritos, ao lado do ícone de coração no cabeçalho (em todas as páginas). */
 function atualizarBadgeFavoritos() {
     const badge = document.getElementById('fav-count');
     if (!badge)
@@ -59,6 +60,7 @@ function atualizarBadgeFavoritos() {
     badge.textContent = String(total);
     badge.hidden = total === 0;
 }
+/** Página favoritos.php: mostra só os cartões de produto cujo id está nos favoritos salvos. */
 function iniciarPaginaFavoritos() {
     const grid = document.getElementById('favoritos-grid');
     const vazio = document.getElementById('favoritos-vazio');
@@ -147,14 +149,16 @@ function iniciarCalculoFrete() {
     campoCep.addEventListener('input', atualizarFrete);
     atualizarFrete();
 }
+let toastTimer;
 function mostrarToast(mensagem) {
     const caixa = document.getElementById('toast');
     if (!caixa)
         return;
     caixa.textContent = mensagem;
     caixa.classList.add('on');
-    window.clearTimeout(caixa._t);
-    caixa._t = window.setTimeout(() => caixa.classList.remove('on'), 2600);
+    if (toastTimer !== undefined)
+        window.clearTimeout(toastTimer);
+    toastTimer = window.setTimeout(() => caixa.classList.remove('on'), 2600);
 }
 function iniciarMostrarSenha() {
     document.querySelectorAll('[data-toggle-senha]').forEach((botao) => {

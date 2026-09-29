@@ -65,8 +65,6 @@
       <span>© 2026 Y3D — Projeto acadêmico. Todos os direitos reservados.</span>
       <div class="ftr-end">
         <span>Impressão 3D é <b>o futuro.</b></span>
-        <span class="ftr-line"></span>
-        <img src="frontend/public/logo-y3d.png" alt="Y3D Creations" loading="lazy">
       </div>
     </div>
   </div>
