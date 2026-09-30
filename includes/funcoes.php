@@ -173,6 +173,9 @@ function e(mixed $valor): string
 function foto_url(?string $foto): string
 {
     if ($foto && trim($foto) !== '') {
+        if (preg_match('#^https?://#i', $foto)) {
+            return $foto; // foto vinda do Google
+        }
         return 'assets/img/' . ltrim($foto, '/');
     }
     return 'assets/img/logo-icon.svg';

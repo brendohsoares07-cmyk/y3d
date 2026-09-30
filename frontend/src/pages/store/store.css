@@ -122,7 +122,9 @@
 .account-side { display: flex; flex-direction: column; gap: 16px; }
 .account-user { display: flex; align-items: center; gap: 12px; }
 .account-user small { display: block; color: var(--s-mute); word-break: break-all; }
-.avatar.big { width: 52px; height: 52px; font-size: 18px; flex-shrink: 0; }
+.avatar.big { width: 52px; height: 52px; font-size: 18px; flex-shrink: 0; overflow: hidden; }
+.avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.account-edit { display: grid; gap: 4px; margin: 12px 0; padding-bottom: 12px; border-bottom: 1px solid var(--s-line); }
 .account-side nav { display: flex; flex-direction: column; gap: 4px; }
 .acc-link { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; border: 0; background: none; color: var(--s-text) !important; font-size: 14px; cursor: pointer; text-decoration: none; text-align: left; }
 .acc-link:hover { background: rgba(124, 92, 255, .15); }
@@ -190,3 +192,8 @@
 .store .modal-close:hover { color: var(--s-text); }
 .store .pay-option input[type="radio"] { width: 18px; height: 18px; padding: 0; flex-shrink: 0; }
 .store .account-content .alert { margin-bottom: 16px; }
+
+/* fotos 4:3 de alguns produtos preenchem todo o quadro (sem faixas vazias) */
+.store .gallery-main .product-img[src*="chaveiros-porta-photocard"],
+.store .gallery-main .product-img[src*="porta-oculos-ovelha"],
+.store .gallery-main .product-img[src*="porta-oculos-coelho"] { object-fit: cover; }

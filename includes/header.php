@@ -23,7 +23,6 @@ unset($_SESSION['flash']);
     <nav class="hdr-nav">
       <a href="index.php" class="<?= $paginaAtual === 'index.php' ? 'on' : '' ?>">Início</a>
       <a href="produtos.php" class="<?= $paginaAtual === 'produtos.php' ? 'on' : '' ?>">Produtos</a>
-      <a href="produtos.php?categoria=personagens">Modelos 3D</a>
       <a href="sobre.php" class="<?= $paginaAtual === 'sobre.php' ? 'on' : '' ?>">Sobre</a>
       <a href="contato.php" class="<?= $paginaAtual === 'contato.php' ? 'on' : '' ?>">Contato</a>
     </nav>
@@ -38,7 +37,7 @@ unset($_SESSION['flash']);
         🛒<?php if ($totalCarrinho > 0): ?><span class="n"><?= $totalCarrinho ?></span><?php endif; ?>
       </a>
       <?php if ($usuarioLogado): ?>
-      <a href="conta.php" class="ava" title="<?= htmlspecialchars($usuarioLogado['nome']) ?>"><?= htmlspecialchars(y3d_iniciais($usuarioLogado['nome'])) ?></a>
+      <a href="conta.php" class="ava" title="<?= htmlspecialchars($usuarioLogado['nome']) ?>"><?php if (!empty($usuarioLogado['foto'])): ?><img src="<?= e(foto_url($usuarioLogado['foto'])) ?>" alt="" referrerpolicy="no-referrer"><?php else: ?><?= htmlspecialchars(y3d_iniciais($usuarioLogado['nome'])) ?><?php endif; ?></a>
       <?php else: ?>
       <a href="login.php" class="btn btn-grad btn-sm" style="margin-left:6px">Entrar</a>
       <?php endif; ?>

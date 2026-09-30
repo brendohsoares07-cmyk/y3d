@@ -106,3 +106,23 @@ function y3d_conta_vincular_google(array $conta, string $googleId, ?string $nome
     y3d_contas_salvar($contas);
     return $conta;
 }
+
+/** Atualiza campos de uma conta (ex.: nome, foto) e devolve a conta já atualizada. */
+function y3d_conta_atualizar(int $id, array $campos): ?array
+{
+    $permitidos = ['nome', 'foto'];
+    $contas = y3d_contas_carregar();
+    foreach ($contas as $indice => $c) {
+        if ((int) ($c['id'] ?? 0) === $id) {
+            foreach ($campos as $chave => $valor) {
+                if (in_array($chave, $permitidos, true)) {
+                    $contas[$indice][$chave] = $valor;
+                }
+            }
+            $contas[$indice]['atualizado_em'] = time();
+            y3d_contas_salvar($contas);
+            return $contas[$indice];
+        }
+    }
+    return null;
+}
