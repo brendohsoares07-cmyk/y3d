@@ -26,7 +26,7 @@ function alternarFavorito(id: number): boolean {
   const lista = lerFavoritos();
   const indice = lista.indexOf(id);
   if (indice >= 0) {
-    lista.splice(indice, 1);
+    lista.splice(indice, 1); 
   } else {
     lista.push(id);
   }
