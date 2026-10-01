@@ -466,6 +466,7 @@ button{font:inherit;cursor:pointer}
 /* fotos 4:3 de alguns produtos preenchem todo o quadro (sem faixas vazias) */
 .thumb img[src*="chaveiros-porta-photocard"],.thumb img[src*="porta-oculos-ovelha"],.thumb img[src*="porta-oculos-coelho"],
 .product-gallery-main img[src*="chaveiros-porta-photocard"],.product-gallery-main img[src*="porta-oculos-ovelha"],.product-gallery-main img[src*="porta-oculos-coelho"]{object-fit:cover}
+<<<<<<< HEAD
 
 /* Pix: QR Code e copia e cola (checkout) */
 .pix-box{max-width:460px;margin-inline:auto;display:grid;gap:14px;justify-items:center}
@@ -477,3 +478,5 @@ button{font:inherit;cursor:pointer}
 .pix-ou{color:var(--mute);font-size:13px}
 .pix-codigo{width:100%;resize:none;background:var(--raise);border:1px solid var(--line);border-radius:10px;padding:10px 12px;color:inherit;font:12px/1.4 ui-monospace,Menlo,Consolas,monospace;word-break:break-all}
 .pix-aviso{color:var(--mute);font-size:12.5px}
+=======
+>>>>>>> a5a589476fa5c55bfc8571843ce76061401223c9
