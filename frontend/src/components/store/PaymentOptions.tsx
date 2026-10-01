@@ -1,7 +1,7 @@
 import { FormaPagamento } from "../../types";
 
 const OPCOES: Array<{ valor: FormaPagamento; titulo: string; texto: string }> = [
-  { valor: "PIX", titulo: "Pix", texto: "Aprovação imediata." },
+  { valor: "PIX", titulo: "Pix", texto: "Aprovação imediata. QR Code ao finalizar." },
   { valor: "CARTAO", titulo: "Cartão de crédito", texto: "Em até 12x (juros)." },
   { valor: "BOLETO", titulo: "Boleto", texto: "Em até 3 dias úteis." },
 ];

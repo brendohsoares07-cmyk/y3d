@@ -15,8 +15,27 @@ require_once __DIR__ . '/includes/header.php';
 
 <section class="acc">
   <aside class="acc-side card-panel">
-    <div class="acc-avatar"><?= htmlspecialchars(y3d_iniciais($u['nome'])) ?></div>
+    <div class="acc-avatar">
+      <?php if (!empty($u['foto'])): ?>
+        <img src="<?= e(foto_url($u['foto'])) ?>" alt="Foto de <?= e($u['nome']) ?>" referrerpolicy="no-referrer">
+      <?php else: ?>
+        <?= htmlspecialchars(y3d_iniciais($u['nome'])) ?>
+      <?php endif; ?>
+    </div>
+    <form action="handlers/perfil.php" method="post" enctype="multipart/form-data" class="acc-photo-form">
+      <input type="hidden" name="acao" value="foto">
+      <input type="file" name="foto" id="acc-foto" accept="image/jpeg,image/png,image/webp" hidden onchange="this.form.submit()">
+      <label for="acc-foto" class="btn btn-outline btn-sm acc-photo-btn">📷 Trocar foto</label>
+    </form>
     <h1><?= htmlspecialchars($u['nome']) ?></h1>
+    <details class="acc-edit">
+      <summary class="btn btn-outline btn-sm">✏️ Editar nome</summary>
+      <form action="handlers/perfil.php" method="post" class="acc-edit-form">
+        <input type="hidden" name="acao" value="nome">
+        <input type="text" name="nome" value="<?= e($u['nome']) ?>" minlength="2" maxlength="80" required aria-label="Novo nome">
+        <button type="submit" class="btn btn-grad btn-sm">Salvar</button>
+      </form>
+    </details>
     <p class="acc-mail"><?= htmlspecialchars($u['email']) ?></p>
     <span class="acc-badge"><i></i> Conectado</span>
     <div class="acc-actions">

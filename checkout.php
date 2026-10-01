@@ -4,7 +4,11 @@ require_once __DIR__ . '/includes/funcoes.php';
 $pedidoConcluido = false;
 $cepInformado = trim($_POST['cep'] ?? '');
 
+$formaPagamento = $_POST['pagamento'] ?? '';
+$totalPedido = 0.0;
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && y3d_total_itens_carrinho() > 0) {
+    $totalPedido = y3d_total_carrinho($cepInformado); // valor final (produtos + frete), calculado no servidor antes de esvaziar o carrinho
     y3d_limpar_carrinho();
     $pedidoConcluido = true;
 }
@@ -16,7 +20,19 @@ $frete = y3d_frete_carrinho($cepInformado);
 $total = y3d_total_carrinho($cepInformado);
 ?>
 
-<?php if ($pedidoConcluido): ?>
+<?php if ($pedidoConcluido && $formaPagamento === 'pix' && $totalPedido > 0): ?>
+  <div class="checkout-success pix-box" data-pix-valor="<?= number_format($totalPedido, 2, '.', '') ?>">
+    <h1>Pedido recebido! Falta só o Pix</h1>
+    <p>Abra o app do seu banco, escolha <b>Pix → Ler QR Code</b> e confirme o pagamento de <b class="pix-valor"><?= y3d_formatar_preco($totalPedido) ?></b>.</p>
+    <div class="pix-qr" data-pix-qr aria-live="polite"></div>
+    <p class="pix-ou">Ou use o Pix copia e cola:</p>
+    <textarea class="pix-codigo" data-pix-codigo readonly rows="4" aria-label="Código Pix copia e cola"></textarea>
+    <button type="button" class="btn btn-outline" data-pix-copiar>Copiar código Pix</button>
+    <p class="pix-aviso">O valor já vem preenchido, não precisa digitar nada. Guarde o comprovante: ele confirma o seu pedido.</p>
+    <a href="produtos.php" class="btn btn-grad">Continuar comprando</a>
+  </div>
+  <script src="assets/js/pix.js"></script>
+<?php elseif ($pedidoConcluido): ?>
   <div class="checkout-success">
     <span>✓</span>
     <h1>Pedido recebido!</h1>
@@ -45,7 +61,7 @@ $total = y3d_total_carrinho($cepInformado);
       <div class="checkout-section">
         <div class="checkout-heading"><span>2</span><h2>Forma de pagamento</h2></div>
         <div class="payment-options">
-          <label><input type="radio" name="pagamento" value="pix" required> Pix <small>Pagamento imediato</small></label>
+          <label><input type="radio" name="pagamento" value="pix" required> Pix <small>Pagamento imediato · QR Code ao finalizar</small></label>
           <label><input type="radio" name="pagamento" value="cartao"> Cartão de crédito <small>Até 12x</small></label>
           <label><input type="radio" name="pagamento" value="boleto"> Boleto bancário <small>Vencimento em 3 dias</small></label>
         </div>

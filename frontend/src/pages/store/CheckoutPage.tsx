@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { AddressForm, AddressValues } from "../../components/store/AddressForm";
 import { OrderSummary } from "../../components/store/OrderSummary";
 import { PaymentOptions } from "../../components/store/PaymentOptions";
+import { PixPayment } from "../../components/store/PixPayment";
 import { Alert } from "../../components/ui/Alert";
 import { useAuth } from "../../context/AuthContext";
 import { useCart } from "../../context/CartContext";
@@ -36,6 +37,9 @@ export function CheckoutPage() {
   const [pagamento, setPagamento] = useState<FormaPagamento>("PIX");
   const [erro, setErro] = useState<string | null>(null);
   const [enviando, setEnviando] = useState(false);
+  const [pixPedido, setPixPedido] = useState<{ id: number; valor: number } | null>(null);
+
+  if (pixPedido) return <PixPayment pedidoId={pixPedido.id} valor={pixPedido.valor} />;
 
   if (itens.length === 0) {
     return (
@@ -62,6 +66,10 @@ export function CheckoutPage() {
         entrega: { ...values },
       });
       limpar();
+      if (pagamento === "PIX") {
+        setPixPedido({ id: pedido.id, valor: pedido.valorTotal }); // valor final (produtos + frete) calculado pelo servidor
+        return;
+      }
       navigate("/loja/conta", { state: { mensagem: `Pedido #${pedido.id} realizado com sucesso!` } });
     } catch (e) {
       setErro(e instanceof ApiError ? e.message : "Não foi possível finalizar o pedido.");
