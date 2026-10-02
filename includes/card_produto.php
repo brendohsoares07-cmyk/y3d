@@ -1,8 +1,9 @@
 <article class="card" data-nome="<?= htmlspecialchars(mb_strtolower($p['nome'])) ?>" data-categoria="<?= $p['categoria'] ?>">
   <a href="produto.php?id=<?= $p['id'] ?>">
     <div class="thumb" style="background:linear-gradient(135deg,<?= $p['cor1'] ?>33,<?= $p['cor2'] ?>33)">
-      <?php if (!empty($p['imagem'])): ?>
-        <img src="<?= htmlspecialchars($p['imagem']) ?>" alt="<?= htmlspecialchars($p['nome']) ?>" loading="lazy">
+      <?php $imagemProdutoCard = y3d_imagem_principal($p); ?>
+      <?php if (!empty($imagemProdutoCard)): ?>
+        <img src="<?= htmlspecialchars($imagemProdutoCard) ?>" alt="<?= htmlspecialchars($p['nome']) ?>" loading="lazy">
       <?php else: ?>
         <?= $p['emoji'] ?>
       <?php endif; ?>

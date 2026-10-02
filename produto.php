@@ -10,13 +10,15 @@ if (!$produto) {
 $tituloPagina = $produto['nome'];
 require_once __DIR__ . '/includes/header.php';
 $categoria = $CATEGORIAS[$produto['categoria']]['nome'];
-$imagemProduto = $produto['imagem'] ?? '';
+$imagensProduto = y3d_imagens_do_produto($produto);
+$imagemProduto = y3d_imagem_principal($produto);
 $produtosRelacionados = array_values(array_filter($PRODUTOS, fn($item) => $item['id'] !== $produto['id'] && $item['categoria'] === $produto['categoria']));
-$imagensGaleria = array_values(array_filter(array_merge(
-    [$imagemProduto],
-    array_map(fn($item) => $item['imagem'] ?? '', $produtosRelacionados)
-)));
-$imagensGaleria = array_slice(array_values(array_unique($imagensGaleria)), 0, 5);
+$galeriaRelacionada = [];
+foreach ($produtosRelacionados as $item) {
+  $galeriaRelacionada = array_merge($galeriaRelacionada, y3d_imagens_do_produto($item));
+}
+$imagensGaleria = array_values(array_filter(array_merge($imagensProduto, $galeriaRelacionada, [$imagemProduto])));
+$imagensGaleria = array_slice(array_values(array_unique(array_filter($imagensGaleria, fn($imagem) => $imagem !== ''))), 0, 5);
 ?>
 
 <div class="pdp-crumbs">
