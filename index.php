@@ -46,6 +46,8 @@ $faq = [
   </div>
 </section>
 
+<?php require __DIR__ . '/includes/promo_bt21.php'; ?>
+
 <?php require __DIR__ . '/includes/marca.php'; ?>
 
 <!-- Sobre a Y3D + Dúvidas Frequentes -->

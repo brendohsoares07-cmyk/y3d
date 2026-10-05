@@ -182,6 +182,85 @@ function iniciarLoginGoogle() {
         });
     });
 }
+function iniciarCarrosselBt21() {
+    // Carrossel da promoção BT21: setas, bolinhas, deslizar com o dedo e avanço automático.
+    const raiz = document.querySelector('[data-bt21]');
+    if (!raiz)
+        return;
+    const pista = raiz.querySelector('[data-bt21-pista]');
+    const anterior = raiz.querySelector('[data-bt21-anterior]');
+    const proximo = raiz.querySelector('[data-bt21-proximo]');
+    const pontos = raiz.querySelector('[data-bt21-pontos]');
+    const cards = Array.from(raiz.querySelectorAll('[data-bt21-card]'));
+    if (!pista || !anterior || !proximo || !pontos || cards.length === 0)
+        return;
+    const reduzirMovimento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let atual = 0;
+    let pausado = false;
+    const botoesPonto = cards.map((card, i) => {
+        var _a;
+        const botao = document.createElement('button');
+        botao.type = 'button';
+        botao.className = 'bt21-ponto';
+        botao.setAttribute('aria-label', `Ver ${(_a = card.dataset.nome) !== null && _a !== void 0 ? _a : 'personagem'}`);
+        botao.addEventListener('click', () => irPara(i));
+        pontos.appendChild(botao);
+        return botao;
+    });
+    function marcarAtual() {
+        botoesPonto.forEach((botao, i) => botao.classList.toggle('on', i === atual));
+        cards.forEach((card, i) => card.classList.toggle('ativo', i === atual));
+    }
+    function irPara(indice) {
+        atual = (indice + cards.length) % cards.length;
+        const card = cards[atual];
+        const alvo = card.offsetLeft - (pista.clientWidth - card.offsetWidth) / 2;
+        pista.scrollTo({ left: alvo, behavior: reduzirMovimento ? 'auto' : 'smooth' });
+        marcarAtual();
+    }
+    // Se a pessoa arrastar com o dedo/mouse, acompanha qual card ficou no centro.
+    let aguardandoFrame = false;
+    pista.addEventListener('scroll', () => {
+        if (aguardandoFrame)
+            return;
+        aguardandoFrame = true;
+        requestAnimationFrame(() => {
+            aguardandoFrame = false;
+            const centro = pista.scrollLeft + pista.clientWidth / 2;
+            let maisPerto = atual;
+            let menorDistancia = Infinity;
+            cards.forEach((card, i) => {
+                const distancia = Math.abs(card.offsetLeft + card.offsetWidth / 2 - centro);
+                if (distancia < menorDistancia) {
+                    menorDistancia = distancia;
+                    maisPerto = i;
+                }
+            });
+            if (maisPerto !== atual) {
+                atual = maisPerto;
+                marcarAtual();
+            }
+        });
+    });
+    anterior.addEventListener('click', () => irPara(atual - 1));
+    proximo.addEventListener('click', () => irPara(atual + 1));
+    pista.addEventListener('keydown', (evento) => {
+        if (evento.key === 'ArrowLeft')
+            irPara(atual - 1);
+        if (evento.key === 'ArrowRight')
+            irPara(atual + 1);
+    });
+    if (!reduzirMovimento) {
+        ['mouseenter', 'focusin', 'touchstart'].forEach((nome) => raiz.addEventListener(nome, () => { pausado = true; }, { passive: true }));
+        ['mouseleave', 'focusout', 'touchend'].forEach((nome) => raiz.addEventListener(nome, () => { pausado = false; }, { passive: true }));
+        window.setInterval(() => {
+            if (!pausado && !document.hidden)
+                irPara(atual + 1);
+        }, 4500);
+    }
+    marcarAtual();
+    irPara(0);
+}
 document.addEventListener('DOMContentLoaded', () => {
     iniciarBotoesFavoritos();
     atualizarBadgeFavoritos();
@@ -191,4 +270,5 @@ document.addEventListener('DOMContentLoaded', () => {
     iniciarCalculoFrete();
     iniciarMostrarSenha();
     iniciarLoginGoogle();
+    iniciarCarrosselBt21();
 });
