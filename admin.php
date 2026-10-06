@@ -1,3 +1,11 @@
+<?php
+require_once __DIR__ . '/includes/funcoes.php';
+// Área restrita: só entra quem fez login com uma conta de administrador.
+if (!y3d_eh_admin()) {
+    header('Location: login.php');
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -17,7 +25,7 @@
     <a href="#">🧾 Pedidos</a>
     <a href="#">⭐ Avaliações</a>
     <a href="#">✉️ Mensagens</a>
-    <a href="#">🚪 Sair</a>
+    <a href="logout.php">🚪 Sair</a>
   </nav>
 </aside>
 

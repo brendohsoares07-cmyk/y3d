@@ -152,7 +152,7 @@ function y3d_iniciais(string $nome): string
  * Registra o login na sessão a partir de uma conta real (vinda de contas.php).
  * A senha não é guardada na sessão, só os dados públicos da conta.
  */
-function y3d_entrar(array $conta): void
+function y3d_entrar(array $conta, bool $permitirAdmin = false): void
 {
     session_regenerate_id(true);
     $_SESSION['usuario'] = [
@@ -162,7 +162,16 @@ function y3d_entrar(array $conta): void
         'foto'      => $conta['foto'] ?? null,
         'google_id' => $conta['google_id'] ?? null,
         'login_em'  => time(),
+        // só vale para login por e-mail + senha (login.php); Google e cadastro nunca concedem admin
+        'admin'     => $permitirAdmin && !empty($conta['admin']),
     ];
+}
+
+/** true se o usuário logado é administrador (campo "admin" da conta em data/usuarios.json). */
+function y3d_eh_admin(): bool
+{
+    $usuario = y3d_usuario();
+    return $usuario !== null && ($usuario['admin'] ?? false) === true;
 }
 
 function e(mixed $valor): string

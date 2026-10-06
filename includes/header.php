@@ -13,13 +13,13 @@ unset($_SESSION['flash']);
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><?= isset($tituloPagina) ? htmlspecialchars($tituloPagina) . ' · ' : '' ?>Y3D Creations</title>
 <link rel="stylesheet" href="assets/css/style.css?v=<?= filemtime(__DIR__ . '/../assets/css/style.css') ?>">
-<link rel="icon" type="image/png" href="frontend/public/logo-y3d.png">
-<link rel="apple-touch-icon" href="frontend/public/logo-y3d.png">
+<link rel="icon" type="image/png" href="assets/img/logo-y3d.png">
+<link rel="apple-touch-icon" href="assets/img/logo-y3d.png">
 </head>
 <body>
 <header class="hdr">
   <div class="hdr-in">
-    <a href="index.php" class="logo"><img src="frontend/public/logo-y3d.png" class="logo-ic" alt="Y3D Creations"></a>
+    <a href="index.php" class="logo"><img src="assets/img/logo-y3d.png" class="logo-ic" alt="Y3D Creations"></a>
     <nav class="hdr-nav">
       <a href="index.php" class="<?= $paginaAtual === 'index.php' ? 'on' : '' ?>">Início</a>
       <a href="produtos.php" class="<?= $paginaAtual === 'produtos.php' ? 'on' : '' ?>">Produtos</a>
@@ -36,6 +36,9 @@ unset($_SESSION['flash']);
       <a href="carrinho.php" class="ibtn" title="Carrinho">
         🛒<?php if ($totalCarrinho > 0): ?><span class="n"><?= $totalCarrinho ?></span><?php endif; ?>
       </a>
+      <?php if (y3d_eh_admin()): ?>
+      <a href="admin.php" class="btn btn-outline btn-sm">Admin</a>
+      <?php endif; ?>
       <?php if ($usuarioLogado): ?>
       <a href="conta.php" class="ava" title="<?= htmlspecialchars($usuarioLogado['nome']) ?>"><?php if (!empty($usuarioLogado['foto'])): ?><img src="<?= e(foto_url($usuarioLogado['foto'])) ?>" alt="" referrerpolicy="no-referrer"><?php else: ?><?= htmlspecialchars(y3d_iniciais($usuarioLogado['nome'])) ?><?php endif; ?></a>
       <?php else: ?>

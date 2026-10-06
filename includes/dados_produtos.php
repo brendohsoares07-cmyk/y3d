@@ -301,3 +301,10 @@ function y3d_imagem_principal(array $produto): string
     $imagens = y3d_imagens_do_produto($produto);
     return $imagens[0] ?? ($produto['imagem'] ?? '');
 }
+
+/** Miniatura leve (pasta thumbs/ ao lado do original). Se não existir, usa o próprio original. */
+function y3d_miniatura(string $imagem): string
+{
+    $miniatura = dirname($imagem) . '/thumbs/' . basename($imagem);
+    return y3d_arquivo_imagem_existe($miniatura) ? $miniatura : $imagem;
+}
