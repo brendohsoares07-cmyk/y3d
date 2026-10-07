@@ -8,7 +8,7 @@ import { PageHeader } from "../../components/ui/PageHeader";
 import { ApiError } from "../../services/http";
 import { adminApi } from "../../services/resources";
 import { ResumoAdmin } from "../../types";
-import "./admin.css";
+import "../../styles/admin.css";
 
 /** Painel administrativo. A tela é montada nesta ordem: 1) KPIs · 2) gráfico + top clientes · 3) clientes. */
 export function AdminPage() {

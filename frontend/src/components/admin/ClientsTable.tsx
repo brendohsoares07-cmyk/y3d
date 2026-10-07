@@ -4,7 +4,7 @@ import { ApiError } from "../../services/http";
 import { adminApi } from "../../services/resources";
 import { ClienteAdmin, Page, StatusCliente } from "../../types";
 import { formatMoney, iniciais } from "../../utils/format";
-import { maskCpf } from "../../utils/validators";
+import { maskCpf } from "../../validations";
 import { Alert } from "../ui/Alert";
 import { Pagination } from "../ui/Pagination";
 

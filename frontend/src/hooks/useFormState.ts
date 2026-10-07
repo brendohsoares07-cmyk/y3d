@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FieldErrors } from "../utils/validators";
+import { FieldErrors } from "../validations";
 
 /** Valores + erros por campo de um formulário. */
 export function useFormState<T extends Record<string, string>>(initial: T) {

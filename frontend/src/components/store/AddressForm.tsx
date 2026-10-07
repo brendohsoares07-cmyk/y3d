@@ -1,5 +1,5 @@
 import { FormField } from "../ui/FormField";
-import { FieldErrors } from "../../utils/validators";
+import { FieldErrors } from "../../validations";
 import { maskCep, maskTelefone } from "../../utils/store";
 
 export type AddressValues = {

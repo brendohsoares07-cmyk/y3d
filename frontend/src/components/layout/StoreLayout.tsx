@@ -1,10 +1,10 @@
 import { FormEvent, useState } from "react";
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
-import { CartProvider, useCart } from "../../context/CartContext";
-import { useAuth } from "../../context/AuthContext";
-import { FavoritesProvider } from "../../context/FavoritesContext";
+import { CartProvider, useCart } from "../../contexts/CartContext";
+import { useAuth } from "../../contexts/AuthContext";
+import { FavoritesProvider } from "../../contexts/FavoritesContext";
 import { CartIcon, SearchIcon, UserIcon } from "../store/Icons";
-import "../../pages/store/store.css";
+import "../../styles/store.css";
 
 const LINKS = [
   { to: "/loja", texto: "Início", end: true },

@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { BaseEntity } from "../entities/BaseEntity";
-import { CrudController } from "../controllers/CrudController";
+import { BaseEntity } from "../shared/base/BaseEntity";
+import { CrudController } from "../shared/base/CrudController";
 
 /** Rotas REST padrão (list, get, create, update, delete) para qualquer CRUD. */
 export function crudRouter<T extends BaseEntity, TInput>(controller: CrudController<T, TInput>): Router {

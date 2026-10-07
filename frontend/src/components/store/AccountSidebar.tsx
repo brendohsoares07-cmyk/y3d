@@ -1,6 +1,6 @@
 import { ChangeEvent, useRef } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 import { useStoredState } from "../../hooks/useStoredState";
 import { iniciais } from "../../utils/format";
 import { HeartIcon, LogoutIcon, PackageIcon, UserIcon } from "./Icons";

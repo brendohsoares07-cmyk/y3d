@@ -5,7 +5,7 @@ import { ResourceForm } from "../../components/ui/ResourceForm";
 import { useResourceForm } from "../../hooks/useResourceForm";
 import { categoriasApi } from "../../services/resources";
 import { Categoria, CategoriaInput } from "../../types";
-import { collectErrors, requiredMsg } from "../../utils/validators";
+import { collectErrors, requiredMsg } from "../../validations";
 
 type Values = { nome: string; descricao: string };
 

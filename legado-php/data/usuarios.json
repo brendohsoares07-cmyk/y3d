@@ -1,0 +1,21 @@
+[
+    {
+        "id": 1,
+        "nome": "bh",
+        "email": "brendohsoares07@gmail.com",
+        "senha_hash": "$2y$10$EQtb\/nqEG4H\/O6kPURiZX.b.uVWpCgNfRr2SmHQrsUO.h43FgarBi",
+        "google_id": null,
+        "foto": null,
+        "criado_em": 1790444506
+    },
+    {
+        "id": 2,
+        "nome": "gabriel",
+        "email": "gabrielkuffellima@gmail.com",
+        "senha_hash": "$2y$10$mGt0V\/G96YmvBQbkTqpJguQ6xTfZEoqYMzkseQvukhZANalMJUqOO",
+        "google_id": null,
+        "foto": "avatares\/usuario-2-1791240431.jpg",
+        "criado_em": 1791240414,
+        "atualizado_em": 1791240431
+    }
+]

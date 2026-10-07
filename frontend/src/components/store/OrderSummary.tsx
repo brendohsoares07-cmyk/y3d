@@ -1,4 +1,4 @@
-import { CartItem } from "../../context/CartContext";
+import { CartItem } from "../../contexts/CartContext";
 import { formatMoney } from "../../utils/format";
 import { FRETE_FIXO } from "../../utils/store";
 import { Button } from "../ui/Button";

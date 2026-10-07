@@ -8,7 +8,7 @@ import { pedidosApi, produtosApi } from "../../services/resources";
 import { Pedido, PedidoInput, StatusPedido } from "../../types";
 import { formatMoney } from "../../utils/format";
 import { ROTULO_STATUS } from "../../utils/store";
-import { collectErrors, requiredMsg } from "../../utils/validators";
+import { collectErrors, requiredMsg } from "../../validations";
 
 type Values = { produtoId: string; quantidade: string; status: string };
 

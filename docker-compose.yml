@@ -16,7 +16,8 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD}
     volumes:
       - db_data:/var/lib/mysql # persistência: os dados sobrevivem a reinícios
-      - ./database/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./database/seeds/01-catalogo.sql:/docker-entrypoint-initdb.d/02-catalogo.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
       interval: 5s
@@ -27,7 +28,9 @@ services:
 
   # ---------- API (Express + TypeScript) ----------
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: ../docker/backend/Dockerfile
     restart: unless-stopped
     environment:
       PORT: 3000
@@ -48,7 +51,9 @@ services:
 
   # ---------- Frontend (React compilado, servido por um Nginx interno) ----------
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: ../docker/frontend/Dockerfile
     restart: unless-stopped
     networks:
       - app_net
@@ -60,7 +65,7 @@ services:
     ports:
       - "${HTTP_PORT:-80}:80"
     volumes:
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
       - frontend
       - backend

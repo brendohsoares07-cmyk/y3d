@@ -6,7 +6,7 @@ import { useOptions } from "../../hooks/useOptions";
 import { useResourceForm } from "../../hooks/useResourceForm";
 import { categoriasApi, produtosApi } from "../../services/resources";
 import { Produto, ProdutoInput } from "../../types";
-import { collectErrors, requiredMsg } from "../../utils/validators";
+import { collectErrors, requiredMsg } from "../../validations";
 
 type Values = {
   nome: string;

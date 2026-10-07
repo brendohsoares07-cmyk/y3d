@@ -2,7 +2,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CrudApi } from "../services/CrudApi";
 import { ApiError } from "../services/http";
-import { FieldErrors } from "../utils/validators";
+import { FieldErrors } from "../validations";
 import { useFormState } from "./useFormState";
 
 type Config<TEntity, TInput, TValues extends Record<string, string>> = {

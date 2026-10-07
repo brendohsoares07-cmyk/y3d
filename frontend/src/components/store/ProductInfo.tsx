@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
-import { useCart } from "../../context/CartContext";
-import { useFavorites } from "../../context/FavoritesContext";
+import { useAuth } from "../../contexts/AuthContext";
+import { useCart } from "../../contexts/CartContext";
+import { useFavorites } from "../../contexts/FavoritesContext";
 import { Categoria, Produto } from "../../types";
 import { formatMoney } from "../../utils/format";
 import { Button } from "../ui/Button";

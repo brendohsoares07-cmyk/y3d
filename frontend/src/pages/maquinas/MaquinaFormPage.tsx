@@ -5,7 +5,7 @@ import { ResourceForm } from "../../components/ui/ResourceForm";
 import { useResourceForm } from "../../hooks/useResourceForm";
 import { maquinasApi } from "../../services/resources";
 import { Maquina, MaquinaInput, TipoMaquina } from "../../types";
-import { collectErrors, requiredMsg } from "../../utils/validators";
+import { collectErrors, requiredMsg } from "../../validations";
 
 type Values = { nome: string; tipo: string; volumeImpressao: string };
 
