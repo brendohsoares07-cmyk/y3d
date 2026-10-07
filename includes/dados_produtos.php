@@ -170,7 +170,7 @@ $PRODUTOS = [
     ],
     [
         'id' => 18, 'nome' => 'Cooky BT21', 'categoria' => 'personagens',
-        'preco' => 24.90, 'avaliacao' => 0, 'num_avaliacoes' => 0, 'vendidos' => 0,
+        'preco' => 50.00, 'avaliacao' => 0, 'num_avaliacoes' => 0, 'vendidos' => 0,
         'cor1' => '#ff5c93', 'cor2' => '#8b5cf6', 'emoji' => '🐰',
         'imagem' => 'assets/img/bt21/cooky.png',
         'formatos' => ['Peça física'], 'tamanho' => 'Impressa em 3D pela Y3D Creations',
@@ -178,7 +178,7 @@ $PRODUTOS = [
     ],
     [
         'id' => 19, 'nome' => 'Koya BT21', 'categoria' => 'personagens',
-        'preco' => 24.90, 'avaliacao' => 0, 'num_avaliacoes' => 0, 'vendidos' => 0,
+        'preco' => 35.00, 'avaliacao' => 0, 'num_avaliacoes' => 0, 'vendidos' => 0,
         'cor1' => '#4b6bff', 'cor2' => '#3ddbf2', 'emoji' => '🐨',
         'imagem' => 'assets/img/bt21/koya.png',
         'formatos' => ['Peça física'], 'tamanho' => 'Impressa em 3D pela Y3D Creations',
@@ -186,7 +186,7 @@ $PRODUTOS = [
     ],
     [
         'id' => 20, 'nome' => 'Tata BT21', 'categoria' => 'personagens',
-        'preco' => 24.90, 'avaliacao' => 0, 'num_avaliacoes' => 0, 'vendidos' => 0,
+        'preco' => 35.00, 'avaliacao' => 0, 'num_avaliacoes' => 0, 'vendidos' => 0,
         'cor1' => '#ff4d5e', 'cor2' => '#4b6bff', 'emoji' => '❤️',
         'imagem' => 'assets/img/bt21/tata.png',
         'formatos' => ['Peça física'], 'tamanho' => 'Impressa em 3D pela Y3D Creations',
@@ -194,7 +194,7 @@ $PRODUTOS = [
     ],
     [
         'id' => 21, 'nome' => 'Chimmy BT21', 'categoria' => 'personagens',
-        'preco' => 24.90, 'avaliacao' => 0, 'num_avaliacoes' => 0, 'vendidos' => 0,
+        'preco' => 35.00, 'avaliacao' => 0, 'num_avaliacoes' => 0, 'vendidos' => 0,
         'cor1' => '#ffd23d', 'cor2' => '#ffffff', 'emoji' => '🐶',
         'imagem' => 'assets/img/bt21/chimmy.png',
         'formatos' => ['Peça física'], 'tamanho' => 'Impressa em 3D pela Y3D Creations',
@@ -202,7 +202,7 @@ $PRODUTOS = [
     ],
     [
         'id' => 22, 'nome' => 'Shooky BT21', 'categoria' => 'personagens',
-        'preco' => 24.90, 'avaliacao' => 0, 'num_avaliacoes' => 0, 'vendidos' => 0,
+        'preco' => 20.00, 'avaliacao' => 0, 'num_avaliacoes' => 0, 'vendidos' => 0,
         'cor1' => '#b8742f', 'cor2' => '#ffffff', 'emoji' => '🍪',
         'imagem' => 'assets/img/bt21/shooky.png',
         'formatos' => ['Peça física'], 'tamanho' => 'Impressa em 3D pela Y3D Creations',
@@ -210,7 +210,7 @@ $PRODUTOS = [
     ],
     [
         'id' => 23, 'nome' => 'Mang BT21', 'categoria' => 'personagens',
-        'preco' => 24.90, 'avaliacao' => 0, 'num_avaliacoes' => 0, 'vendidos' => 0,
+        'preco' => 35.00, 'avaliacao' => 0, 'num_avaliacoes' => 0, 'vendidos' => 0,
         'cor1' => '#8b5cf6', 'cor2' => '#3ddbf2', 'emoji' => '🐴',
         'imagem' => 'assets/img/bt21/mang.png',
         'formatos' => ['Peça física'], 'tamanho' => 'Impressa em 3D pela Y3D Creations',
@@ -218,7 +218,7 @@ $PRODUTOS = [
     ],
     [
         'id' => 24, 'nome' => 'RJ BT21', 'categoria' => 'personagens',
-        'preco' => 24.90, 'avaliacao' => 0, 'num_avaliacoes' => 0, 'vendidos' => 0,
+        'preco' => 40.00, 'avaliacao' => 0, 'num_avaliacoes' => 0, 'vendidos' => 0,
         'cor1' => '#ffffff', 'cor2' => '#ffd23d', 'emoji' => '🐑',
         'imagem' => 'assets/img/bt21/rj.png',
         'formatos' => ['Peça física'], 'tamanho' => 'Impressa em 3D pela Y3D Creations',
@@ -226,11 +226,11 @@ $PRODUTOS = [
     ],
     [
         'id' => 25, 'nome' => 'Coleção Completa BT21', 'categoria' => 'personagens',
-        'preco' => 200.00, 'avaliacao' => 0, 'num_avaliacoes' => 0, 'vendidos' => 0,
+        'preco' => 250.00, 'avaliacao' => 0, 'num_avaliacoes' => 0, 'vendidos' => 0,
         'cor1' => '#8b5cf6', 'cor2' => '#ff4fd8', 'emoji' => '🧸',
         'imagem' => 'assets/img/bt21/colecao-completa.png',
         'formatos' => ['Peça física'], 'tamanho' => 'Impressa em 3D pela Y3D Creations',
-        'descricao' => 'Coleção completa BT21 com 10 personagens em miniatura, com jaqueta preta, por um preço promocional.',
+        'descricao' => 'Coleção completa BT21 com 7 personagens em miniatura, com jaqueta preta, por um preço promocional.',
     ],
 ];
 
@@ -300,4 +300,11 @@ function y3d_imagem_principal(array $produto): string
 {
     $imagens = y3d_imagens_do_produto($produto);
     return $imagens[0] ?? ($produto['imagem'] ?? '');
+}
+
+/** Miniatura leve (pasta thumbs/ ao lado do original). Se não existir, usa o próprio original. */
+function y3d_miniatura(string $imagem): string
+{
+    $miniatura = dirname($imagem) . '/thumbs/' . basename($imagem);
+    return y3d_arquivo_imagem_existe($miniatura) ? $miniatura : $imagem;
 }

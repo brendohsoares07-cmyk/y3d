@@ -12,13 +12,7 @@ require_once __DIR__ . '/includes/header.php';
 $categoria = $CATEGORIAS[$produto['categoria']]['nome'];
 $imagensProduto = y3d_imagens_do_produto($produto);
 $imagemProduto = y3d_imagem_principal($produto);
-$produtosRelacionados = array_values(array_filter($PRODUTOS, fn($item) => $item['id'] !== $produto['id'] && $item['categoria'] === $produto['categoria']));
-$galeriaRelacionada = [];
-foreach ($produtosRelacionados as $item) {
-  $galeriaRelacionada = array_merge($galeriaRelacionada, y3d_imagens_do_produto($item));
-}
-$imagensGaleria = array_values(array_filter(array_merge($imagensProduto, $galeriaRelacionada, [$imagemProduto])));
-$imagensGaleria = array_slice(array_values(array_unique(array_filter($imagensGaleria, fn($imagem) => $imagem !== ''))), 0, 5);
+$imagensGaleria = array_slice($imagensProduto, 0, 5); // só fotos do próprio produto (originais em alta resolução)
 ?>
 
 <div class="pdp-crumbs">
@@ -26,22 +20,22 @@ $imagensGaleria = array_slice(array_values(array_unique(array_filter($imagensGal
 </div>
 
 <div class="product-detail-shell">
-  <section class="product-gallery" aria-label="Galeria de imagens">
-    <div class="product-gallery-main" style="background:linear-gradient(135deg,<?= e($produto['cor1']) ?>33,<?= e($produto['cor2']) ?>33)">
-      <?php if ($imagemProduto !== ''): ?>
-        <img src="<?= e($imagemProduto) ?>" alt="<?= e($produto['nome']) ?>" data-gallery-main>
-      <?php else: ?>
-        <span class="product-gallery-emoji"><?= $produto['emoji'] ?></span>
-      <?php endif; ?>
-    </div>
+  <section class="product-gallery<?= count($imagensGaleria) < 2 ? ' no-thumbs' : '' ?>" aria-label="Galeria de imagens" data-gallery data-gallery-nome="<?= e($produto['nome']) ?>" data-gallery-images="<?= e(json_encode($imagensGaleria, JSON_UNESCAPED_SLASHES)) ?>">
     <?php if (count($imagensGaleria) > 1): ?>
-      <div class="product-gallery-thumbs">
+      <div class="product-gallery-thumbs" data-gallery-thumbs>
         <?php foreach ($imagensGaleria as $indice => $imagem): ?>
-          <button type="button" class="product-gallery-thumb<?= $indice === 0 ? ' is-active' : '' ?>" data-gallery-thumb="<?= e($imagem) ?>" aria-label="Ver imagem <?= $indice + 1 ?>">
-            <img src="<?= e($imagem) ?>" alt="">
+          <button type="button" class="product-gallery-thumb<?= $indice === 0 ? ' is-active' : '' ?>" data-gallery-thumb="<?= $indice ?>" aria-label="Ver foto <?= $indice + 1 ?> de <?= count($imagensGaleria) ?>"<?= $indice === 0 ? ' aria-current="true"' : '' ?>>
+            <img src="<?= e(y3d_miniatura($imagem)) ?>" alt="" loading="lazy" decoding="async">
           </button>
         <?php endforeach; ?>
       </div>
+    <?php endif; ?>
+    <?php if ($imagemProduto !== ''): ?>
+      <button type="button" class="product-gallery-main" data-gallery-open aria-label="Ampliar imagem de <?= e($produto['nome']) ?>">
+        <img src="<?= e($imagemProduto) ?>" alt="<?= e($produto['nome']) ?>" data-gallery-main decoding="async">
+      </button>
+    <?php else: ?>
+      <div class="product-gallery-main"><span class="product-gallery-emoji"><?= $produto['emoji'] ?></span></div>
     <?php endif; ?>
   </section>
 
