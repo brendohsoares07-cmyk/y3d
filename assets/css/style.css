@@ -49,8 +49,6 @@ button{font:inherit;cursor:pointer}
 .ibtn{position:relative;width:40px;height:40px;border-radius:12px;border:0;background:transparent;color:var(--text);display:grid;place-items:center;font-size:18px}
 .ibtn:hover{background:var(--raise)}
 .ibtn svg{width:20px;height:20px}
-.lg-google-slot{display:flex;justify-content:center;min-height:56px}
-.lg-google-slot iframe{border-radius:14px !important}
 .ibtn .n{position:absolute;top:2px;right:2px;background:var(--pink);color:#fff;font-size:10px;min-width:16px;height:16px;border-radius:8px;display:grid;place-items:center;padding:0 3px}
 .ava{width:34px;height:34px;border-radius:50%;background:var(--grad);display:grid;place-items:center;font-weight:700;font-size:13px;margin-left:4px;overflow:hidden}
 .ava img{width:100%;height:100%;object-fit:cover;display:block}
@@ -155,6 +153,11 @@ button{font:inherit;cursor:pointer}
 .cart-panel .qty button{width:22px;height:22px;border-radius:6px;border:1px solid var(--line);background:transparent;color:var(--text)}
 .cart-panel .rm{border:0;background:transparent;color:var(--mute);font-size:15px}
 .cart-panel .rm:hover{color:#ff6b6b}
+.cart-panel .ic img{width:100%;height:100%;object-fit:contain;display:block}
+.cart-panel .ic:has(img){background:#fff !important}
+.cart-list .item{align-items:center;gap:14px;padding:14px 0}
+.cart-list .ic{width:76px;height:76px;border-radius:12px;overflow:hidden;font-size:30px;text-decoration:none}
+.cart-list .info{font-size:14px}
 .sum-row{display:flex;justify-content:space-between;font-size:13px;color:var(--mute);margin-top:6px}
 .sum-row.total{color:var(--text);font-weight:700;font-size:15px;border-top:1px solid var(--line);padding-top:10px;margin-top:10px}
 
@@ -332,11 +335,6 @@ button{font:inherit;cursor:pointer}
 .lg-btn{width:100%;height:58px;border-radius:14px;border:0;display:flex;align-items:center;justify-content:center;gap:10px;font-weight:700;font-size:16px;letter-spacing:.02em;color:#fff;background:linear-gradient(180deg,#8567ff,var(--lg2));box-shadow:0 10px 30px rgba(101,68,240,.45);transition:transform .12s,filter .15s}
 .lg-btn:hover{filter:brightness(1.1);transform:translateY(-1px)}
 .lg-btn svg{width:20px;height:20px}
-.lg-or{display:flex;align-items:center;gap:14px;margin:20px 0;color:#a9aee0;font-size:13px}
-.lg-or::before,.lg-or::after{content:"";flex:1;height:1px;background:rgba(124,92,255,.28)}
-.lg-google{width:100%;height:56px;border-radius:14px;border:1px solid var(--lg-line);background:rgba(10,10,28,.6);color:#fff;font-weight:600;font-size:15px;display:flex;align-items:center;justify-content:center;gap:12px}
-.lg-google:hover{border-color:var(--lg);background:rgba(124,92,255,.1)}
-.lg-google svg{width:22px;height:22px}
 .lg-signup{text-align:center;margin:22px 0 0;font-size:14px;color:#b6bbe6}
 .lg-signup a{color:var(--lg);font-weight:600;margin-left:6px}
 .lg-alert{border:1px solid #ff6b6b;background:rgba(255,107,107,.12);color:#ffd5d5;padding:11px 14px;border-radius:12px;font-size:13.5px;margin-bottom:16px}

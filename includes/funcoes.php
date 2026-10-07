@@ -81,35 +81,10 @@ function y3d_subtotal_carrinho(): float
     return $subtotal;
 }
 
-/** Calcula o frete por região do CEP; sem CEP, o valor ainda não é definido. */
-function y3d_frete_carrinho(?string $cep = null): ?float
+/** Total do pedido = soma dos produtos, pelo preço normal (a loja não cobra frete no site). */
+function y3d_total_carrinho(): float
 {
-    if (y3d_total_itens_carrinho() === 0) return 0.0;
-
-    $cepNumerico = preg_replace('/\D+/', '', $cep ?? '');
-    if (strlen($cepNumerico) !== 8) return null;
-
-    if (y3d_subtotal_carrinho() >= 150) return 0.0;
-
-    $faixasPorRegiao = [
-        '0' => 9.90,
-        '1' => 14.90,
-        '2' => 19.90,
-        '3' => 24.90,
-        '4' => 29.90,
-        '5' => 34.90,
-        '6' => 39.90,
-        '7' => 34.90,
-        '8' => 24.90,
-        '9' => 29.90,
-    ];
-
-    return $faixasPorRegiao[$cepNumerico[0]] ?? 39.90;
-}
-
-function y3d_total_carrinho(?string $cep = null): float
-{
-    return y3d_subtotal_carrinho() + (y3d_frete_carrinho($cep) ?? 0.0);
+    return y3d_subtotal_carrinho();
 }
 
 function y3d_estrelas_html(float $nota): string
@@ -129,15 +104,6 @@ function y3d_usuario(): ?array
     return isset($_SESSION['usuario']) && is_array($_SESSION['usuario']) ? $_SESSION['usuario'] : null;
 }
 
-/** Só usado como último recurso, se o Google não mandar um nome no perfil. */
-function y3d_nome_do_email(string $email): string
-{
-    $parte = explode('@', $email)[0];
-    $parte = preg_replace('/[._\-+]+|\d+/', ' ', $parte);
-    $nome = mb_convert_case(trim($parte), MB_CASE_TITLE, 'UTF-8');
-    return $nome !== '' ? $nome : 'Cliente Y3D';
-}
-
 function y3d_iniciais(string $nome): string
 {
     $partes = preg_split('/\s+/', trim($nome));
@@ -152,7 +118,7 @@ function y3d_iniciais(string $nome): string
  * Registra o login na sessão a partir de uma conta real (vinda de contas.php).
  * A senha não é guardada na sessão, só os dados públicos da conta.
  */
-function y3d_entrar(array $conta): void
+function y3d_entrar(array $conta, bool $permitirAdmin = false): void
 {
     session_regenerate_id(true);
     $_SESSION['usuario'] = [
@@ -160,9 +126,17 @@ function y3d_entrar(array $conta): void
         'nome'      => (string) ($conta['nome'] ?? ''),
         'email'     => (string) ($conta['email'] ?? ''),
         'foto'      => $conta['foto'] ?? null,
-        'google_id' => $conta['google_id'] ?? null,
         'login_em'  => time(),
+        // só vale para login por e-mail + senha (login.php); o cadastro nunca concede admin
+        'admin'     => $permitirAdmin && !empty($conta['admin']),
     ];
+}
+
+/** true se o usuário logado é administrador (campo "admin" da conta em data/usuarios.json). */
+function y3d_eh_admin(): bool
+{
+    $usuario = y3d_usuario();
+    return $usuario !== null && ($usuario['admin'] ?? false) === true;
 }
 
 function e(mixed $valor): string
@@ -174,7 +148,7 @@ function foto_url(?string $foto): string
 {
     if ($foto && trim($foto) !== '') {
         if (preg_match('#^https?://#i', $foto)) {
-            return $foto; // foto vinda do Google
+            return $foto; // foto com endereço completo (URL)
         }
         return 'assets/img/' . ltrim($foto, '/');
     }

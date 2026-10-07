@@ -8,7 +8,7 @@ $formaPagamento = $_POST['pagamento'] ?? '';
 $totalPedido = 0.0;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && y3d_total_itens_carrinho() > 0) {
-    $totalPedido = y3d_total_carrinho($cepInformado); // valor final (produtos + frete), calculado no servidor antes de esvaziar o carrinho
+    $totalPedido = y3d_total_carrinho(); // valor final (preço normal dos produtos), calculado no servidor antes de esvaziar o carrinho
     y3d_limpar_carrinho();
     $pedidoConcluido = true;
 }
@@ -16,8 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && y3d_total_itens_carrinho() > 0) {
 require_once __DIR__ . '/includes/header.php';
 $itens = y3d_itens_carrinho();
 $subtotal = y3d_subtotal_carrinho();
-$frete = y3d_frete_carrinho($cepInformado);
-$total = y3d_total_carrinho($cepInformado);
+$total = y3d_total_carrinho();
 ?>
 
 <?php if ($pedidoConcluido && $formaPagamento === 'pix' && $totalPedido > 0): ?>
@@ -73,10 +72,10 @@ $total = y3d_total_carrinho($cepInformado);
     <aside class="checkout-summary">
       <div class="checkout-heading"><span>3</span><h2>Revisão do pedido</h2></div>
       <div class="checkout-items">
-        <?php foreach ($itens as $item): $produtoItem = $item['produto']; ?>
+        <?php foreach ($itens as $item): $produtoItem = $item['produto']; $imagemCheckout = y3d_imagem_principal($produtoItem); ?>
           <div class="checkout-item">
             <div class="checkout-item-image">
-              <?php if (!empty($produtoItem['imagem'])): ?><img src="<?= htmlspecialchars($produtoItem['imagem']) ?>" alt=""><?php else: ?><?= $produtoItem['emoji'] ?><?php endif; ?>
+              <?php if ($imagemCheckout !== ''): ?><img src="<?= htmlspecialchars($imagemCheckout) ?>" alt=""><?php else: ?><?= $produtoItem['emoji'] ?><?php endif; ?>
             </div>
             <div><b><?= htmlspecialchars($produtoItem['nome']) ?></b><small><?= $item['quantidade'] ?> unidade<?= $item['quantidade'] === 1 ? '' : 's' ?></small></div>
             <strong><?= y3d_formatar_preco($item['subtotal']) ?></strong>
@@ -84,7 +83,6 @@ $total = y3d_total_carrinho($cepInformado);
         <?php endforeach; ?>
       </div>
       <div class="checkout-total-row"><span>Subtotal</span><strong data-checkout-subtotal="<?= $subtotal ?>"><?= y3d_formatar_preco($subtotal) ?></strong></div>
-      <div class="checkout-total-row"><span>Frete</span><strong data-checkout-freight><?= $frete === null ? 'Informe seu CEP' : ($frete > 0 ? y3d_formatar_preco($frete) : 'Grátis') ?></strong></div>
       <div class="checkout-total-row checkout-grand-total"><span>Total</span><strong data-checkout-total="<?= $total ?>"><?= y3d_formatar_preco($total) ?></strong></div>
       <a href="carrinho.php" class="checkout-back">← Voltar ao carrinho</a>
     </aside>

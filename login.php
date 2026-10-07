@@ -5,15 +5,7 @@ if (y3d_usuario()) {
     exit;
 }
 
-// Mensagens vindas do fluxo de login com Google (google_login.php redireciona para cá com ?erro=codigo)
-$mensagensGoogle = [
-    'nao_cadastrado'    => 'Essa conta Google ainda não tem cadastro na Y3D Creations. Crie uma conta primeiro.',
-    'token_invalido'    => 'Não foi possível confirmar sua conta Google. Tente novamente.',
-    'sem_configuracao'  => 'O login com Google ainda não foi configurado neste site.',
-    'falha'             => 'Não foi possível falar com o Google agora. Tente novamente em instantes.',
-];
-$codigoErroGoogle = (string) ($_GET['erro'] ?? '');
-$erro = $mensagensGoogle[$codigoErroGoogle] ?? null;
+$erro = null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
@@ -29,9 +21,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$conta || !y3d_verificar_senha($conta, $senha)) {
             $erro = 'E-mail ou senha incorretos.';
         } else {
-            y3d_entrar($conta);
+            y3d_entrar($conta, true);
             $_SESSION['flash'] = 'Login realizado com sucesso!';
-            header('Location: conta.php');
+            header('Location: ' . (y3d_eh_admin() ? 'admin.php' : 'conta.php'));
             exit;
         }
     }
@@ -45,8 +37,8 @@ $lgPrefix = 'lg';
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Entrar · Y3D Creations</title>
 <link rel="stylesheet" href="assets/css/style.css">
-<link rel="icon" type="image/png" href="frontend/public/logo-y3d.png">
-<link rel="apple-touch-icon" href="frontend/public/logo-y3d.png">
+<link rel="icon" type="image/png" href="assets/img/logo-y3d.png">
+<link rel="apple-touch-icon" href="assets/img/logo-y3d.png">
 </head>
 <body>
 <div class="lg-page">

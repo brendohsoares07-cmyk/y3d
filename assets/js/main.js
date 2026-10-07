@@ -121,34 +121,6 @@ function iniciarGaleriaProduto() {
         });
     });
 }
-function iniciarCalculoFrete() {
-    const campoCep = document.querySelector('#checkout-cep');
-    const freteElemento = document.querySelector('[data-checkout-freight]');
-    const totalElemento = document.querySelector('[data-checkout-total]');
-    const subtotalElemento = document.querySelector('[data-checkout-subtotal]');
-    if (!campoCep || !freteElemento || !totalElemento || !subtotalElemento)
-        return;
-    const faixasPorRegiao = {
-        '0': 9.9, '1': 14.9, '2': 19.9, '3': 24.9, '4': 29.9,
-        '5': 34.9, '6': 39.9, '7': 34.9, '8': 24.9, '9': 29.9,
-    };
-    const dinheiro = (valor) => `R$ ${valor.toFixed(2).replace('.', ',')}`;
-    const atualizarFrete = () => {
-        var _a, _b;
-        const cep = campoCep.value.replace(/\D/g, '');
-        const subtotal = Number((_a = subtotalElemento.dataset.checkoutSubtotal) !== null && _a !== void 0 ? _a : '0');
-        if (cep.length !== 8) {
-            freteElemento.textContent = 'Informe seu CEP';
-            totalElemento.textContent = dinheiro(subtotal);
-            return;
-        }
-        const frete = subtotal >= 150 ? 0 : ((_b = faixasPorRegiao[cep[0]]) !== null && _b !== void 0 ? _b : 39.9);
-        freteElemento.textContent = frete === 0 ? 'Grátis' : dinheiro(frete);
-        totalElemento.textContent = dinheiro(subtotal + frete);
-    };
-    campoCep.addEventListener('input', atualizarFrete);
-    atualizarFrete();
-}
 let toastTimer;
 function mostrarToast(mensagem) {
     const caixa = document.getElementById('toast');
@@ -171,14 +143,6 @@ function iniciarMostrarSenha() {
             campo.type = mostrar ? 'text' : 'password';
             botao.setAttribute('aria-pressed', String(mostrar));
             botao.setAttribute('aria-label', mostrar ? 'Ocultar senha' : 'Mostrar senha');
-        });
-    });
-}
-function iniciarLoginGoogle() {
-    // Este botão só aparece quando includes/config.php ainda não tem um Client ID do Google configurado.
-    document.querySelectorAll('[data-login-google]').forEach((botao) => {
-        botao.addEventListener('click', () => {
-            mostrarToast('Login com Google ainda não configurado: veja includes/config.php');
         });
     });
 }
@@ -267,8 +231,6 @@ document.addEventListener('DOMContentLoaded', () => {
     iniciarPaginaFavoritos();
     iniciarSeletorQuantidade();
     iniciarGaleriaProduto();
-    iniciarCalculoFrete();
     iniciarMostrarSenha();
-    iniciarLoginGoogle();
     iniciarCarrosselBt21();
 });

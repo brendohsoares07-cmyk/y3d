@@ -257,12 +257,13 @@ function y3d_arquivo_imagem_existe(string $imagem): bool
 
 function y3d_imagens_fallback_arquivos(): array
 {
-    $pastaBase = __DIR__ . '/../assets/img';
+    // fotos reais usadas quando um produto está sem imagem própria
+    $pastaBase = __DIR__ . '/../assets/img/produtos/galeria';
     if (!is_dir($pastaBase)) {
         return [];
     }
 
-    $arquivos = glob($pastaBase . '/WhatsApp Image*.*') ?: [];
+    $arquivos = glob($pastaBase . '/foto-*.*') ?: [];
     $imagens = [];
     foreach ($arquivos as $arquivo) {
         $relativo = str_replace('\\', '/', substr($arquivo, strlen(dirname(__DIR__)) + 1));

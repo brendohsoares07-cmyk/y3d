@@ -7,7 +7,7 @@ if (!$u) {
 }
 $tituloPagina = 'Minha conta';
 $loginEm = date('d/m/Y', $u['login_em']) . ' às ' . date('H:i', $u['login_em']);
-$senhaMascarada = !empty($u['google_id']) ? 'Login pelo Google (sem senha na Y3D)' : str_repeat('•', 10);
+$senhaMascarada = str_repeat('•', 10);
 require_once __DIR__ . '/includes/header.php';
 ?>
 
