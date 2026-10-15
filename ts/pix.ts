@@ -1,5 +1,5 @@
 // ts/pix.ts — QR Code do Pix no checkout do site PHP (compilado para assets/js/pix.js).
-// Cópia da lógica de frontend/src/utils/pix.ts: se mudar lá, mude aqui.
+// Gera o código Pix (copia e cola) e o QR Code do pedido.
 // O PHP calcula o valor do pedido; este arquivo só monta o código Pix e desenha o QR.
 
 (() => {
