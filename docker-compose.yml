@@ -1,5 +1,5 @@
 # Y3D Creations — 4 serviços: nginx (proxy) → frontend + backend → mysql
-# Uso: cp .env.example .env  e depois  docker compose up --build
+# Uso: cp .env.example .env  e depois  docker compose up --build   (ou só `docker compose up`)
 
 name: y3d-creations
 
@@ -16,8 +16,8 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD}
     volumes:
       - db_data:/var/lib/mysql # persistência: os dados sobrevivem a reinícios
-      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
-      - ./database/seeds/01-catalogo.sql:/docker-entrypoint-initdb.d/02-catalogo.sql:ro
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro # cria as tabelas (só na 1ª vez)
+      # o catálogo NÃO entra mais aqui: o serviço db-sync abaixo aplica a cada up em que o arquivo mudou
     healthcheck:
       test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
       interval: 5s
@@ -26,11 +26,48 @@ services:
     networks:
       - db_net # só o backend enxerga o banco
 
+  # ---------- Sincroniza o catálogo (roda, atualiza o banco e termina) ----------
+  # O initdb do MySQL só roda quando o volume db_data é criado. Este serviço roda a cada
+  # `docker compose up`: se database/seeds/01-catalogo.sql mudou desde a última vez
+  # (compara o hash guardado na tabela catalogo_versao), reaplica o catálogo no banco.
+  # Se o arquivo não mudou, não faz nada (edições feitas pelo painel admin são preservadas).
+  db-sync:
+    image: mysql:8.4
+    restart: "no"
+    environment:
+      MYSQL_PWD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+    volumes:
+      - ./database/seeds/01-catalogo.sql:/catalogo.sql:ro
+    entrypoint: ["sh", "-c"]
+    command:
+      - |
+        set -eu
+        M="mysql -h db -u$$DB_USER $$DB_NAME --default-character-set=utf8mb4"
+        NOVO=$$(sha256sum /catalogo.sql | cut -d" " -f1)
+        $$M -e "CREATE TABLE IF NOT EXISTS catalogo_versao (id TINYINT PRIMARY KEY, hash CHAR(64) NOT NULL, aplicado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)"
+        ANTIGO=$$($$M -N -B -e "SELECT hash FROM catalogo_versao WHERE id = 1")
+        if [ "$$NOVO" = "$$ANTIGO" ]; then
+          echo "db-sync: catálogo já está atualizado."
+          exit 0
+        fi
+        echo "db-sync: aplicando catálogo novo..."
+        $$M < /catalogo.sql
+        $$M -e "REPLACE INTO catalogo_versao (id, hash) VALUES (1, '$$NOVO')"
+        echo "db-sync: catálogo atualizado."
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - db_net # só conversa com o banco
+
   # ---------- API (Express + TypeScript) ----------
   backend:
     build:
       context: ./backend
       dockerfile: ../docker/backend/Dockerfile
+    pull_policy: build # sempre reconstrói a imagem no `up` (o cache do Docker deixa rápido se nada mudou)
     restart: unless-stopped
     environment:
       PORT: 3000
@@ -45,6 +82,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      db-sync:
+        condition: service_completed_successfully
     networks:
       - app_net
       - db_net
@@ -54,6 +93,7 @@ services:
     build:
       context: ./frontend
       dockerfile: ../docker/frontend/Dockerfile
+    pull_policy: build # sempre reconstrói o React no `up`, assim o site nunca fica com a versão antiga
     restart: unless-stopped
     networks:
       - app_net
