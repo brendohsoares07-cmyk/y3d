@@ -6,7 +6,7 @@ declare(strict_types=1);
  * É a base para o login funcionar de verdade nesta versão de demonstração
  * (sem exigir um banco de dados MySQL só para o site em PHP).
  *
- * Cada conta: id, nome, email, senha_hash, google_id, foto, criado_em.
+ * Cada conta: id, nome, email, senha_hash, foto, criado_em (e admin, só nas contas de administrador).
  */
 
 require_once __DIR__ . '/config.php';
@@ -67,7 +67,6 @@ function y3d_criar_conta(string $nome, string $email, string $senha): ?array
         'nome'       => trim($nome),
         'email'      => y3d_email_normalizado($email),
         'senha_hash' => password_hash($senha, PASSWORD_DEFAULT),
-        'google_id'  => null,
         'foto'       => null,
         'criado_em'  => time(),
     ];
@@ -79,32 +78,6 @@ function y3d_criar_conta(string $nome, string $email, string $senha): ?array
 function y3d_verificar_senha(array $conta, string $senha): bool
 {
     return !empty($conta['senha_hash']) && password_verify($senha, (string) $conta['senha_hash']);
-}
-
-/**
- * Liga uma conta já existente ao Google: guarda o google_id e aproveita a foto do
- * perfil do Google. NÃO cria conta nova — só é chamada depois de confirmar que o
- * e-mail já está cadastrado.
- */
-function y3d_conta_vincular_google(array $conta, string $googleId, ?string $nome, ?string $foto): array
-{
-    $contas = y3d_contas_carregar();
-    foreach ($contas as $indice => $c) {
-        if ((int) ($c['id'] ?? 0) === (int) $conta['id']) {
-            $contas[$indice]['google_id'] = $googleId;
-            if ($foto) {
-                $contas[$indice]['foto'] = $foto;
-            }
-            if (empty($contas[$indice]['nome']) && $nome) {
-                $contas[$indice]['nome'] = $nome;
-            }
-            $contas[$indice]['atualizado_em'] = time();
-            $conta = $contas[$indice];
-            break;
-        }
-    }
-    y3d_contas_salvar($contas);
-    return $conta;
 }
 
 /** Atualiza campos de uma conta (ex.: nome, foto) e devolve a conta já atualizada. */

@@ -14,10 +14,12 @@ $itens = y3d_itens_carrinho();
   </div>
 <?php else: ?>
   <div class="grid" style="grid-template-columns:1fr 340px;gap:24px;align-items:start">
-    <div class="card-panel">
-      <?php foreach ($itens as $item): $p = $item['produto']; ?>
+    <div class="card-panel cart-panel cart-list">
+      <?php foreach ($itens as $item): $p = $item['produto']; $imagemItem = y3d_imagem_principal($p); ?>
         <div class="item">
-          <div class="ic" style="background:linear-gradient(135deg,<?= $p['cor1'] ?>33,<?= $p['cor2'] ?>33)"><?= $p['emoji'] ?></div>
+          <a class="ic" href="produto.php?id=<?= $p['id'] ?>" style="background:linear-gradient(135deg,<?= $p['cor1'] ?>33,<?= $p['cor2'] ?>33)">
+            <?php if ($imagemItem !== ''): ?><img src="<?= htmlspecialchars($imagemItem) ?>" alt="<?= htmlspecialchars($p['nome']) ?>"><?php else: ?><?= $p['emoji'] ?><?php endif; ?>
+          </a>
           <div class="info">
             <b><?= htmlspecialchars($p['nome']) ?></b>
             <div style="color:var(--mute)"><?= y3d_formatar_preco($p['preco']) ?> cada</div>
@@ -46,8 +48,6 @@ $itens = y3d_itens_carrinho();
     <div class="card-panel cart-panel">
       <h3 style="margin:0 0 10px;font-size:15px">Resumo do pedido</h3>
       <div class="sum-row"><span>Subtotal</span><span><?= y3d_formatar_preco(y3d_subtotal_carrinho()) ?></span></div>
-      <?php $freteCarrinho = y3d_frete_carrinho(); ?>
-      <div class="sum-row"><span>Frete</span><span><?= $freteCarrinho === null ? 'Calcular no checkout' : ($freteCarrinho > 0 ? y3d_formatar_preco($freteCarrinho) : 'Grátis') ?></span></div>
       <div class="sum-row total"><span>Total</span><span><?= y3d_formatar_preco(y3d_total_carrinho()) ?></span></div>
       <a href="checkout.php" class="btn btn-grad btn-block" style="margin-top:16px">Finalizar compra →</a>
       <form action="handlers/carrinho.php" method="post" style="margin-top:8px">

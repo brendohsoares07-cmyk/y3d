@@ -5,15 +5,7 @@ if (y3d_usuario()) {
     exit;
 }
 
-// Mensagens vindas do fluxo de login com Google (google_login.php redireciona para cá com ?erro=codigo)
-$mensagensGoogle = [
-    'nao_cadastrado'    => 'Essa conta Google ainda não tem cadastro na Y3D Creations. Crie uma conta primeiro.',
-    'token_invalido'    => 'Não foi possível confirmar sua conta Google. Tente novamente.',
-    'sem_configuracao'  => 'O login com Google ainda não foi configurado neste site.',
-    'falha'             => 'Não foi possível falar com o Google agora. Tente novamente em instantes.',
-];
-$codigoErroGoogle = (string) ($_GET['erro'] ?? '');
-$erro = $mensagensGoogle[$codigoErroGoogle] ?? null;
+$erro = null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');

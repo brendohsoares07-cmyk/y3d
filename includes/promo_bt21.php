@@ -58,7 +58,7 @@ if (!$personagensBt21) return;
     <img class="bt21-combo-img" src="<?= e($colecaoBt21['imagem']) ?>" alt="Coleção completa BT21" loading="lazy">
     <div class="bt21-combo-copy">
       <span class="lg-eyebrow bt21-eyebrow">COLEÇÃO COMPLETA <i>///</i></span>
-      <p>10 personagens por <b class="grad"><?= y3d_formatar_preco($colecaoBt21['preco']) ?></b></p>
+      <p>7 personagens por <b class="grad"><?= y3d_formatar_preco($colecaoBt21['preco']) ?></b></p>
     </div>
     <form action="handlers/carrinho.php" method="post">
       <input type="hidden" name="acao" value="comprar_agora">
