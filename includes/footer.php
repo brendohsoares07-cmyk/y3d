@@ -6,7 +6,7 @@
   <div class="wrap">
     <div class="ftr-main">
       <div class="ftr-brand">
-        <a href="index.php" class="ftr-logo" aria-label="Y3D Creations — página inicial"><img src="frontend/public/logo-y3d.png" alt="Y3D Creations" loading="lazy"></a>
+        <a href="index.php" class="ftr-logo" aria-label="Y3D Creations — página inicial"><img src="assets/img/logo-y3d.png" alt="Y3D Creations" loading="lazy"></a>
         <p>Transformando ideias em realidade com tecnologia, inovação e qualidade. Sua loja de produtos e soluções em impressão 3D.</p>
         <div class="ftr-social">
           <a href="<?= htmlspecialchars(INSTAGRAM_URL) ?>" title="Instagram" aria-label="Instagram da Y3D Creations" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".9" fill="currentColor"/></svg></a>
@@ -66,7 +66,7 @@
       <div class="ftr-end">
         <span>Impressão 3D é <b>o futuro.</b></span>
         <span class="ftr-line"></span>
-        <img src="frontend/public/logo-y3d.png" alt="Y3D Creations" loading="lazy">
+        <img src="assets/img/logo-y3d.png" alt="Y3D Creations" loading="lazy">
       </div>
     </div>
   </div>

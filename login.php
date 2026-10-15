@@ -29,9 +29,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$conta || !y3d_verificar_senha($conta, $senha)) {
             $erro = 'E-mail ou senha incorretos.';
         } else {
-            y3d_entrar($conta);
+            y3d_entrar($conta, true);
             $_SESSION['flash'] = 'Login realizado com sucesso!';
-            header('Location: conta.php');
+            header('Location: ' . (y3d_eh_admin() ? 'admin.php' : 'conta.php'));
             exit;
         }
     }
@@ -45,8 +45,8 @@ $lgPrefix = 'lg';
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Entrar · Y3D Creations</title>
 <link rel="stylesheet" href="assets/css/style.css">
-<link rel="icon" type="image/png" href="frontend/public/logo-y3d.png">
-<link rel="apple-touch-icon" href="frontend/public/logo-y3d.png">
+<link rel="icon" type="image/png" href="assets/img/logo-y3d.png">
+<link rel="apple-touch-icon" href="assets/img/logo-y3d.png">
 </head>
 <body>
 <div class="lg-page">
