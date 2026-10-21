@@ -1,5 +1,7 @@
 -- Y3D Creations — dados iniciais (catálogo, categorias e máquinas).
--- Executado depois do schema.sql, só na primeira vez que o volume é criado.
+-- Aplicado automaticamente pelo serviço db-sync do docker-compose (a cada `docker compose up`
+-- em que ESTE arquivo mudou). Pode rodar quantas vezes precisar: tudo aqui é idempotente.
+-- Depende da tabela catalogo_versao, que o próprio db-sync cria antes de executar este script.
 SET NAMES utf8mb4;
 
 -- Catálogo (categorias e produtos com as fotos e preços reais da Y3D Creations)
@@ -13,7 +15,8 @@ INSERT INTO categorias (id, nome, descricao) VALUES
   (7, 'Arquitetura', 'Modelos e peças 3D de arquitetura'),
   (8, 'Tecnologia', 'Modelos e peças 3D de tecnologia'),
   (9, 'Game Assets', 'Modelos e peças 3D de game assets'),
-  (10, 'Personalizados', 'Modelos e peças 3D de personalizados');
+  (10, 'Personalizados', 'Modelos e peças 3D de personalizados')
+AS novo ON DUPLICATE KEY UPDATE nome = novo.nome, descricao = novo.descricao;
 
 INSERT INTO produtos (id, nome, descricao, preco, estoque, categoria_id, emoji, imagens, personalizacoes, detalhes, avaliacao, total_avaliacoes) VALUES
   (1, 'Chaveiros Nomes BTS', 'Chaveiros com o nome de cada integrante em relevo vermelho sobre base branca, com corrente de bolinhas. Vendidos por unidade.', 8.00, 100, 10, '🔑', '["/img/produtos/chaveiros-nomes-bts.jpg"]', '["Nome ou frase gravada", "Cores personalizadas"]', '["Peça física impressa em 3D pela Y3D Creations"]', NULL, 0),
@@ -32,9 +35,26 @@ INSERT INTO produtos (id, nome, descricao, preco, estoque, categoria_id, emoji, 
   (14, 'Leque BTS', 'Leque articulado impresso em 3D com detalhes em vermelho e borla, inspirado no universo do grupo. Peça de colecionador.', 25.00, 100, 10, '🪭', '["/img/produtos/leque-bts.jpg"]', '["Cores personalizadas"]', '["Peça física impressa em 3D pela Y3D Creations"]', NULL, 0),
   (15, 'Dragão Preto', 'Escultura de dragão em preto metalizado com muitos detalhes em relevo. Serve como decoração ou porta-objetos.', 40.00, 100, 3, '🐉', '["/img/produtos/dragao-preto.jpg"]', '[]', '["Peça física impressa em 3D pela Y3D Creations"]', NULL, 0),
   (16, 'Quadro Camisa de Time', 'Quadro com camisa do time em relevo 3D, com nome, número e patrocinadores. Personalizável para qualquer clube ou jogador.', 60.00, 100, 10, '🖼️', '["/img/produtos/quadro-flamengo-paqueta.jpg"]', '["Nome ou frase gravada", "Cores personalizadas", "Enviar minha própria arte"]', '["Peça física impressa em 3D pela Y3D Creations"]', NULL, 0),
-  (17, 'Chaveiros Emblema BTS', 'Chaveiros com emblema em vermelho e branco e corrente de bolinhas, disponíveis em duas cores de corrente.', 8.00, 100, 10, '🎖️', '["/img/produtos/chaveiros-emblema.jpg"]', '["Cores personalizadas"]', '["Peça física impressa em 3D pela Y3D Creations"]', NULL, 0);
+  (17, 'Chaveiros Emblema BTS', 'Chaveiros com emblema em vermelho e branco e corrente de bolinhas, disponíveis em duas cores de corrente.', 8.00, 100, 10, '🎖️', '["/img/produtos/chaveiros-emblema.jpg"]', '["Cores personalizadas"]', '["Peça física impressa em 3D pela Y3D Creations"]', NULL, 0)
+AS novo ON DUPLICATE KEY UPDATE nome = novo.nome, descricao = novo.descricao, preco = novo.preco, estoque = novo.estoque, categoria_id = novo.categoria_id, emoji = novo.emoji, imagens = novo.imagens, personalizacoes = novo.personalizacoes, detalhes = novo.detalhes, avaliacao = novo.avaliacao, total_avaliacoes = novo.total_avaliacoes;
 
-INSERT INTO maquinas (nome, tipo, volume_impressao) VALUES
-  ('Impressora FDM', 'FDM', '220 x 220 x 250 mm'),
-  ('Impressora Fechada CoreXY', 'FECHADA', '300 x 300 x 300 mm'),
-  ('Impressora de Resina', 'RESINA', '192 x 120 x 200 mm');
+-- Máquinas: só entram se ainda não existirem (não duplica a cada sincronização).
+INSERT INTO maquinas (nome, tipo, volume_impressao)
+  SELECT 'Impressora FDM', 'FDM', '220 x 220 x 250 mm' FROM DUAL
+  WHERE NOT EXISTS (SELECT 1 FROM maquinas WHERE nome = 'Impressora FDM');
+INSERT INTO maquinas (nome, tipo, volume_impressao)
+  SELECT 'Impressora Fechada CoreXY', 'FECHADA', '300 x 300 x 300 mm' FROM DUAL
+  WHERE NOT EXISTS (SELECT 1 FROM maquinas WHERE nome = 'Impressora Fechada CoreXY');
+INSERT INTO maquinas (nome, tipo, volume_impressao)
+  SELECT 'Impressora de Resina', 'RESINA', '192 x 120 x 200 mm' FROM DUAL
+  WHERE NOT EXISTS (SELECT 1 FROM maquinas WHERE nome = 'Impressora de Resina');
+
+-- Limpeza do catálogo ANTIGO (ids acima de 17): roda SÓ na primeira sincronização
+-- (enquanto catalogo_versao está vazia), igual a database/migrations/atualizar-catalogo.sql.
+-- Apaga os que nunca foram pedidos e zera o estoque dos que já têm pedido.
+-- Se um dia o catálogo passar de 17 produtos, ajuste o número 17 nas duas linhas abaixo.
+DELETE FROM produtos
+  WHERE id > 17 AND id NOT IN (SELECT produto_id FROM pedido_itens)
+  AND NOT EXISTS (SELECT 1 FROM catalogo_versao);
+UPDATE produtos SET estoque = 0
+  WHERE id > 17 AND NOT EXISTS (SELECT 1 FROM catalogo_versao);

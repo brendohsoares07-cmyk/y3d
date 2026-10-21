@@ -1,13 +1,25 @@
 <?php
 $tituloPagina = 'Finalizar compra';
 require_once __DIR__ . '/includes/funcoes.php';
+require_once __DIR__ . '/includes/validacoes.php';
 $pedidoConcluido = false;
 $cepInformado = trim($_POST['cep'] ?? '');
+$cpfInformado = trim($_POST['cpf'] ?? '');
+$erroCheckout = null;
 
 $formaPagamento = $_POST['pagamento'] ?? '';
 $totalPedido = 0.0;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && y3d_total_itens_carrinho() > 0) {
+    // CPF obrigatório e válido: sem isso o pedido não é concluído e o carrinho é mantido
+    if (y3d_somente_digitos($cpfInformado) === '') {
+        $erroCheckout = 'Informe o CPF para finalizar o pedido.';
+    } elseif (!y3d_cpf_valido($cpfInformado)) {
+        $erroCheckout = 'CPF inválido. Confira os números e tente de novo.';
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && y3d_total_itens_carrinho() > 0 && $erroCheckout === null) {
     $totalPedido = y3d_total_carrinho(); // valor final (preço normal dos produtos), calculado no servidor antes de esvaziar o carrinho
     y3d_limpar_carrinho();
     $pedidoConcluido = true;
@@ -46,14 +58,16 @@ $total = y3d_total_carrinho();
   </div>
 <?php else: ?>
   <div class="checkout-layout">
-    <form class="checkout-form" method="post" action="checkout.php">
+    <form class="checkout-form" method="post" action="checkout.php" novalidate>
+      <?php if ($erroCheckout): ?><div class="checkout-erro" role="alert"><?= htmlspecialchars($erroCheckout) ?></div><?php endif; ?>
       <div class="checkout-section">
         <div class="checkout-heading"><span>1</span><h1>Endereço de entrega</h1></div>
         <div class="checkout-fields">
-          <label>Nome completo<input type="text" name="nome" required placeholder="Seu nome completo"></label>
-          <label>Telefone<input type="tel" name="telefone" required placeholder="(00) 00000-0000"></label>
-          <label class="field-wide">Endereço<input type="text" name="endereco" required placeholder="Rua, número e complemento"></label>
-          <label>Cidade<input type="text" name="cidade" required placeholder="Sua cidade"></label>
+          <label>Nome completo<input type="text" name="nome" required placeholder="Seu nome completo" value="<?= htmlspecialchars(trim($_POST['nome'] ?? '')) ?>"></label>
+          <label>Telefone<input type="tel" name="telefone" required placeholder="(00) 00000-0000" value="<?= htmlspecialchars(trim($_POST['telefone'] ?? '')) ?>"></label>
+          <label>CPF<input id="checkout-cpf" type="text" name="cpf" required placeholder="000.000.000-00" inputmode="numeric" maxlength="14" autocomplete="off" data-cpf value="<?= htmlspecialchars(y3d_cpf_formatar($cpfInformado)) ?>"><small class="checkout-cpf-erro" data-cpf-erro role="alert" hidden></small></label>
+          <label class="field-wide">Endereço<input type="text" name="endereco" required placeholder="Rua, número e complemento" value="<?= htmlspecialchars(trim($_POST['endereco'] ?? '')) ?>"></label>
+          <label>Cidade<input type="text" name="cidade" required placeholder="Sua cidade" value="<?= htmlspecialchars(trim($_POST['cidade'] ?? '')) ?>"></label>
           <label>CEP<input id="checkout-cep" type="text" name="cep" required placeholder="00000-000" inputmode="numeric" maxlength="9" value="<?= htmlspecialchars($cepInformado) ?>"></label>
         </div>
       </div>
@@ -88,5 +102,13 @@ $total = y3d_total_carrinho();
     </aside>
   </div>
 <?php endif; ?>
+
+<style>
+.checkout-erro{border:1px solid #ff6b6b;background:rgba(255,107,107,.12);color:#ffd5d5;padding:11px 14px;border-radius:10px;font-size:13px;margin-bottom:16px}
+.checkout-cpf-erro{color:#ff9c9c;font-size:11.5px}
+.checkout-cpf-erro[hidden]{display:none}
+.checkout-fields label.is-invalid input{border-color:#ff6b6b;box-shadow:0 0 0 3px rgba(255,107,107,.18)}
+.checkout-fields label.is-valid input{border-color:#38d39f}
+</style>
 
 <?php require_once __DIR__ . '/includes/footer.php'; ?>

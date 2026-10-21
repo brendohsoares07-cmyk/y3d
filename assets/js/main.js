@@ -487,6 +487,74 @@ function iniciarCarrosselBt21() {
     marcarAtual();
     irPara(0);
 }
+// ---- CPF no cadastro: máscara + validação (mesma regra de includes/validacoes.php) ----
+function cpfValido(valor) {
+    const cpf = valor.replace(/\D/g, '');
+    if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf))
+        return false;
+    const digito = (tamanho) => {
+        let soma = 0;
+        for (let i = 0; i < tamanho; i++)
+            soma += Number(cpf[i]) * (tamanho + 1 - i);
+        const resto = (soma * 10) % 11;
+        return resto === 10 ? 0 : resto;
+    };
+    return digito(9) === Number(cpf[9]) && digito(10) === Number(cpf[10]);
+}
+function mascararCpf(valor) {
+    const d = valor.replace(/\D/g, '').slice(0, 11);
+    return d
+        .replace(/^(\d{3})(\d)/, '$1.$2')
+        .replace(/^(\d{3})\.(\d{3})(\d)/, '$1.$2.$3')
+        .replace(/\.(\d{3})(\d)/, '.$1-$2');
+}
+function iniciarCpfCadastro() {
+    var _a;
+    const campo = document.querySelector('input[data-cpf]');
+    if (!campo)
+        return;
+    const caixa = (_a = campo.closest('.lg-input')) !== null && _a !== void 0 ? _a : campo.closest('label'); // login/cadastro ou checkout
+    const aviso = document.querySelector('[data-cpf-erro]');
+    const formulario = campo.closest('form');
+    // mostra ou limpa a mensagem; devolve true quando o CPF está ok
+    const conferir = (mostrarVazio) => {
+        const digitos = campo.value.replace(/\D/g, '');
+        let mensagem = '';
+        if (digitos.length === 0) {
+            if (mostrarVazio)
+                mensagem = 'Digite seu CPF.';
+        }
+        else if (digitos.length < 11) {
+            if (mostrarVazio)
+                mensagem = 'O CPF precisa ter 11 números.';
+        }
+        else if (!cpfValido(digitos)) {
+            mensagem = 'CPF inválido. Confira os números.';
+        }
+        const ok = digitos.length === 11 && mensagem === '';
+        caixa === null || caixa === void 0 ? void 0 : caixa.classList.toggle('is-invalid', mensagem !== '');
+        caixa === null || caixa === void 0 ? void 0 : caixa.classList.toggle('is-valid', ok);
+        if (aviso) {
+            aviso.textContent = mensagem;
+            aviso.hidden = mensagem === '';
+        }
+        return ok;
+    };
+    campo.addEventListener('input', () => {
+        campo.value = mascararCpf(campo.value);
+        // valida na hora quando completar os 11 dígitos; antes disso só limpa o erro
+        conferir(false);
+    });
+    campo.addEventListener('blur', () => { conferir(true); });
+    formulario === null || formulario === void 0 ? void 0 : formulario.addEventListener('submit', (evento) => {
+        if (!conferir(true)) {
+            evento.preventDefault();
+            campo.focus();
+        }
+    });
+    if (campo.value)
+        campo.value = mascararCpf(campo.value);
+}
 document.addEventListener('DOMContentLoaded', () => {
     iniciarBotoesFavoritos();
     atualizarBadgeFavoritos();
@@ -494,5 +562,6 @@ document.addEventListener('DOMContentLoaded', () => {
     iniciarSeletorQuantidade();
     iniciarGaleriaProduto();
     iniciarMostrarSenha();
+    iniciarCpfCadastro();
     iniciarCarrosselBt21();
 });

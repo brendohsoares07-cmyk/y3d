@@ -98,6 +98,34 @@ services:
     networks:
       - app_net
 
+  # ---------- Loja em PHP (o site com vídeo e coleção BT21): servido em /loja/ ----------
+  # Os arquivos são montados direto da pasta do projeto: salvou o arquivo, o site já mostra a mudança
+  # (sem rebuild). Não montamos a raiz inteira para o .env, .git e o código da API nunca ficarem acessíveis.
+  loja:
+    image: php:8.3-apache
+    restart: unless-stopped
+    volumes:
+      - ./index.php:/var/www/html/index.php:ro
+      - ./produtos.php:/var/www/html/produtos.php:ro
+      - ./produto.php:/var/www/html/produto.php:ro
+      - ./sobre.php:/var/www/html/sobre.php:ro
+      - ./contato.php:/var/www/html/contato.php:ro
+      - ./login.php:/var/www/html/login.php:ro
+      - ./logout.php:/var/www/html/logout.php:ro
+      - ./cadastro.php:/var/www/html/cadastro.php:ro
+      - ./conta.php:/var/www/html/conta.php:ro
+      - ./favoritos.php:/var/www/html/favoritos.php:ro
+      - ./carrinho.php:/var/www/html/carrinho.php:ro
+      - ./checkout.php:/var/www/html/checkout.php:ro
+      - ./admin.php:/var/www/html/admin.php:ro
+      - ./admin.css:/var/www/html/admin.css:ro
+      - ./includes:/var/www/html/includes:ro
+      - ./handlers:/var/www/html/handlers:ro
+      - ./assets:/var/www/html/assets # leitura e escrita: fotos de perfil vão para assets/img/avatares
+      - ./data:/var/www/html/data # contas da loja (usuarios.json) — precisa gravar
+    networks:
+      - app_net
+
   # ---------- Proxy reverso: ÚNICO serviço exposto fora do Docker ----------
   nginx:
     image: nginx:1.27-alpine
@@ -109,6 +137,7 @@ services:
     depends_on:
       - frontend
       - backend
+      - loja
     networks:
       - public_net
       - app_net
