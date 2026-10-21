@@ -555,6 +555,79 @@ function iniciarCpfCadastro() {
     if (campo.value)
         campo.value = mascararCpf(campo.value);
 }
+function iniciarCepCheckout() {
+    const cep = document.querySelector('#checkout-cep');
+    const rua = document.querySelector('#checkout-endereco');
+    const bairro = document.querySelector('#checkout-bairro');
+    const cidade = document.querySelector('#checkout-cidade');
+    const aviso = document.querySelector('[data-cep-status]');
+    if (!cep || !rua || !bairro || !cidade)
+        return;
+    let ultimoCep = '';
+    let busca = 0; // só a busca mais recente pode preencher os campos
+    const mostrar = (mensagem, erro = false) => {
+        if (!aviso)
+            return;
+        aviso.textContent = mensagem;
+        aviso.hidden = mensagem === '';
+        aviso.classList.toggle('is-erro', erro);
+    };
+    const buscar = async (digitos) => {
+        const minha = ++busca;
+        const controle = new AbortController();
+        const limite = window.setTimeout(() => controle.abort(), 8000);
+        mostrar('Buscando endereço...');
+        try {
+            const resposta = await fetch(`https://viacep.com.br/ws/${digitos}/json/`, { signal: controle.signal });
+            if (!resposta.ok)
+                throw new Error('http ' + resposta.status);
+            const dados = (await resposta.json());
+            if (minha !== busca)
+                return;
+            if (dados.erro) {
+                mostrar('CEP não encontrado. Confira os números ou preencha o endereço manualmente.', true);
+                return;
+            }
+            if (dados.logradouro)
+                rua.value = `${dados.logradouro}, `;
+            if (dados.bairro)
+                bairro.value = dados.bairro;
+            if (dados.localidade)
+                cidade.value = dados.uf ? `${dados.localidade} - ${dados.uf}` : dados.localidade;
+            mostrar('Endereço encontrado. Falta só o número e o complemento.');
+            if (dados.logradouro) {
+                rua.focus();
+                rua.setSelectionRange(rua.value.length, rua.value.length);
+            }
+            else {
+                // CEP geral da cidade, sem rua: a pessoa digita a rua
+                rua.focus();
+            }
+        }
+        catch {
+            if (minha !== busca)
+                return;
+            mostrar('Não foi possível buscar o CEP agora. Preencha o endereço manualmente.', true);
+        }
+        finally {
+            window.clearTimeout(limite);
+        }
+    };
+    cep.addEventListener('input', () => {
+        const digitos = cep.value.replace(/\D/g, '').slice(0, 8);
+        cep.value = digitos.length > 5 ? `${digitos.slice(0, 5)}-${digitos.slice(5)}` : digitos;
+        if (digitos.length < 8) {
+            ultimoCep = '';
+            busca++; // cancela busca em andamento
+            mostrar('');
+            return;
+        }
+        if (digitos !== ultimoCep) {
+            ultimoCep = digitos;
+            void buscar(digitos);
+        }
+    });
+}
 document.addEventListener('DOMContentLoaded', () => {
     iniciarBotoesFavoritos();
     atualizarBadgeFavoritos();
@@ -563,5 +636,6 @@ document.addEventListener('DOMContentLoaded', () => {
     iniciarGaleriaProduto();
     iniciarMostrarSenha();
     iniciarCpfCadastro();
+    iniciarCepCheckout();
     iniciarCarrosselBt21();
 });

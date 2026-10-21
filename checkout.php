@@ -66,9 +66,10 @@ $total = y3d_total_carrinho();
           <label>Nome completo<input type="text" name="nome" required placeholder="Seu nome completo" value="<?= htmlspecialchars(trim($_POST['nome'] ?? '')) ?>"></label>
           <label>Telefone<input type="tel" name="telefone" required placeholder="(00) 00000-0000" value="<?= htmlspecialchars(trim($_POST['telefone'] ?? '')) ?>"></label>
           <label>CPF<input id="checkout-cpf" type="text" name="cpf" required placeholder="000.000.000-00" inputmode="numeric" maxlength="14" autocomplete="off" data-cpf value="<?= htmlspecialchars(y3d_cpf_formatar($cpfInformado)) ?>"><small class="checkout-cpf-erro" data-cpf-erro role="alert" hidden></small></label>
-          <label class="field-wide">Endereço<input type="text" name="endereco" required placeholder="Rua, número e complemento" value="<?= htmlspecialchars(trim($_POST['endereco'] ?? '')) ?>"></label>
-          <label>Cidade<input type="text" name="cidade" required placeholder="Sua cidade" value="<?= htmlspecialchars(trim($_POST['cidade'] ?? '')) ?>"></label>
-          <label>CEP<input id="checkout-cep" type="text" name="cep" required placeholder="00000-000" inputmode="numeric" maxlength="9" value="<?= htmlspecialchars($cepInformado) ?>"></label>
+          <label>CEP<input id="checkout-cep" type="text" name="cep" required placeholder="00000-000" inputmode="numeric" maxlength="9" autocomplete="postal-code" value="<?= htmlspecialchars($cepInformado) ?>"><small class="checkout-cep-status" data-cep-status role="status" hidden></small></label>
+          <label class="field-wide">Endereço<input id="checkout-endereco" type="text" name="endereco" required placeholder="Rua, número e complemento" value="<?= htmlspecialchars(trim($_POST['endereco'] ?? '')) ?>"></label>
+          <label>Bairro<input id="checkout-bairro" type="text" name="bairro" required placeholder="Seu bairro" value="<?= htmlspecialchars(trim($_POST['bairro'] ?? '')) ?>"></label>
+          <label>Cidade<input id="checkout-cidade" type="text" name="cidade" required placeholder="Sua cidade" value="<?= htmlspecialchars(trim($_POST['cidade'] ?? '')) ?>"></label>
         </div>
       </div>
       <div class="checkout-section">
@@ -107,6 +108,9 @@ $total = y3d_total_carrinho();
 .checkout-erro{border:1px solid #ff6b6b;background:rgba(255,107,107,.12);color:#ffd5d5;padding:11px 14px;border-radius:10px;font-size:13px;margin-bottom:16px}
 .checkout-cpf-erro{color:#ff9c9c;font-size:11.5px}
 .checkout-cpf-erro[hidden]{display:none}
+.checkout-cep-status{color:#7fe0b0;font-size:11.5px}
+.checkout-cep-status.is-erro{color:#ff9c9c}
+.checkout-cep-status[hidden]{display:none}
 .checkout-fields label.is-invalid input{border-color:#ff6b6b;box-shadow:0 0 0 3px rgba(255,107,107,.18)}
 .checkout-fields label.is-valid input{border-color:#38d39f}
 </style>
