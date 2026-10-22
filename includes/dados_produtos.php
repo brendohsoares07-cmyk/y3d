@@ -232,6 +232,52 @@ $PRODUTOS = [
         'formatos' => ['Peça física'], 'tamanho' => 'Impressa em 3D pela Y3D Creations',
         'descricao' => 'Coleção completa BT21 com 7 personagens em miniatura, com jaqueta preta, por um preço promocional.',
     ],
+    [
+        'id' => 26, 'nome' => 'Coiote', 'categoria' => 'personagens',
+        'preco' => 185.00, 'avaliacao' => 0, 'num_avaliacoes' => 0, 'vendidos' => 0,
+        'cor1' => '#8b5e4b', 'cor2' => '#f2e5d0', 'emoji' => '🐺',
+        'imagem' => 'assets/img/produtos/coiote.png',
+        'formatos' => ['Peça física'], 'tamanho' => 'Impressa em 3D pela Y3D Creations',
+        'descricao' => 'Miniatura colorida do Coiote, impressa em 3D e pintada com detalhes. Peça colecionável para decorar sua estante.',
+    ],
+    [
+        'id' => 27, 'nome' => 'Frajola', 'categoria' => 'personagens',
+        'preco' => 150.00, 'avaliacao' => 0, 'num_avaliacoes' => 0, 'vendidos' => 0,
+        'cor1' => '#1a1a1a', 'cor2' => '#ffffff', 'emoji' => '🐈‍⬛',
+        'imagem' => 'assets/img/produtos/frajola.png',
+        'formatos' => ['Peça física'], 'tamanho' => 'Impressa em 3D pela Y3D Creations',
+        'descricao' => 'Miniatura do Frajola em preto e branco, impressa em 3D e pintada com detalhes. Peça colecionável para decorar sua estante.',
+    ],
+    [
+        'id' => 28, 'nome' => 'Harry Potter', 'categoria' => 'personagens',
+        'preco' => 200.00, 'avaliacao' => 0, 'num_avaliacoes' => 0, 'vendidos' => 0,
+        'cor1' => '#1a1a1a', 'cor2' => '#ffd23a', 'emoji' => '🧙',
+        'imagem' => 'assets/img/produtos/harry-potter.png',
+        'formatos' => ['Peça física'], 'tamanho' => 'Impressa em 3D pela Y3D Creations',
+        'descricao' => 'Miniatura de Harry Potter com óculos, varinha e cachecol, impressa em 3D com acabamento detalhado.',
+    ],
+    [
+        'id' => 29, 'nome' => 'Bowser', 'categoria' => 'personagens',
+        'preco' => 140.00, 'avaliacao' => 0, 'num_avaliacoes' => 0, 'vendidos' => 0,
+        'cor1' => '#ffd23a', 'cor2' => '#ff4d5e', 'emoji' => '🐢',
+        'imagem' => 'assets/img/produtos/bowser-promocao.png',
+        'formatos' => ['Peça física'], 'tamanho' => 'Impressa em 3D pela Y3D Creations',
+        'descricao' => 'Miniatura do Bowser com casco e espinhos coloridos, impressa em 3D e pintada com detalhes.',
+    ],
+    [
+        'id' => 30, 'nome' => 'Combo Personagens', 'categoria' => 'personagens',
+        'preco' => 599.00, 'avaliacao' => 0, 'num_avaliacoes' => 0, 'vendidos' => 0,
+        'cor1' => '#8b5cf6', 'cor2' => '#ffd23a', 'emoji' => '🎁',
+        'imagem' => 'assets/img/produtos/coiote.png',
+        'imagens' => [
+            'assets/img/produtos/coiote.png',
+            'assets/img/produtos/frajola.png',
+            'assets/img/produtos/harry-potter.png',
+            'assets/img/produtos/bowser-promocao.png',
+        ],
+        'formatos' => ['Combo com 4 peças físicas'], 'tamanho' => 'Impressas em 3D pela Y3D Creations',
+        'descricao' => 'Combo promocional com as quatro miniaturas: Coiote, Frajola, Harry Potter e Bowser. As peças saem por R$ 675,00 compradas separadamente; no combo, você economiza R$ 76,00.',
+    ],
 ];
 
 function y3d_produto_por_id(int $id): ?array

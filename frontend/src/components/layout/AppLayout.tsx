@@ -34,10 +34,7 @@ export function AppLayout() {
     <div className="shell">
       <aside className="sidebar">
         <div className="brand">
-          <img src="/logo-icon.svg" alt="" width={36} height={36} />
-          <span>
-            <strong className="grad">Y3D</strong> Creations
-          </span>
+          <img src="/logo-y3d-transparente.png" alt="Y3D Creations" />
         </div>
         <nav>
           <Link to="/loja" className="nav-link">← Voltar à loja</Link>

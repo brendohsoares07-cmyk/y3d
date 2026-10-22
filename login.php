@@ -37,8 +37,8 @@ $lgPrefix = 'lg';
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Entrar · Y3D Creations</title>
 <link rel="stylesheet" href="assets/css/style.css">
-<link rel="icon" type="image/png" href="assets/img/logo-y3d.png">
-<link rel="apple-touch-icon" href="assets/img/logo-y3d.png">
+<link rel="icon" type="image/png" href="assets/img/logo-y3d-transparente.png">
+<link rel="apple-touch-icon" href="assets/img/logo-y3d-transparente.png">
 </head>
 <body>
 <div class="lg-page">

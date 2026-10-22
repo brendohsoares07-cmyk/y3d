@@ -19,8 +19,8 @@
 /* barra de navegação */
 .store-nav { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: 28px; padding: 12px 24px; background: rgba(7, 8, 25, .92);
   backdrop-filter: blur(8px); border-bottom: 1px solid var(--s-line); }
-.store-brand { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 600; color: var(--s-text) !important; text-decoration: none; }
-.store-brand b { color: var(--s-violet); }
+.store-brand { display: flex; align-items: center; flex: none; color: var(--s-text) !important; text-decoration: none; }
+.store-brand img { display: block; width: 150px; max-height: 48px; object-fit: contain; }
 .store-links { display: flex; gap: 22px; }
 .store-links a { color: var(--s-text); text-decoration: none; padding: 6px 0; border-bottom: 2px solid transparent; }
 .store-links a.on, .store-links a:hover { border-bottom-color: var(--s-purple); }

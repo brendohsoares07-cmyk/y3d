@@ -152,7 +152,7 @@ function foto_url(?string $foto): string
         }
         return 'assets/img/' . ltrim($foto, '/');
     }
-    return 'assets/img/logo-icon.svg';
+    return 'assets/img/logo-y3d-transparente.png';
 }
 
 function avatar_html(string $nome, ?string $foto = null, string $class = ''): string

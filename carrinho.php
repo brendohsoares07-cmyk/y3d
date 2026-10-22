@@ -59,4 +59,4 @@ $itens = y3d_itens_carrinho();
   </div>
 <?php endif; ?>
 
-<?php require_once __DIR__ . '/includes/footer.php'; ?>
+<?php require_once __DIR__ . '/includes/footer.php'; ?> 

@@ -35,7 +35,12 @@ INSERT INTO produtos (id, nome, descricao, preco, estoque, categoria_id, emoji, 
   (14, 'Leque BTS', 'Leque articulado impresso em 3D com detalhes em vermelho e borla, inspirado no universo do grupo. Peça de colecionador.', 25.00, 100, 10, '🪭', '["/img/produtos/leque-bts.jpg"]', '["Cores personalizadas"]', '["Peça física impressa em 3D pela Y3D Creations"]', NULL, 0),
   (15, 'Dragão Preto', 'Escultura de dragão em preto metalizado com muitos detalhes em relevo. Serve como decoração ou porta-objetos.', 40.00, 100, 3, '🐉', '["/img/produtos/dragao-preto.jpg"]', '[]', '["Peça física impressa em 3D pela Y3D Creations"]', NULL, 0),
   (16, 'Quadro Camisa de Time', 'Quadro com camisa do time em relevo 3D, com nome, número e patrocinadores. Personalizável para qualquer clube ou jogador.', 60.00, 100, 10, '🖼️', '["/img/produtos/quadro-flamengo-paqueta.jpg"]', '["Nome ou frase gravada", "Cores personalizadas", "Enviar minha própria arte"]', '["Peça física impressa em 3D pela Y3D Creations"]', NULL, 0),
-  (17, 'Chaveiros Emblema BTS', 'Chaveiros com emblema em vermelho e branco e corrente de bolinhas, disponíveis em duas cores de corrente.', 8.00, 100, 10, '🎖️', '["/img/produtos/chaveiros-emblema.jpg"]', '["Cores personalizadas"]', '["Peça física impressa em 3D pela Y3D Creations"]', NULL, 0)
+  (17, 'Chaveiros Emblema BTS', 'Chaveiros com emblema em vermelho e branco e corrente de bolinhas, disponíveis em duas cores de corrente.', 8.00, 100, 10, '🎖️', '["/img/produtos/chaveiros-emblema.jpg"]', '["Cores personalizadas"]', '["Peça física impressa em 3D pela Y3D Creations"]', NULL, 0),
+  (26, 'Coiote', 'Miniatura colorida do Coiote, impressa em 3D e pintada com detalhes. Peça colecionável para decorar sua estante.', 185.00, 100, 1, '🐺', '["/img/produtos/coiote.png"]', '[]', '["Peça física impressa em 3D pela Y3D Creations"]', NULL, 0),
+  (27, 'Frajola', 'Miniatura do Frajola em preto e branco, impressa em 3D e pintada com detalhes. Peça colecionável para decorar sua estante.', 150.00, 100, 1, '🐈‍⬛', '["/img/produtos/frajola.png"]', '[]', '["Peça física impressa em 3D pela Y3D Creations"]', NULL, 0),
+  (28, 'Harry Potter', 'Miniatura de Harry Potter com óculos, varinha e cachecol, impressa em 3D com acabamento detalhado.', 200.00, 100, 1, '🧙', '["/img/produtos/harry-potter.png"]', '[]', '["Peça física impressa em 3D pela Y3D Creations"]', NULL, 0),
+  (29, 'Bowser', 'Miniatura do Bowser com casco e espinhos coloridos, impressa em 3D e pintada com detalhes.', 140.00, 100, 1, '🐢', '["/img/produtos/bowser-promocao.png"]', '[]', '["Peça física impressa em 3D pela Y3D Creations"]', NULL, 0),
+  (30, 'Combo Personagens', 'Combo promocional com as quatro miniaturas: Coiote, Frajola, Harry Potter e Bowser. As peças saem por R$ 675,00 compradas separadamente; no combo, você economiza R$ 76,00.', 599.00, 100, 1, '🎁', '["/img/produtos/coiote.png", "/img/produtos/frajola.png", "/img/produtos/harry-potter.png", "/img/produtos/bowser-promocao.png"]', '[]', '["Combo com 4 peças físicas impressas em 3D pela Y3D Creations"]', NULL, 0)
 AS novo ON DUPLICATE KEY UPDATE nome = novo.nome, descricao = novo.descricao, preco = novo.preco, estoque = novo.estoque, categoria_id = novo.categoria_id, emoji = novo.emoji, imagens = novo.imagens, personalizacoes = novo.personalizacoes, detalhes = novo.detalhes, avaliacao = novo.avaliacao, total_avaliacoes = novo.total_avaliacoes;
 
 -- Máquinas: só entram se ainda não existirem (não duplica a cada sincronização).
@@ -49,12 +54,14 @@ INSERT INTO maquinas (nome, tipo, volume_impressao)
   SELECT 'Impressora de Resina', 'RESINA', '192 x 120 x 200 mm' FROM DUAL
   WHERE NOT EXISTS (SELECT 1 FROM maquinas WHERE nome = 'Impressora de Resina');
 
--- Limpeza do catálogo ANTIGO (ids acima de 17): roda SÓ na primeira sincronização
+-- Limpeza do catálogo ANTIGO (ids acima de 17, exceto os novos produtos 26 a 30): roda SÓ na primeira sincronização
 -- (enquanto catalogo_versao está vazia), igual a database/migrations/atualizar-catalogo.sql.
 -- Apaga os que nunca foram pedidos e zera o estoque dos que já têm pedido.
--- Se um dia o catálogo passar de 17 produtos, ajuste o número 17 nas duas linhas abaixo.
+-- Se um dia o catálogo mudar, ajuste as exclusões abaixo.
 DELETE FROM produtos
-  WHERE id > 17 AND id NOT IN (SELECT produto_id FROM pedido_itens)
+  WHERE id > 17 AND id NOT IN (26, 27, 28, 29, 30)
+  AND id NOT IN (SELECT produto_id FROM pedido_itens)
   AND NOT EXISTS (SELECT 1 FROM catalogo_versao);
 UPDATE produtos SET estoque = 0
-  WHERE id > 17 AND NOT EXISTS (SELECT 1 FROM catalogo_versao);
+  WHERE id > 17 AND id NOT IN (26, 27, 28, 29, 30)
+  AND NOT EXISTS (SELECT 1 FROM catalogo_versao);

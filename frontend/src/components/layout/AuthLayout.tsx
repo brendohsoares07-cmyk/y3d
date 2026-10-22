@@ -6,10 +6,7 @@ export function AuthLayout({ titulo, children }: { titulo: string; children: Rea
     <main className="auth-page">
       <section className="auth-card">
         <div className="brand">
-          <img src="/logo-icon.svg" alt="" width={44} height={44} />
-          <span>
-            <strong className="grad">Y3D</strong> Creations
-          </span>
+          <img src="/logo-y3d-transparente.png" alt="Y3D Creations" />
         </div>
         <h1>{titulo}</h1>
         {children}

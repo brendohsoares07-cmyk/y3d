@@ -37,8 +37,7 @@ function Navbar() {
   return (
     <header className="store-nav">
       <Link to="/loja" className="store-brand">
-        <img src="/logo-icon.svg" alt="" width={40} height={40} />
-        <span>Y3D <b>creations</b></span>
+        <img src="/logo-y3d-transparente.png" alt="Y3D Creations" />
       </Link>
       <nav className="store-links">
         {LINKS.map((l) => (

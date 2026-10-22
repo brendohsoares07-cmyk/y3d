@@ -1,4 +1,4 @@
--- Y3D Creations — troca o catálogo antigo pelos 17 produtos reais (para bancos JÁ criados).
+-- Y3D Creations — troca o catálogo antigo pelos 17 produtos e adiciona os quatro novos e o combo (para bancos JÁ criados).
 -- Aplique uma vez no MySQL do projeto.
 SET NAMES utf8mb4;
 
@@ -53,6 +53,14 @@ ON DUPLICATE KEY UPDATE nome=VALUES(nome), descricao=VALUES(descricao), preco=VA
 INSERT INTO produtos (id, nome, descricao, preco, estoque, categoria_id, emoji, imagens, personalizacoes, detalhes, avaliacao, total_avaliacoes) VALUES (17, 'Chaveiros Emblema BTS', 'Chaveiros com emblema em vermelho e branco e corrente de bolinhas, disponíveis em duas cores de corrente.', 8.00, 100, 10, '🎖️', '["/img/produtos/chaveiros-emblema.jpg"]', '["Cores personalizadas"]', '["Peça física impressa em 3D pela Y3D Creations"]', NULL, 0)
 ON DUPLICATE KEY UPDATE nome=VALUES(nome), descricao=VALUES(descricao), preco=VALUES(preco), estoque=VALUES(estoque), categoria_id=VALUES(categoria_id), emoji=VALUES(emoji), imagens=VALUES(imagens), personalizacoes=VALUES(personalizacoes), detalhes=VALUES(detalhes), avaliacao=VALUES(avaliacao), total_avaliacoes=VALUES(total_avaliacoes);
 
--- Produtos antigos (ids acima de 17): apaga os que nunca foram pedidos e zera o estoque dos que já têm pedido.
-DELETE FROM produtos WHERE id > 17 AND id NOT IN (SELECT produto_id FROM pedido_itens);
-UPDATE produtos SET estoque = 0 WHERE id > 17;
+INSERT INTO produtos (id, nome, descricao, preco, estoque, categoria_id, emoji, imagens, personalizacoes, detalhes, avaliacao, total_avaliacoes) VALUES
+(26, 'Coiote', 'Miniatura colorida do Coiote, impressa em 3D e pintada com detalhes. Peça colecionável para decorar sua estante.', 185.00, 100, 1, '🐺', '["/img/produtos/coiote.png"]', '[]', '["Peça física impressa em 3D pela Y3D Creations"]', NULL, 0),
+(27, 'Frajola', 'Miniatura do Frajola em preto e branco, impressa em 3D e pintada com detalhes. Peça colecionável para decorar sua estante.', 150.00, 100, 1, '🐈‍⬛', '["/img/produtos/frajola.png"]', '[]', '["Peça física impressa em 3D pela Y3D Creations"]', NULL, 0),
+(28, 'Harry Potter', 'Miniatura de Harry Potter com óculos, varinha e cachecol, impressa em 3D com acabamento detalhado.', 200.00, 100, 1, '🧙', '["/img/produtos/harry-potter.png"]', '[]', '["Peça física impressa em 3D pela Y3D Creations"]', NULL, 0),
+(29, 'Bowser', 'Miniatura do Bowser com casco e espinhos coloridos, impressa em 3D e pintada com detalhes.', 140.00, 100, 1, '🐢', '["/img/produtos/bowser-promocao.png"]', '[]', '["Peça física impressa em 3D pela Y3D Creations"]', NULL, 0),
+(30, 'Combo Personagens', 'Combo promocional com as quatro miniaturas: Coiote, Frajola, Harry Potter e Bowser. As peças saem por R$ 675,00 compradas separadamente; no combo, você economiza R$ 76,00.', 599.00, 100, 1, '🎁', '["/img/produtos/coiote.png", "/img/produtos/frajola.png", "/img/produtos/harry-potter.png", "/img/produtos/bowser-promocao.png"]', '[]', '["Combo com 4 peças físicas impressas em 3D pela Y3D Creations"]', NULL, 0)
+ON DUPLICATE KEY UPDATE nome=VALUES(nome), descricao=VALUES(descricao), preco=VALUES(preco), estoque=VALUES(estoque), categoria_id=VALUES(categoria_id), emoji=VALUES(emoji), imagens=VALUES(imagens), personalizacoes=VALUES(personalizacoes), detalhes=VALUES(detalhes), avaliacao=VALUES(avaliacao), total_avaliacoes=VALUES(total_avaliacoes);
+
+-- Produtos antigos (ids acima de 17, exceto os novos produtos): apaga os que nunca foram pedidos e zera o estoque dos que já têm pedido.
+DELETE FROM produtos WHERE id > 17 AND id NOT IN (26, 27, 28, 29, 30) AND id NOT IN (SELECT produto_id FROM pedido_itens);
+UPDATE produtos SET estoque = 0 WHERE id > 17 AND id NOT IN (26, 27, 28, 29, 30);

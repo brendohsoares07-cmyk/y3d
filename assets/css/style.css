@@ -30,7 +30,7 @@ button{font:inherit;cursor:pointer}
 
 /* logo */
 .logo{display:flex;align-items:center;flex:none}
-.logo-ic{width:92px;height:62px;object-fit:contain;object-position:center;border-radius:8px;flex:none;filter:drop-shadow(0 3px 10px rgba(61,219,242,.22))}
+.logo-ic{width:128px;height:52px;object-fit:contain;object-position:center;border-radius:8px;flex:none;filter:drop-shadow(0 3px 10px rgba(61,219,242,.22))}
 .logo .y3d{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .logo small{display:block;font-size:9px;font-weight:600;letter-spacing:.25em;color:var(--mute);margin-top:-2px}
 
@@ -412,7 +412,7 @@ button{font:inherit;cursor:pointer}
 
 /* ===================== MARCA + MÁQUINAS ===================== */
 .brand-band{display:grid;grid-template-columns:1.05fr 1fr;align-items:center;gap:36px;padding:22px;border-radius:24px;border:1px solid var(--line);background:linear-gradient(120deg,rgba(139,92,246,.16),rgba(16,20,42,.9) 55%,rgba(61,219,242,.1))}
-.brand-logo{width:100%;aspect-ratio:997/672;object-fit:cover;object-position:center;border-radius:18px;border:1px solid var(--line);box-shadow:0 20px 60px rgba(75,59,214,.35)}
+.brand-logo{width:100%;aspect-ratio:3.21/1;object-fit:contain;object-position:center;border-radius:18px;border:1px solid var(--line);box-shadow:0 20px 60px rgba(75,59,214,.35)}
 .brand-copy h2{margin:10px 0 12px;font-size:clamp(28px,3.4vw,42px);line-height:1.1;font-weight:900}
 .brand-copy h2 .grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .brand-copy p{margin:0 0 22px;color:var(--mute);max-width:46ch}
@@ -533,6 +533,40 @@ button{font:inherit;cursor:pointer}
   .bt21-comprar{width:100%;white-space:normal}
 }
 @media (prefers-reduced-motion:reduce){.bt21-card,.bt21-seta,.bt21-ponto{transition:none}}
+
+/* ===== Promoção Combo de Personagens ===== */
+.personagens-promo{position:relative;overflow:hidden;padding:30px;border:1px solid rgba(255,210,58,.55);border-radius:24px;
+  background:radial-gradient(700px 300px at 50% 0%,rgba(255,79,216,.16),transparent 65%),radial-gradient(500px 260px at 100% 100%,rgba(255,210,58,.12),transparent 65%),linear-gradient(135deg,#17102d,#0c1028 62%,#17132b);
+  box-shadow:0 0 0 1px rgba(255,210,58,.12),0 0 40px rgba(255,79,216,.14)}
+.personagens-promo-head{text-align:center}
+.personagens-promo-selo,.personagens-promo-tag{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;background:linear-gradient(100deg,#ff4d5e,#ff4fd8);color:#fff;font-size:11px;font-weight:900;letter-spacing:.09em;padding:7px 13px;box-shadow:0 5px 20px rgba(255,77,94,.28)}
+.personagens-promo-chamada{margin:14px 0 5px;color:#ffd23a;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.13em}
+.personagens-promo-head h2{margin:0;font-size:clamp(25px,4vw,42px);font-weight:900;line-height:1.12}
+.personagens-promo-head h2 .grad{background:linear-gradient(100deg,#ffd23a,#ff4fd8 55%,#8b5cf6);-webkit-background-clip:text;background-clip:text;color:transparent}
+.personagens-promo-sub{margin:10px 0 0;color:var(--mute);font-size:15px}
+.personagens-promo-lista{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:24px auto;max-width:880px}
+.personagens-promo-item{min-width:0;padding:10px;border:1px solid rgba(139,92,246,.35);border-radius:16px;background:rgba(10,14,34,.72);text-align:center;transition:transform .2s,border-color .2s,box-shadow .2s}
+.personagens-promo-item:hover{transform:translateY(-4px);border-color:#ff4fd8;box-shadow:0 10px 24px rgba(139,92,246,.2)}
+.personagens-promo-foto{display:grid;place-items:center;aspect-ratio:1/1;border-radius:11px;background:radial-gradient(circle at 50% 85%,rgba(139,92,246,.26),transparent 65%),#10152e;overflow:hidden}
+.personagens-promo-foto img{width:100%;height:100%;padding:4px;object-fit:contain;filter:drop-shadow(0 8px 10px rgba(0,0,0,.45))}
+.personagens-promo-nome,.personagens-promo-preco{display:block}
+.personagens-promo-nome{margin-top:9px;color:var(--text);font-size:14px;font-weight:800}
+.personagens-promo-preco{margin-top:3px;color:var(--mute);font-size:12px}
+.personagens-promo-oferta{display:flex;align-items:center;justify-content:center;gap:28px;flex-wrap:wrap;padding:18px;border:1px solid rgba(255,210,58,.3);border-radius:18px;background:rgba(7,10,24,.55)}
+.personagens-promo-economia{display:grid;justify-items:center;gap:5px}
+.personagens-promo-tag{background:linear-gradient(100deg,#ffd23a,#ff9e3d);color:#24142f;box-shadow:none}
+.personagens-promo-valores{display:flex;align-items:baseline;gap:11px}
+.personagens-promo-valores s{color:var(--mute);font-size:16px}
+.personagens-promo-valores strong{color:#ffd23a;font-size:clamp(29px,4vw,40px);font-weight:900;line-height:1.1}
+.personagens-promo-economize{color:#8ff3d2;font-size:13px;font-weight:700}
+.personagens-promo-botao{min-height:52px;padding:0 26px;font-weight:900;box-shadow:0 0 24px rgba(255,79,216,.3)}
+@media (max-width:640px){
+  .personagens-promo{padding:22px 15px}
+  .personagens-promo-lista{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:18px auto}
+  .personagens-promo-oferta{gap:16px;padding:16px 12px}
+  .personagens-promo-oferta form,.personagens-promo-botao{width:100%}
+}
+@media (prefers-reduced-motion:reduce){.personagens-promo-item{transition:none}}
 
 /* ===== Galeria do produto: miniaturas verticais à esquerda + imagem principal grande ===== */
 .product-gallery{padding:12px;display:grid;grid-template-columns:78px minmax(0,1fr);gap:12px;align-items:start;border-color:rgba(61,219,242,.18)}

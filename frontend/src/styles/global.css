@@ -45,7 +45,9 @@ input:disabled { opacity: .6; }
   background: radial-gradient(circle at 20% 10%, rgba(139, 92, 246, .25), transparent 40%),
               radial-gradient(circle at 80% 90%, rgba(255, 79, 216, .18), transparent 40%), var(--bg); }
 .auth-card { width: 100%; max-width: 420px; background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 28px; }
-.brand { display: flex; align-items: center; gap: 10px; font-size: 20px; margin-bottom: 18px; }
+.brand { display: flex; align-items: center; margin-bottom: 18px; }
+.brand img { display: block; width: 156px; max-height: 54px; object-fit: contain; }
+.auth-card .brand { justify-content: center; }
 
 /* área logada */
 .shell { display: grid; grid-template-columns: 230px 1fr; min-height: 100vh; }

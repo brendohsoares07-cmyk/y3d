@@ -47,6 +47,7 @@ $faq = [
 </section>
 
 <?php require __DIR__ . '/includes/promo_bt21.php'; ?>
+<?php require __DIR__ . '/includes/promo-personagens.php'; ?>
 
 <?php require __DIR__ . '/includes/marca.php'; ?>
 

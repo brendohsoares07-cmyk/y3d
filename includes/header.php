@@ -13,13 +13,13 @@ unset($_SESSION['flash']);
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><?= isset($tituloPagina) ? htmlspecialchars($tituloPagina) . ' · ' : '' ?>Y3D Creations</title>
 <link rel="stylesheet" href="assets/css/style.css?v=<?= filemtime(__DIR__ . '/../assets/css/style.css') ?>">
-<link rel="icon" type="image/png" href="assets/img/logo-y3d.png">
-<link rel="apple-touch-icon" href="assets/img/logo-y3d.png">
+<link rel="icon" type="image/png" href="assets/img/logo-y3d-transparente.png">
+<link rel="apple-touch-icon" href="assets/img/logo-y3d-transparente.png">
 </head>
 <body>
 <header class="hdr">
   <div class="hdr-in">
-    <a href="index.php" class="logo"><img src="assets/img/logo-y3d.png" class="logo-ic" alt="Y3D Creations"></a>
+    <a href="index.php" class="logo"><img src="assets/img/logo-y3d-transparente.png" class="logo-ic" alt="Y3D Creations"></a>
     <nav class="hdr-nav">
       <a href="index.php" class="<?= $paginaAtual === 'index.php' ? 'on' : '' ?>">Início</a>
       <a href="produtos.php" class="<?= $paginaAtual === 'produtos.php' ? 'on' : '' ?>">Produtos</a>
