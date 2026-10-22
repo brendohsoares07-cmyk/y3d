@@ -628,6 +628,84 @@ function iniciarCepCheckout() {
         }
     });
 }
+// ---- Avaliação do atendimento: estrelas brancas que se preenchem, frase por nota e envio sem recarregar ----
+function iniciarAvaliacaoAtendimento() {
+    const caixa = document.querySelector('[data-aval-caixa]');
+    const form = caixa === null || caixa === void 0 ? void 0 : caixa.querySelector('[data-aval-form]');
+    if (!caixa || !form)
+        return;
+    const frase = form.querySelector('[data-aval-texto]');
+    const erro = form.querySelector('[data-aval-erro]');
+    const botao = form.querySelector('button[type="submit"]');
+    const frases = {
+        '1': 'Ruim. Sentimos muito, conte o que aconteceu.',
+        '2': 'Regular. Vamos trabalhar para melhorar.',
+        '3': 'Bom. Obrigado!',
+        '4': 'Muito bom! Que bom que você gostou.',
+        '5': 'Excelente! Adoramos atender você.',
+    };
+    const mostrarErro = (mensagem) => {
+        if (!erro)
+            return;
+        erro.textContent = mensagem;
+        erro.hidden = mensagem === '';
+    };
+    form.addEventListener('change', (evento) => {
+        var _a;
+        const alvo = evento.target;
+        if (alvo instanceof HTMLInputElement && alvo.name === 'nota') {
+            if (frase)
+                frase.textContent = (_a = frases[alvo.value]) !== null && _a !== void 0 ? _a : '';
+            mostrarErro('');
+        }
+    });
+    form.addEventListener('submit', async (evento) => {
+        var _a;
+        const marcada = form.querySelector('input[name="nota"]:checked');
+        evento.preventDefault();
+        if (!marcada) {
+            mostrarErro('Toque em uma estrela para avaliar.');
+            return;
+        }
+        if (botao)
+            botao.disabled = true;
+        try {
+            const resposta = await fetch(form.action, {
+                method: 'POST',
+                body: new FormData(form),
+                headers: { 'X-Requested-With': 'fetch', Accept: 'application/json' },
+                credentials: 'same-origin',
+            });
+            const dados = (await resposta.json());
+            if (!dados.ok) {
+                mostrarErro((_a = dados.mensagem) !== null && _a !== void 0 ? _a : 'Não foi possível enviar agora.');
+                if (botao)
+                    botao.disabled = false;
+                return;
+            }
+            const nota = Number(marcada.value);
+            caixa.replaceChildren();
+            const agradecimento = document.createElement('div');
+            agradecimento.className = 'aval-obrigado';
+            const estrelas = document.createElement('div');
+            estrelas.className = 'aval-estrelas';
+            estrelas.setAttribute('aria-hidden', 'true');
+            estrelas.textContent = '★'.repeat(nota) + '☆'.repeat(5 - nota);
+            const titulo = document.createElement('h2');
+            titulo.textContent = 'Obrigado pela sua avaliação!';
+            const texto = document.createElement('p');
+            texto.className = 'aval-sub';
+            texto.textContent = 'A sua opinião ajuda a Y3D a atender cada vez melhor.';
+            agradecimento.append(estrelas, titulo, texto);
+            caixa.append(agradecimento);
+        }
+        catch {
+            mostrarErro('Sem conexão agora. Tente de novo em instantes.');
+            if (botao)
+                botao.disabled = false;
+        }
+    });
+}
 document.addEventListener('DOMContentLoaded', () => {
     iniciarBotoesFavoritos();
     atualizarBadgeFavoritos();
@@ -637,5 +715,6 @@ document.addEventListener('DOMContentLoaded', () => {
     iniciarMostrarSenha();
     iniciarCpfCadastro();
     iniciarCepCheckout();
+    iniciarAvaliacaoAtendimento();
     iniciarCarrosselBt21();
 });

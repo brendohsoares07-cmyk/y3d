@@ -80,4 +80,44 @@ tbody tr{transition:transform .2s}tbody tr:hover{transform:translateX(4px) scale
 .tag{padding:4px 12px;border-radius:999px;font-size:12px;font-weight:600}
 .ativo{background:rgba(52,211,153,.15);color:var(--green)}.inativo{background:rgba(255,159,67,.15);color:var(--orange)}
 .empty{text-align:center;color:var(--mut);padding:30px}
-@media(max-width:900px){aside{display:none}.grid{grid-template-columns:1fr}main{padding:18px}}
+@media(max-width:900px){.grid{grid-template-columns:1fr}main{padding:18px}}
+
+/* ===== abas: Clientes, Produtos, Pedidos, Avaliações, Mensagens ===== */
+nav a{position:relative}
+.badge{margin-left:auto;min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:var(--grad);color:#fff;font-size:11px;display:inline-grid;place-items:center}
+.vermais{color:var(--cyan);text-decoration:none}
+.vermais:hover{text-decoration:underline}
+.mudo{color:var(--mut)}
+.convidado{margin-left:6px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--mut);font-size:11px}
+.thumb{width:36px;height:36px;max-width:36px;border-radius:8px;object-fit:cover;flex:none;background:var(--bg2)}
+.thumb-emoji{display:grid;place-items:center;font-size:20px}
+.estrelas{color:#ffc83d;letter-spacing:1px}
+.comentario{max-width:360px;white-space:normal;line-height:1.45}
+.detalhes{margin-top:4px;font-size:12px;color:var(--mut)}
+.detalhes summary{cursor:pointer;color:var(--cyan)}
+.detalhes div{margin-top:6px;line-height:1.6}
+form.inline{display:flex;align-items:center;gap:8px;margin:0}
+.sel-status{background:var(--bg2);border:1px solid var(--line);color:var(--txt);padding:7px 10px;border-radius:10px;font-size:13px;outline:none}
+.mini{display:inline-block;background:rgba(124,92,255,.18);border:1px solid rgba(124,92,255,.5);color:#fff;border-radius:10px;padding:6px 12px;font-size:12px;cursor:pointer;text-decoration:none}
+.mini:hover{background:rgba(124,92,255,.35)}
+.mini.perigo{background:rgba(255,95,95,.14);border-color:rgba(255,95,95,.5);color:#ffb4b4}
+.st-aguardando{background:rgba(255,159,67,.15);color:var(--orange)}
+.st-pago{background:rgba(34,211,238,.15);color:var(--cyan)}
+.st-enviado{background:rgba(124,92,255,.2);color:#b9a8ff}
+.st-entregue{background:rgba(52,211,153,.15);color:var(--green)}
+.st-cancelado{background:rgba(255,95,95,.15);color:#ff8f8f}
+.msgs{display:grid;gap:12px}
+.msg{background:rgba(19,26,74,.55);border:1px solid var(--line);border-radius:14px;padding:16px}
+.msg.nova{border-color:rgba(255,79,216,.6);box-shadow:0 0 0 1px rgba(255,79,216,.2)}
+.msg-topo{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+.msg-topo a{color:var(--cyan);text-decoration:none;margin-left:8px;font-size:13px}
+.msg p{color:#d7dcff;line-height:1.6;font-size:14px;margin-bottom:12px}
+.msg-acoes{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+tr[hidden]{display:none}
+@media(max-width:900px){
+  body{flex-direction:column}
+  aside{display:block;position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line);padding:14px}
+  .brand{margin-bottom:12px}
+  nav{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+  nav a{white-space:nowrap;margin-bottom:0}
+}

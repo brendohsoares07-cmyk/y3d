@@ -21,8 +21,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && y3d_total_itens_carrinho() > 0) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && y3d_total_itens_carrinho() > 0 && $erroCheckout === null) {
     $totalPedido = y3d_total_carrinho(); // valor final (preço normal dos produtos), calculado no servidor antes de esvaziar o carrinho
-    y3d_limpar_carrinho();
-    $pedidoConcluido = true;
+
+    // guarda o pedido (data/pedidos.json) para aparecer no painel admin
+    $itensDoPedido = [];
+    foreach (y3d_itens_carrinho() as $item) {
+        $itensDoPedido[] = [
+            'id'         => (int) $item['produto']['id'],
+            'nome'       => (string) $item['produto']['nome'],
+            'quantidade' => (int) $item['quantidade'],
+            'preco'      => (float) $item['produto']['preco'],
+        ];
+    }
+    $contaLogada = y3d_usuario();
+    $pedidoId = y3d_pedido_registrar([
+        'usuario_id' => $contaLogada ? (int) $contaLogada['id'] : null,
+        'nome'       => trim($_POST['nome'] ?? ''),
+        'email'      => $contaLogada ? (string) $contaLogada['email'] : '',
+        'telefone'   => trim($_POST['telefone'] ?? ''),
+        'cpf'        => y3d_somente_digitos($cpfInformado),
+        'cep'        => $cepInformado,
+        'endereco'   => trim($_POST['endereco'] ?? ''),
+        'bairro'     => trim($_POST['bairro'] ?? ''),
+        'cidade'     => trim($_POST['cidade'] ?? ''),
+        'pagamento'  => (string) $formaPagamento,
+        'itens'      => $itensDoPedido,
+        'total'      => $totalPedido,
+    ]);
+    if ($pedidoId > 0) {
+        $_SESSION['pedido_para_avaliar'] = $pedidoId; // libera a avaliação do atendimento deste pedido
+        y3d_limpar_carrinho();
+        $pedidoConcluido = true;
+    } else {
+        $erroCheckout = 'Não foi possível registrar o pedido agora. Seu carrinho foi mantido, tente de novo.';
+    }
 }
 
 require_once __DIR__ . '/includes/header.php';
@@ -42,12 +73,21 @@ $total = y3d_total_carrinho();
     <p class="pix-aviso">O valor já vem preenchido, não precisa digitar nada. Guarde o comprovante: ele confirma o seu pedido.</p>
     <a href="produtos.php" class="btn btn-grad">Continuar comprando</a>
   </div>
+  <?php require __DIR__ . '/includes/avaliar_atendimento.php'; ?>
   <script src="assets/js/pix.js"></script>
 <?php elseif ($pedidoConcluido): ?>
   <div class="checkout-success">
     <span>✓</span>
     <h1>Pedido recebido!</h1>
     <p>Seu pedido foi registrado para demonstração. Em breve você receberá as instruções de pagamento e envio.</p>
+    <a href="produtos.php" class="btn btn-grad">Continuar comprando</a>
+  </div>
+  <?php require __DIR__ . '/includes/avaliar_atendimento.php'; ?>
+<?php elseif (!$itens && isset($_GET['avaliado'])): ?>
+  <div class="checkout-success">
+    <span>★</span>
+    <h1>Obrigado pela sua avaliação!</h1>
+    <p>A sua opinião ajuda a Y3D a atender cada vez melhor.</p>
     <a href="produtos.php" class="btn btn-grad">Continuar comprando</a>
   </div>
 <?php elseif (!$itens): ?>

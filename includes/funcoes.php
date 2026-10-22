@@ -8,6 +8,8 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 require_once __DIR__ . '/dados_produtos.php';
 require_once __DIR__ . '/contas.php';
+require_once __DIR__ . '/loja_dados.php';
+y3d_aplicar_avaliacoes_ao_catalogo(); // notas reais dos clientes nos cartões e na página do produto
 
 if (!isset($_SESSION['carrinho']) || !is_array($_SESSION['carrinho'])) {
     // formato: [ id_produto => quantidade ]

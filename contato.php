@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/includes/funcoes.php';
 $enviado = false;
 $erros = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -8,7 +9,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (mb_strlen($nome) < 2) $erros['nome'] = 'Digite seu nome.';
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $erros['email'] = 'Digite um e-mail válido.';
     if (mb_strlen($mensagem) < 10) $erros['mensagem'] = 'Conte um pouco mais (mínimo 10 caracteres).';
-    if (!$erros) $enviado = true; // projeto de demonstração: não envia e-mail de verdade
+    if (!$erros) {
+        // não envia e-mail: a mensagem fica guardada e aparece em Mensagens, no painel admin
+        $enviado = y3d_mensagem_registrar($nome, $email, $mensagem);
+        if (!$enviado) $erros['mensagem'] = 'Não foi possível enviar agora. Tente de novo em instantes.';
+    }
 }
 $tituloPagina = 'Contato';
 require_once __DIR__ . '/includes/header.php';
