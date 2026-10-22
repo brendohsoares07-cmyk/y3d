@@ -23,7 +23,6 @@ unset($_SESSION['flash']);
     <nav class="hdr-nav">
       <a href="index.php" class="<?= $paginaAtual === 'index.php' ? 'on' : '' ?>">Início</a>
       <a href="produtos.php" class="<?= $paginaAtual === 'produtos.php' ? 'on' : '' ?>">Produtos</a>
-      <a href="sobre.php" class="<?= $paginaAtual === 'sobre.php' ? 'on' : '' ?>">Sobre</a>
       <a href="contato.php" class="<?= $paginaAtual === 'contato.php' ? 'on' : '' ?>">Contato</a>
     </nav>
     <form class="hdr-search" action="produtos.php" method="get">

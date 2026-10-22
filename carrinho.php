@@ -41,7 +41,7 @@ $itens = y3d_itens_carrinho();
             <input type="hidden" name="voltar" value="carrinho.php">
             <button type="submit" class="rm" aria-label="Remover <?= htmlspecialchars($p['nome']) ?>">✕</button>
           </form>
-        </div>
+        </div> 
       <?php endforeach; ?>
     </div>
 
