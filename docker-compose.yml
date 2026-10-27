@@ -122,7 +122,9 @@ services:
       - ./includes:/var/www/html/includes:ro
       - ./handlers:/var/www/html/handlers:ro
       - ./assets:/var/www/html/assets # leitura e escrita: fotos de perfil vão para assets/img/avatares
-      - ./data:/var/www/html/data # contas da loja (usuarios.json) — precisa gravar
+      - ./data:/var/www/data # contas, pedidos etc. FORA da pasta pública (/var/www/html): ninguém baixa pelo navegador
+    environment:
+      Y3D_DATA_DIR: /var/www/data # a loja PHP lê/grava os JSON aqui (ver includes/config.php)
     networks:
       - app_net
 

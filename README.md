@@ -13,7 +13,7 @@ Projeto com **duas partes** no mesmo repositório:
 php -S localhost:8000
 ```
 
-Contas ficam em `data/usuarios.json`. Para recompilar o TypeScript da loja: `npm run build`.
+Contas ficam em `data/usuarios.json` (no Docker, a pasta `data/` é montada fora da raiz pública, em `/var/www/data`, via `Y3D_DATA_DIR`; em outros servidores, mantenha-a fora da pasta pública ou bloqueie o acesso). Para recompilar o TypeScript da loja: `npm run build`.
 
 ## Rodar a aplicação TypeScript com Docker
 

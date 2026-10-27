@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/config.php';
 
-const Y3D_ARQUIVO_CONTAS = __DIR__ . '/../data/usuarios.json';
+const Y3D_ARQUIVO_CONTAS = Y3D_PASTA_DADOS . '/usuarios.json';
 
 function y3d_contas_carregar(): array
 {

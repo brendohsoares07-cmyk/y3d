@@ -18,6 +18,10 @@ function y3d_perfil_voltar(string $mensagem): never
     exit;
 }
 
+if (!y3d_csrf_valido($_POST['csrf'] ?? null)) {
+    y3d_perfil_voltar('Sessão expirada. Recarregue a página e tente de novo.');
+}
+
 $acao = $_POST['acao'] ?? '';
 
 if ($acao === 'nome') {

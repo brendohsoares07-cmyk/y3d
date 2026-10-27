@@ -15,7 +15,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $senha    = (string) ($_POST['senha'] ?? '');
     $confirma = (string) ($_POST['confirma'] ?? '');
 
-    if ($nome === '') {
+    if (!y3d_csrf_valido($_POST['csrf'] ?? null)) {
+        $erro = 'Sessão expirada. Recarregue a página e tente de novo.';
+    } elseif ($nome === '') {
         $erro = 'Digite seu nome.';
     } elseif ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $erro = 'Digite um e-mail válido.';

@@ -34,6 +34,7 @@ if (!$personagensBt21) return;
               <div class="bt21-preco-row">
                 <span class="bt21-preco"><small>R$</small> <?= number_format($p['preco'], 2, ',', '.') ?></span>
                 <form action="handlers/carrinho.php" method="post">
+                  <?= y3d_csrf_campo() ?>
                   <input type="hidden" name="acao" value="adicionar">
                   <input type="hidden" name="id" value="<?= $p['id'] ?>">
                   <input type="hidden" name="quantidade" value="1">
@@ -61,6 +62,7 @@ if (!$personagensBt21) return;
       <p>7 personagens por <b class="grad"><?= y3d_formatar_preco($colecaoBt21['preco']) ?></b></p>
     </div>
     <form action="handlers/carrinho.php" method="post">
+      <?= y3d_csrf_campo() ?>
       <input type="hidden" name="acao" value="comprar_agora">
       <input type="hidden" name="id" value="<?= $colecaoBt21['id'] ?>">
       <input type="hidden" name="quantidade" value="1">

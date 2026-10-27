@@ -33,6 +33,7 @@ $descontoPercentual = (int) round(($economia / $precoSeparado) * 100);
         <span class="personagens-promo-economize">Você economiza <?= y3d_formatar_preco($economia) ?></span>
       </div>
       <form action="handlers/carrinho.php" method="post">
+        <?= y3d_csrf_campo() ?>
         <input type="hidden" name="acao" value="comprar_agora">
         <input type="hidden" name="id" value="<?= $comboPersonagens['id'] ?>">
         <input type="hidden" name="quantidade" value="1">

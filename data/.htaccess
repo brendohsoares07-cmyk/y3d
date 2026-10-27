@@ -1,0 +1,3 @@
+# Ninguém acessa estes arquivos pelo navegador (Apache 2.4).
+# Segunda camada de proteção: o ideal é a pasta ficar fora da raiz pública (variável Y3D_DATA_DIR).
+Require all denied

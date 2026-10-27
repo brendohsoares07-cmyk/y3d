@@ -12,7 +12,9 @@ $totalPedido = 0.0;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && y3d_total_itens_carrinho() > 0) {
     // CPF obrigatório e válido: sem isso o pedido não é concluído e o carrinho é mantido
-    if (y3d_somente_digitos($cpfInformado) === '') {
+    if (!y3d_csrf_valido($_POST['csrf'] ?? null)) {
+        $erroCheckout = 'Sessão expirada. Recarregue a página e tente de novo.';
+    } elseif (y3d_somente_digitos($cpfInformado) === '') {
         $erroCheckout = 'Informe o CPF para finalizar o pedido.';
     } elseif (!y3d_cpf_valido($cpfInformado)) {
         $erroCheckout = 'CPF inválido. Confira os números e tente de novo.';
@@ -99,6 +101,7 @@ $total = y3d_total_carrinho();
 <?php else: ?>
   <div class="checkout-layout">
     <form class="checkout-form" method="post" action="checkout.php" novalidate>
+      <?= y3d_csrf_campo() ?>
       <?php if ($erroCheckout): ?><div class="checkout-erro" role="alert"><?= htmlspecialchars($erroCheckout) ?></div><?php endif; ?>
       <div class="checkout-section">
         <div class="checkout-heading"><span>1</span><h1>Endereço de entrega</h1></div>

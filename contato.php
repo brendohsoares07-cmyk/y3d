@@ -6,6 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nome = trim($_POST['nome'] ?? '');
     $email = trim($_POST['email'] ?? '');
     $mensagem = trim($_POST['mensagem'] ?? '');
+    if (!y3d_csrf_valido($_POST['csrf'] ?? null)) $erros['mensagem'] = 'Sessão expirada. Recarregue a página e tente de novo.';
     if (mb_strlen($nome) < 2) $erros['nome'] = 'Digite seu nome.';
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $erros['email'] = 'Digite um e-mail válido.';
     if (mb_strlen($mensagem) < 10) $erros['mensagem'] = 'Conte um pouco mais (mínimo 10 caracteres).';
@@ -38,6 +39,7 @@ require_once __DIR__ . '/includes/header.php';
       <div class="alert">Mensagem enviada! Obrigado pelo contato.</div>
     <?php endif; ?>
     <form method="post" novalidate>
+      <?= y3d_csrf_campo() ?>
       <div class="fld">
         <label for="nome">Nome</label>
         <input id="nome" name="nome" value="<?= htmlspecialchars($_POST['nome'] ?? '') ?>">

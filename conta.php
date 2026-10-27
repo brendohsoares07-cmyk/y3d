@@ -23,6 +23,7 @@ require_once __DIR__ . '/includes/header.php';
       <?php endif; ?>
     </div>
     <form action="handlers/perfil.php" method="post" enctype="multipart/form-data" class="acc-photo-form">
+      <?= y3d_csrf_campo() ?>
       <input type="hidden" name="acao" value="foto">
       <input type="file" name="foto" id="acc-foto" accept="image/jpeg,image/png,image/webp" hidden onchange="this.form.submit()">
       <label for="acc-foto" class="btn btn-outline btn-sm acc-photo-btn">📷 Trocar foto</label>
@@ -31,6 +32,7 @@ require_once __DIR__ . '/includes/header.php';
     <details class="acc-edit">
       <summary class="btn btn-outline btn-sm">✏️ Editar nome</summary>
       <form action="handlers/perfil.php" method="post" class="acc-edit-form">
+        <?= y3d_csrf_campo() ?>
         <input type="hidden" name="acao" value="nome">
         <input type="text" name="nome" value="<?= e($u['nome']) ?>" minlength="2" maxlength="80" required aria-label="Novo nome">
         <button type="submit" class="btn btn-grad btn-sm">Salvar</button>

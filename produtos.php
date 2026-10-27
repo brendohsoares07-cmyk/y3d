@@ -11,17 +11,15 @@ $categoriaImagens = [
   'personagens' => 'assets/img/produtos/bailarina-rosa.jpg',
   'objetos' => 'assets/img/produtos/bandejas-bt21.jpg',
   'animais' => 'assets/img/produtos/dinossauros-equilibrio.jpg',
-  'cenarios' => 'assets/img/produtos/estatua-guerreira.jpg',
-  'props' => 'assets/img/produtos/estatua-guerreira.jpg',
-  'veiculos' => 'assets/img/produtos/estatua-guerreira.jpg',
-  'arquitetura' => 'assets/img/produtos/estatua-guerreira.jpg',
-  'tecnologia' => 'assets/img/produtos/estatua-guerreira.jpg',
-  'game-assets' => 'assets/img/produtos/estatua-guerreira.jpg',
   'personalizados' => 'assets/img/produtos/chaveiros-porta-photocard.jpg',
 ];
 
+if ($categoriaAtiva !== 'todos' && !isset($CATEGORIAS[$categoriaAtiva])) {
+    $categoriaAtiva = 'todos'; // categoria que não existe (ou foi removida)
+}
+
 $lista = $PRODUTOS;
-if ($categoriaAtiva !== 'todos' && isset($CATEGORIAS[$categoriaAtiva])) {
+if ($categoriaAtiva !== 'todos') {
     $lista = array_filter($lista, fn($p) => $p['categoria'] === $categoriaAtiva);
 }
 if ($busca !== '') {

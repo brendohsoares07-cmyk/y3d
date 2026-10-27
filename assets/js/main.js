@@ -706,7 +706,21 @@ function iniciarAvaliacaoAtendimento() {
         }
     });
 }
+// Aviso de sessão ("Você saiu da sua conta" etc.): some sozinho e tem botão para fechar.
+function iniciarAvisoFlash() {
+    var _a;
+    const aviso = document.querySelector('[data-flash]');
+    if (!aviso)
+        return;
+    const fechar = () => {
+        aviso.classList.add('sai');
+        window.setTimeout(() => aviso.remove(), 400);
+    };
+    (_a = aviso.querySelector('[data-flash-fechar]')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', fechar);
+    window.setTimeout(fechar, 6000);
+}
 document.addEventListener('DOMContentLoaded', () => {
+    iniciarAvisoFlash();
     iniciarBotoesFavoritos();
     atualizarBadgeFavoritos();
     iniciarPaginaFavoritos();

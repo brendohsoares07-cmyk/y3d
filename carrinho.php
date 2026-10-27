@@ -24,6 +24,7 @@ $itens = y3d_itens_carrinho();
             <b><?= htmlspecialchars($p['nome']) ?></b>
             <div style="color:var(--mute)"><?= y3d_formatar_preco($p['preco']) ?> cada</div>
             <form action="handlers/carrinho.php" method="post" style="display:flex;align-items:center;gap:10px;margin-top:6px">
+              <?= y3d_csrf_campo() ?>
               <input type="hidden" name="acao" value="atualizar">
               <input type="hidden" name="id" value="<?= $p['id'] ?>">
               <input type="hidden" name="voltar" value="carrinho.php">
@@ -36,6 +37,7 @@ $itens = y3d_itens_carrinho();
             </form>
           </div>
           <form action="handlers/carrinho.php" method="post">
+            <?= y3d_csrf_campo() ?>
             <input type="hidden" name="acao" value="remover">
             <input type="hidden" name="id" value="<?= $p['id'] ?>">
             <input type="hidden" name="voltar" value="carrinho.php">
@@ -51,6 +53,7 @@ $itens = y3d_itens_carrinho();
       <div class="sum-row total"><span>Total</span><span><?= y3d_formatar_preco(y3d_total_carrinho()) ?></span></div>
       <a href="checkout.php" class="btn btn-grad btn-block" style="margin-top:16px">Finalizar compra →</a>
       <form action="handlers/carrinho.php" method="post" style="margin-top:8px">
+        <?= y3d_csrf_campo() ?>
         <input type="hidden" name="acao" value="limpar">
         <input type="hidden" name="voltar" value="carrinho.php">
         <button type="submit" class="btn btn-outline btn-block">Esvaziar carrinho</button>

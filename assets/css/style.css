@@ -86,13 +86,16 @@ button{font:inherit;cursor:pointer}
   100%{opacity:0}
 }
 .hero-overlay{position:absolute;inset:0;z-index:1;background:
-  linear-gradient(100deg,rgba(9,11,26,.92) 0%,rgba(15,14,46,.82) 45%,rgba(9,17,38,.55) 100%)}
+  linear-gradient(100deg,rgba(9,11,26,.94) 0%,rgba(15,14,46,.86) 45%,rgba(9,17,38,.6) 100%)}
 .hero-copy{position:relative;z-index:2;padding:48px;max-width:560px}
 .hero h1{font-size:clamp(30px,4vw,46px);line-height:1.15;margin:0 0 18px;font-weight:800}
 .hero h1 .grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-.hero p{color:var(--mute);max-width:44ch;margin:0 0 26px}
+.hero p{color:#cdd3f0;max-width:44ch;margin:0 0 26px;font-size:17px;text-shadow:0 1px 10px rgba(0,0,0,.6)}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap}
+.hero-cta .btn{height:50px;padding:0 28px;font-size:15px}
+.hero-cta .btn-outline{border-color:var(--violet);background:rgba(8,10,22,.45)}
 .hero-tags{display:flex;gap:26px;margin-top:32px;flex-wrap:wrap}
-.hero-tags li{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--mute)}
+.hero-tags li{display:flex;align-items:center;gap:10px;font-size:13px;color:#b9c1e6}
 .hero-tags b{display:block;color:var(--text);font-size:14px}
 .tag-ic{width:36px;height:36px;border-radius:10px;background:var(--raise);display:grid;place-items:center;font-size:16px}
 
@@ -103,6 +106,10 @@ button{font:inherit;cursor:pointer}
 .sec-h h2{font-size:16px;margin:0;display:flex;align-items:center;gap:8px}
 .sec-h .more{font-size:13px;color:var(--mute)}
 .sec-h .more:hover{color:var(--text)}
+/* título centralizado de seção (ex.: "Acesse sua conta" na home) */
+.sec-h-centro{justify-content:center;text-align:center;margin-bottom:28px}
+.sec-h.sec-h-centro h2{display:block;font-size:clamp(34px,5.4vw,56px);font-weight:800;line-height:1.1;letter-spacing:-.01em;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 
 /* categorias */
 .cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
@@ -225,7 +232,20 @@ button{font:inherit;cursor:pointer}
 
 
 /* alertas / toast */
-.alert{background:rgba(61,219,183,.12);border:1px solid var(--cyan);color:var(--text);padding:12px 16px;border-radius:10px;margin-bottom:18px;font-size:14px}
+.alert{display:flex;align-items:center;justify-content:space-between;gap:12px;background:rgba(61,219,183,.12);border:1px solid var(--cyan);color:var(--text);padding:12px 16px;border-radius:10px;margin-bottom:18px;font-size:14px;transition:opacity .4s,transform .4s}
+.alert.sai{opacity:0;transform:translateY(-6px)}
+.alert-x{background:none;border:0;color:var(--text);font-size:22px;line-height:1;padding:0 4px;opacity:.7}
+.alert-x:hover{opacity:1}
+
+/* faixa de confiança (home) */
+.trust{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.trust li,.trust a{display:flex;align-items:center;gap:12px;height:100%;padding:16px 18px;background:var(--surface);border:1px solid var(--line);border-radius:14px;font-size:13px;color:var(--mute)}
+.trust li:has(a){padding:0;border:0;background:none}
+.trust a:hover{border-color:var(--violet)}
+.trust b{display:block;color:var(--text);font-size:14px}
+.trust-ic{flex:none;width:40px;height:40px;border-radius:12px;background:var(--raise);display:grid;place-items:center;font-size:18px}
+@media(max-width:900px){.trust{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.trust{grid-template-columns:1fr}.hero-cta .btn{width:100%}}
 #toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;background:#171c38;border:1px solid var(--violet);color:#fff;padding:12px 20px;border-radius:10px;font-size:13px;transition:.2s;z-index:80;pointer-events:none}
 #toast.on{opacity:1;transform:translate(-50%,0)}
 
@@ -618,7 +638,12 @@ div.product-gallery-main{cursor:default}
 @media (prefers-reduced-motion:reduce){.product-gallery-main img,.product-gallery-thumb,.lightbox-seta{transition:none}}
 
 /* ===================== SOBRE na página inicial (abaixo do vídeo) ===================== */
-.sobre-home{margin-top:0;border-top:1px solid var(--line)}
+/* moldura do Sobre: borda em degradê com as cores do tema (rosa → violeta → ciano) e respiro acima, entre a faixa de vantagens e a borda */
+.sobre-home{position:relative;margin-top:64px;padding:0 clamp(20px,4vw,52px) 28px;border-radius:24px;box-shadow:0 0 44px rgba(139,92,246,.16)}
+.sobre-home::before{content:"";position:absolute;inset:0;padding:2px;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(135deg,var(--pink),var(--violet) 55%,var(--cyan));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
+  mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
 .sh-eyebrow{display:block;font-size:12px;font-weight:700;letter-spacing:.3em;color:var(--text);opacity:.85}
 .sh-intro{display:grid;grid-template-columns:1.05fr 1fr;gap:40px;align-items:center;padding:54px 0 46px}
 .sh-logo{width:min(230px,60%);height:auto;margin:10px 0 18px}
