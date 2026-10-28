@@ -40,11 +40,12 @@ services:
       DB_USER: ${DB_USER}
     volumes:
       - ./database/seeds/01-catalogo.sql:/catalogo.sql:ro
+   
     entrypoint: ["sh", "-c"]
     command:
       - |
         set -eu
-        M="mysql -h db -u$$DB_USER $$DB_NAME --default-character-set=utf8mb4"
+        M="mysql --default-character-set=utf8mb4 -h db -u$$DB_USER $$DB_NAME"
         NOVO=$$(sha256sum /catalogo.sql | cut -d" " -f1)
         $$M -e "CREATE TABLE IF NOT EXISTS catalogo_versao (id TINYINT PRIMARY KEY, hash CHAR(64) NOT NULL, aplicado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)"
         ANTIGO=$$($$M -N -B -e "SELECT hash FROM catalogo_versao WHERE id = 1")
@@ -56,6 +57,7 @@ services:
         $$M < /catalogo.sql
         $$M -e "REPLACE INTO catalogo_versao (id, hash) VALUES (1, '$$NOVO')"
         echo "db-sync: catálogo atualizado."
+
     depends_on:
       db:
         condition: service_healthy

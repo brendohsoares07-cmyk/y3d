@@ -238,13 +238,14 @@ button{font:inherit;cursor:pointer}
 .alert-x:hover{opacity:1}
 
 /* faixa de confiança (home) */
-.trust{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
-.trust li,.trust a{display:flex;align-items:center;gap:12px;height:100%;padding:16px 18px;background:var(--surface);border:1px solid var(--line);border-radius:14px;font-size:13px;color:var(--mute)}
+.trust{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px;max-width:1180px;margin-inline:auto}
+.trust li,.trust a{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px;height:100%;padding:22px 18px;background:var(--surface);border:1px solid var(--line);border-radius:14px;font-size:13px;color:var(--mute)}
 .trust li:has(a){padding:0;border:0;background:none}
+.trust li>a{width:100%}
 .trust a:hover{border-color:var(--violet)}
 .trust b{display:block;color:var(--text);font-size:14px}
 .trust-ic{flex:none;width:40px;height:40px;border-radius:12px;background:var(--raise);display:grid;place-items:center;font-size:18px}
-@media(max-width:900px){.trust{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:900px){.trust{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}}
 @media(max-width:520px){.trust{grid-template-columns:1fr}.hero-cta .btn{width:100%}}
 #toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;background:#171c38;border:1px solid var(--violet);color:#fff;padding:12px 20px;border-radius:10px;font-size:13px;transition:.2s;z-index:80;pointer-events:none}
 #toast.on{opacity:1;transform:translate(-50%,0)}
@@ -643,7 +644,7 @@ div.product-gallery-main{cursor:default}
 .sobre-home::before{content:"";position:absolute;inset:0;padding:2px;border-radius:inherit;pointer-events:none;
   background:linear-gradient(135deg,var(--pink),var(--violet) 55%,var(--cyan));
   -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
-  mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
+  mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude}
 .sh-eyebrow{display:block;font-size:12px;font-weight:700;letter-spacing:.3em;color:var(--text);opacity:.85}
 .sh-intro{display:grid;grid-template-columns:1.05fr 1fr;gap:40px;align-items:center;padding:54px 0 46px}
 .sh-logo{width:min(230px,60%);height:auto;margin:10px 0 18px}
