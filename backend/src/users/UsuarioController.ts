@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { UnauthorizedError } from "../errors/AppError";
 import { UsuarioService } from "./UsuarioService";
 import { UpdateUsuarioInput } from "../shared/types";
-import { parseId } from "../shared/utils/http";
+import { parseId } from "../shared/utils/requestParams";
 
 export class UsuarioController {
   constructor(private readonly service: UsuarioService) {}

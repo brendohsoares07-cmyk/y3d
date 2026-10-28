@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { BaseEntity } from "./BaseEntity";
 import { CrudService } from "./CrudService";
-import { parseId, parsePagination } from "../utils/http";
+import { parseId, parsePagination } from "../utils/requestParams";
 
 /** Handlers HTTP genéricos. Controllers específicos só sobrescrevem o que muda. */
 export abstract class CrudController<T extends BaseEntity, TInput> {

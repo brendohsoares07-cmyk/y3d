@@ -4,12 +4,6 @@ $CATEGORIAS = [
     'personagens'  => ['nome' => 'Personagens',  'emoji' => '🧙'],
     'objetos'      => ['nome' => 'Objetos',      'emoji' => '🦾'],
     'animais'      => ['nome' => 'Animais',      'emoji' => '🐉'],
-    'cenarios'     => ['nome' => 'Cenários',     'emoji' => '🏰'],
-    'props'        => ['nome' => 'Props',        'emoji' => '💣'],
-    'veiculos'     => ['nome' => 'Veículos',     'emoji' => '🚗'],
-    'arquitetura'  => ['nome' => 'Arquitetura',  'emoji' => '🏠'],
-    'tecnologia'   => ['nome' => 'Tecnologia',   'emoji' => '🤖'],
-    'game-assets'  => ['nome' => 'Game Assets',  'emoji' => '🎮'],
     'personalizados' => ['nome' => 'Personalizados', 'emoji' => '🎁'],
 ];
 

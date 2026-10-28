@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDebounce } from "../../hooks/useDebounce";
-import { ApiError } from "../../services/http";
+import { getApiErrorMessage } from "../../services/apiClient";
 import { adminApi } from "../../services/resources";
 import { ClienteAdmin, Page, StatusCliente } from "../../types";
 import { formatMoney, iniciais } from "../../utils/format";
@@ -63,7 +63,7 @@ export function ClientsTable() {
         setResultado(r);
         setErro(null);
       })
-      .catch((e: unknown) => !cancelado && setErro(e instanceof ApiError ? e.message : "Erro ao carregar clientes"));
+      .catch((e: unknown) => !cancelado && setErro(getApiErrorMessage(e, "Erro ao carregar clientes")));
     return () => {
       cancelado = true;
     };

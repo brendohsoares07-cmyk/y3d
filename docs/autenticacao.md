@@ -15,7 +15,7 @@ Frontend: `pages/Login`, `pages/Cadastro`, `pages/Perfil`, `contexts/AuthContext
 ## Frontend
 | Item da rubrica | Onde está |
 |---|---|
-| Login: campos, regex, token no localStorage, erros amigáveis, redirecionamento | `pages/Login/LoginPage.tsx` · `services/http.ts` (`tokenStorage`, `friendlyMessage`) |
+| Login: campos, regex, token no localStorage, erros amigáveis, redirecionamento | `pages/Login/LoginPage.tsx` · `services/apiClient.ts` (`tokenStorage`, `friendlyMessage`) |
 | Cadastro: obrigatórios, senha dupla, CPF, e-mail, redireciona ao login, erros da API | `pages/Cadastro/RegisterPage.tsx` |
 | Edição: Context global, CPF, nível de senha, confirmação, e-mail bloqueado | `contexts/AuthContext.tsx` · `pages/Perfil/ProfilePage.tsx` |
 

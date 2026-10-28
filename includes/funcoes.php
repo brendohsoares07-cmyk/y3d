@@ -4,6 +4,18 @@
 date_default_timezone_set('America/Sao_Paulo');
 
 if (session_status() === PHP_SESSION_NONE) {
+    // cookie de sessão: não legível por JavaScript, não enviado em requisições de outros sites
+    // e, quando o site estiver em HTTPS, só trafega criptografado
+    $conexaoHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+        || strtolower((string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '')) === 'https';
+    ini_set('session.use_strict_mode', '1');
+    session_set_cookie_params([
+        'lifetime' => 0,
+        'path'     => '/',
+        'secure'   => $conexaoHttps,
+        'httponly' => true,
+        'samesite' => 'Lax',
+    ]);
     session_start();
 }
 require_once __DIR__ . '/dados_produtos.php';

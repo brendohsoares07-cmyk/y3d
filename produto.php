@@ -76,6 +76,7 @@ $imagensGaleria = array_slice($imagensProduto, 0, 5); // só fotos do próprio p
     </div>
 
     <form action="handlers/carrinho.php" method="post" class="product-buy-form">
+      <?= y3d_csrf_campo() ?>
       <input type="hidden" name="acao" value="adicionar">
       <input type="hidden" name="id" value="<?= $produto['id'] ?>">
       <input type="hidden" name="voltar" value="produto.php?id=<?= $produto['id'] ?>">
@@ -88,6 +89,7 @@ $imagensGaleria = array_slice($imagensProduto, 0, 5); // só fotos do próprio p
       <button type="submit" class="btn btn-grad">🛒 Adicionar ao carrinho</button>
     </form>
     <form action="handlers/carrinho.php" method="post" class="product-buy-now-form">
+      <?= y3d_csrf_campo() ?>
       <input type="hidden" name="acao" value="comprar_agora">
       <input type="hidden" name="id" value="<?= $produto['id'] ?>">
       <input type="hidden" name="quantidade" data-buy-now-quantity value="1">

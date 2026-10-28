@@ -1,3 +1,6 @@
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-export const isEmail = (valor: string): boolean => EMAIL_REGEX.test(valor.trim());
+export function isEmail(valor: string): boolean {
+  const emailSemEspacos = valor.trim();
+  return EMAIL_REGEX.test(emailSemEspacos);
+}

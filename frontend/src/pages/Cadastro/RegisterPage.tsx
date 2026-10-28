@@ -5,11 +5,22 @@ import { Alert } from "../../components/ui/Alert";
 import { Button } from "../../components/ui/Button";
 import { FormField } from "../../components/ui/FormField";
 import { useFormState } from "../../hooks/useFormState";
-import { ApiError } from "../../services/http";
+import { getApiErrorMessage } from "../../services/apiClient";
 import { authApi } from "../../services/resources";
 import { collectErrors, isCpf, isEmail, maskCpf, passwordIssues, requiredMsg } from "../../validations";
 
 type Values = { nome: string; email: string; cpf: string; senha: string; confirmarSenha: string };
+
+function validarCadastro(values: Values) {
+  const problemasSenha = passwordIssues(values.senha);
+  return collectErrors<Values>([
+    ["nome", requiredMsg(values.nome, "Nome") ?? (values.nome.trim().length < 3 ? "Informe o nome completo" : null)],
+    ["email", requiredMsg(values.email, "E-mail") ?? (isEmail(values.email) ? null : "E-mail inválido")],
+    ["cpf", requiredMsg(values.cpf, "CPF") ?? (isCpf(values.cpf) ? null : "CPF inválido")],
+    ["senha", requiredMsg(values.senha, "Senha") ?? (problemasSenha.length ? "Senha fraca" : null)],
+    ["confirmarSenha", values.confirmarSenha !== values.senha ? "As senhas não conferem" : null],
+  ]);
+}
 
 /** Mostra em tempo real o que ainda falta na senha (exclusivo desta página). */
 function SenhaChecklist({ senha }: { senha: string }) {
@@ -29,18 +40,9 @@ export function RegisterPage() {
   const [apiError, setApiError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
-  const validar = (v: Values) =>
-    collectErrors<Values>([
-      ["nome", requiredMsg(v.nome, "Nome") ?? (v.nome.trim().length < 3 ? "Informe o nome completo" : null)],
-      ["email", requiredMsg(v.email, "E-mail") ?? (isEmail(v.email) ? null : "E-mail inválido")],
-      ["cpf", requiredMsg(v.cpf, "CPF") ?? (isCpf(v.cpf) ? null : "CPF inválido")],
-      ["senha", requiredMsg(v.senha, "Senha") ?? (passwordIssues(v.senha).length ? "Senha fraca" : null)],
-      ["confirmarSenha", v.confirmarSenha !== v.senha ? "As senhas não conferem" : null],
-    ]);
-
   const submit = async (event: FormEvent) => {
     event.preventDefault();
-    const encontrados = validar(values);
+    const encontrados = validarCadastro(values);
     setErrors(encontrados);
     if (Object.keys(encontrados).length > 0) return;
 
@@ -50,7 +52,7 @@ export function RegisterPage() {
       await authApi.register({ nome: values.nome, email: values.email, cpf: values.cpf, senha: values.senha });
       navigate(linkLogin, { state: { mensagem: "Cadastro realizado! Faça login para continuar." } });
     } catch (e) {
-      setApiError(e instanceof ApiError ? e.message : "Não foi possível cadastrar. Tente novamente.");
+      setApiError(getApiErrorMessage(e, "Não foi possível cadastrar. Tente novamente."));
     } finally {
       setSaving(false);
     }

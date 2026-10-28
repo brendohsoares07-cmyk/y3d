@@ -9,7 +9,7 @@
 | Edição: rota autenticada, só o próprio usuário | `routes/index.ts` (`authMiddleware`) · `UsuarioService.update` (403 se `id` ≠ token) |
 | Edição: campos obrigatórios, CPF, senha, e-mail imutável | `UsuarioService.update` |
 | 4 CRUDs completos, todos autenticados | Categorias, Produtos, Máquinas, Pedidos — `routes/index.ts` |
-| Paginação | `shared/base/BaseRepository.findPage` · `shared/utils/http.ts` (`parsePagination`) |
+| Paginação | `shared/base/BaseRepository.findPage` · `shared/utils/requestParams.ts` (`parsePagination`) |
 | Não editar/deletar o que não existe | `shared/base/CrudService.getOrFail` → `NotFoundError` (404) |
 | Relacionamento entre recursos | `database/schema.sql` (FKs, `pedido_itens`) · `crud/pedido/PedidoService` (busca os produtos e calcula o total) |
 | AGENTS.md + 3 skills + guardrails + proteção do `.env` | `AGENTS.md` · `.claude/skills/*` · `.claude/settings.json` · `.gitignore` · `.cursorignore` |
@@ -17,7 +17,7 @@
 ## 2. Front-end
 | Item da rubrica | Onde está |
 |---|---|
-| Login: campos, regex, token no localStorage, erros amigáveis, redirecionamento | `pages/Login/LoginPage.tsx` · `services/http.ts` (`tokenStorage`, `friendlyMessage`) |
+| Login: campos, regex, token no localStorage, erros amigáveis, redirecionamento | `pages/Login/LoginPage.tsx` · `services/apiClient.ts` (`tokenStorage`, `friendlyMessage`) |
 | Cadastro: obrigatórios, senha dupla, CPF, e-mail, redireciona ao login, erros da API | `pages/Cadastro/RegisterPage.tsx` |
 | Edição: Context global, CPF, nível de senha, confirmação, e-mail bloqueado | `contexts/AuthContext.tsx` · `pages/Perfil/ProfilePage.tsx` |
 | 4 CRUDs, paginação, validação de obrigatórios, listagem e formulário em telas separadas | `pages/{Categorias,Produtos,Maquinas,Pedidos}/` (`XListPage` + `XFormPage`) |

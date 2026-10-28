@@ -8,7 +8,7 @@ import { Alert } from "../../components/ui/Alert";
 import { useAuth } from "../../contexts/AuthContext";
 import { useCart } from "../../contexts/CartContext";
 import { useFormState } from "../../hooks/useFormState";
-import { ApiError } from "../../services/http";
+import { getApiErrorMessage } from "../../services/apiClient";
 import { pedidosApi } from "../../services/resources";
 import { FormaPagamento } from "../../types";
 import { collectErrors, requiredMsg } from "../../validations";
@@ -72,7 +72,7 @@ export function CheckoutPage() {
       }
       navigate("/loja/conta", { state: { mensagem: `Pedido #${pedido.id} realizado com sucesso!` } });
     } catch (e) {
-      setErro(e instanceof ApiError ? e.message : "Não foi possível finalizar o pedido.");
+      setErro(getApiErrorMessage(e, "Não foi possível finalizar o pedido."));
     } finally {
       setEnviando(false);
     }

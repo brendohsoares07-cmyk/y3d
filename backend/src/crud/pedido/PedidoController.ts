@@ -3,7 +3,7 @@ import { Pedido } from "./Pedido";
 import { ForbiddenError, NotFoundError, UnauthorizedError } from "../../errors/AppError";
 import { PedidoService } from "./PedidoService";
 import { PedidoInput } from "../../shared/types";
-import { parseId, parsePagination } from "../../shared/utils/http";
+import { parseId, parsePagination } from "../../shared/utils/requestParams";
 import { CrudController } from "../../shared/base/CrudController";
 
 /**

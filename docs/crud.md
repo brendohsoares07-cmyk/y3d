@@ -7,7 +7,8 @@ Frontend: uma pasta por recurso em `frontend/src/pages/`, com `XListPage` (lista
 | Item da rubrica | Onde está |
 |---|---|
 | 4 CRUDs completos, todos autenticados | Categorias, Produtos, Máquinas, Pedidos — `routes/index.ts` |
-| Paginação | `shared/base/BaseRepository.findPage` · `shared/utils/http.ts` (`parsePagination`) |
+| Quem pode usar | Produtos e Categorias: qualquer usuário logado lê, só administrador cria/edita/apaga. Máquinas: só administrador. Pedidos: o `PedidoController` decide (`routes/crudRouter.ts`, `routes/index.ts`) |
+| Paginação | `shared/base/BaseRepository.findPage` · `shared/utils/requestParams.ts` (`parsePagination`) |
 | Não editar/deletar o que não existe | `shared/base/CrudService.getOrFail` → `NotFoundError` (404) |
 | Relacionamento entre recursos | `database/schema.sql` (FKs, `pedido_itens`) · `crud/pedido/PedidoService` (busca os produtos e calcula o total) |
 

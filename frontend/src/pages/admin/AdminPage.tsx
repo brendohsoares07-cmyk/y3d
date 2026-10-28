@@ -5,7 +5,7 @@ import { RevenueChart } from "../../components/admin/RevenueChart";
 import { TopClients } from "../../components/admin/TopClients";
 import { Alert } from "../../components/ui/Alert";
 import { PageHeader } from "../../components/ui/PageHeader";
-import { ApiError } from "../../services/http";
+import { getApiErrorMessage } from "../../services/apiClient";
 import { adminApi } from "../../services/resources";
 import { ResumoAdmin } from "../../types";
 import "../../styles/admin.css";
@@ -19,7 +19,7 @@ export function AdminPage() {
     adminApi
       .resumo()
       .then(setResumo)
-      .catch((e: unknown) => setErro(e instanceof ApiError ? e.message : "Erro ao carregar o painel"));
+      .catch((e: unknown) => setErro(getApiErrorMessage(e, "Erro ao carregar o painel")));
   }, []);
 
   return (

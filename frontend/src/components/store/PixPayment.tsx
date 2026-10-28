@@ -28,10 +28,22 @@ export function PixPayment({ pedidoId, valor }: Props) {
         Abra o app do seu banco, escolha <strong>Pix → Ler QR Code</strong> e confirme o pagamento de{" "}
         <strong className="pix-valor">{formatMoney(valor)}</strong>.
       </p>
-      <div className="pix-qr" dangerouslySetInnerHTML={{ __html: svg }} />
+      <div
+        className="pix-qr"
+        dangerouslySetInnerHTML={{ __html: svg }}
+      />
       <p className="muted">Ou use o Pix copia e cola:</p>
-      <textarea className="pix-codigo" readOnly rows={4} value={codigo} aria-label="Código Pix copia e cola" onFocus={(e) => e.currentTarget.select()} />
-      <button type="button" className="btn btn-outline" onClick={copiar}>{copiado ? "Código copiado!" : "Copiar código Pix"}</button>
+      <textarea
+        className="pix-codigo"
+        readOnly
+        rows={4}
+        value={codigo}
+        aria-label="Código Pix copia e cola"
+        onFocus={(e) => e.currentTarget.select()}
+      />
+      <button type="button" className="btn btn-outline" onClick={copiar}>
+        {copiado ? "Código copiado!" : "Copiar código Pix"}
+      </button>
       <small className="muted">O valor já vem preenchido, não precisa digitar nada. Guarde o comprovante do pagamento.</small>
       <Link to="/loja/conta" className="btn btn-primary">Ver meus pedidos</Link>
     </section>

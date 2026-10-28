@@ -9,6 +9,12 @@ import { collectErrors, requiredMsg } from "../../validations";
 
 type Values = { nome: string; descricao: string };
 
+function validarCategoria(values: Values) {
+  return collectErrors<Values>([
+    ["nome", requiredMsg(values.nome, "Nome") ?? (values.nome.trim().length < 2 ? "Mínimo de 2 caracteres" : null)],
+  ]);
+}
+
 export function CategoriaFormPage() {
   const { id } = useParams();
   const idNumerico = id ? Number(id) : undefined;
@@ -18,10 +24,7 @@ export function CategoriaFormPage() {
     api: categoriasApi,
     emptyValues: { nome: "", descricao: "" },
     fromEntity: (c) => ({ nome: c.nome, descricao: c.descricao ?? "" }),
-    validate: (v) =>
-      collectErrors<Values>([
-        ["nome", requiredMsg(v.nome, "Nome") ?? (v.nome.trim().length < 2 ? "Mínimo de 2 caracteres" : null)],
-      ]),
+    validate: validarCategoria,
     toInput: (v) => ({ nome: v.nome.trim(), descricao: v.descricao.trim() || null }),
     backTo: "/categorias",
   });

@@ -5,11 +5,21 @@ import { FormField } from "../../components/ui/FormField";
 import { PageHeader } from "../../components/ui/PageHeader";
 import { useAuth } from "../../contexts/AuthContext";
 import { useFormState } from "../../hooks/useFormState";
-import { ApiError } from "../../services/http";
+import { getApiErrorMessage } from "../../services/apiClient";
 import { authApi } from "../../services/resources";
 import { collectErrors, isCpf, maskCpf, passwordIssues, requiredMsg } from "../../validations";
 
 type Values = { nome: string; cpf: string; senha: string; confirmarSenha: string };
+
+function validarPerfil(values: Values) {
+  const problemasSenha = passwordIssues(values.senha);
+  return collectErrors<Values>([
+    ["nome", requiredMsg(values.nome, "Nome")],
+    ["cpf", requiredMsg(values.cpf, "CPF") ?? (isCpf(values.cpf) ? null : "CPF inválido")],
+    ["senha", requiredMsg(values.senha, "Senha") ?? (problemasSenha.length ? `A senha precisa de: ${problemasSenha.join(", ")}` : null)],
+    ["confirmarSenha", values.confirmarSenha !== values.senha ? "As senhas não conferem" : null],
+  ]);
+}
 
 export function ProfilePage() {
   const { usuario, atualizarUsuario } = useAuth(); // usuário vem do contexto global
@@ -27,12 +37,7 @@ export function ProfilePage() {
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
-    const encontrados = collectErrors<Values>([
-      ["nome", requiredMsg(values.nome, "Nome")],
-      ["cpf", requiredMsg(values.cpf, "CPF") ?? (isCpf(values.cpf) ? null : "CPF inválido")],
-      ["senha", requiredMsg(values.senha, "Senha") ?? (passwordIssues(values.senha).length ? `A senha precisa de: ${passwordIssues(values.senha).join(", ")}` : null)],
-      ["confirmarSenha", values.confirmarSenha !== values.senha ? "As senhas não conferem" : null],
-    ]);
+    const encontrados = validarPerfil(values);
     setErrors(encontrados);
     if (Object.keys(encontrados).length > 0) return;
 
@@ -50,7 +55,7 @@ export function ProfilePage() {
       setField("senha", "");
       setField("confirmarSenha", "");
     } catch (e) {
-      setApiError(e instanceof ApiError ? e.message : "Não foi possível salvar.");
+      setApiError(getApiErrorMessage(e, "Não foi possível salvar."));
     } finally {
       setSaving(false);
     }

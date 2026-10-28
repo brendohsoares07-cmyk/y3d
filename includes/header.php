@@ -27,12 +27,12 @@ unset($_SESSION['flash']);
     </nav>
     <form class="hdr-search" action="produtos.php" method="get">
       <span>🔍</span>
-      <input type="search" name="busca" placeholder="Buscar produtos, modelos ou categorias..." value="<?= htmlspecialchars($_GET['busca'] ?? '') ?>">
+      <input type="search" name="busca" aria-label="Buscar produtos" placeholder="Buscar produtos, modelos ou categorias..." value="<?= htmlspecialchars($_GET['busca'] ?? '') ?>">
     </form>
     <div class="hdr-icons">
-      <a href="<?= $usuarioLogado ? 'conta.php' : 'login.php' ?>" class="ibtn" title="Minha conta">👤</a>
-      <a href="favoritos.php" class="ibtn" id="btn-favoritos" title="Favoritos">♡<span class="n" id="fav-count" hidden>0</span></a>
-      <a href="carrinho.php" class="ibtn" title="Carrinho">
+      <a href="<?= $usuarioLogado ? 'conta.php' : 'login.php' ?>" class="ibtn" title="Minha conta" aria-label="Minha conta">👤</a>
+      <a href="favoritos.php" class="ibtn" id="btn-favoritos" title="Favoritos" aria-label="Favoritos">♡<span class="n" id="fav-count" hidden>0</span></a>
+      <a href="carrinho.php" class="ibtn" title="Carrinho" aria-label="Carrinho">
         🛒<?php if ($totalCarrinho > 0): ?><span class="n"><?= $totalCarrinho ?></span><?php endif; ?>
       </a>
       <?php if (y3d_eh_admin()): ?>
@@ -48,5 +48,5 @@ unset($_SESSION['flash']);
 </header>
 <main class="wrap" style="padding-top:24px;padding-bottom:40px">
 <?php if ($flash): ?>
-  <div class="alert"><?= htmlspecialchars($flash) ?></div>
+  <div class="alert" role="status" data-flash><span><?= htmlspecialchars($flash) ?></span><button type="button" class="alert-x" data-flash-fechar aria-label="Fechar aviso">×</button></div>
 <?php endif; ?>

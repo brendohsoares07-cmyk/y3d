@@ -9,6 +9,8 @@ dist/
 *.log
 .DS_Store
 
-# contas da loja (dados pessoais: não deve ir para o controle de versão)
-/data/usuarios.json
+# dados da loja PHP (contas, pedidos com CPF e endereço, mensagens): não vão para o controle de versão
+/data/*.json
+/data/*.lock
+/data/.*.lock
 

@@ -1,3 +1,4 @@
+/** Parses route identifiers and pagination parameters from HTTP requests. */
 import { Request } from "express";
 import { ValidationError } from "../../errors/AppError";
 

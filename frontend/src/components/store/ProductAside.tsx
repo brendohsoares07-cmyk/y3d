@@ -25,6 +25,9 @@ function ShareButtons({ produto }: { produto: Produto }) {
   const [copiado, setCopiado] = useState(false);
   const url = window.location.href;
   const texto = encodeURIComponent(`${produto.nome} na Y3D Creations`);
+  const mensagemWhatsApp = `${texto}%20${encodeURIComponent(url)}`;
+  const linkWhatsApp = `https://wa.me/?text=${mensagemWhatsApp}`;
+  const linkTwitter = `https://twitter.com/intent/tweet?text=${texto}&url=${encodeURIComponent(url)}`;
 
   const copiar = async () => {
     try {
@@ -37,9 +40,15 @@ function ShareButtons({ produto }: { produto: Produto }) {
 
   return (
     <div className="share">
-      <a className="share-btn" href={`https://wa.me/?text=${texto}%20${encodeURIComponent(url)}`} target="_blank" rel="noreferrer">WhatsApp</a>
-      <a className="share-btn" href={`https://twitter.com/intent/tweet?text=${texto}&url=${encodeURIComponent(url)}`} target="_blank" rel="noreferrer">X</a>
-      <button type="button" className="share-btn" onClick={copiar}>{copiado ? "Link copiado!" : "Copiar link"}</button>
+      <a className="share-btn" href={linkWhatsApp} target="_blank" rel="noreferrer">
+        WhatsApp
+      </a>
+      <a className="share-btn" href={linkTwitter} target="_blank" rel="noreferrer">
+        X
+      </a>
+      <button type="button" className="share-btn" onClick={copiar}>
+        {copiado ? "Link copiado!" : "Copiar link"}
+      </button>
     </div>
   );
 }
@@ -62,11 +71,15 @@ export function ProductAside({ produto }: { produto: Produto }) {
       <div className="aside-block">
         <button type="button" className="accordion" onClick={() => setAberto(!aberto)} aria-expanded={aberto}>
           <strong>Descrição completa</strong>
-          <span className={aberto ? "chev open" : "chev"}><ChevronIcon size={18} /></span>
+          <span className={aberto ? "chev open" : "chev"}>
+            <ChevronIcon size={18} />
+          </span>
         </button>
         {aberto && (
           <ul className="details">
-            {produto.detalhes.length > 0 ? produto.detalhes.map((d) => <li key={d}>{d}</li>) : <li>Sem detalhes adicionais.</li>}
+            {produto.detalhes.length > 0
+              ? produto.detalhes.map((detalhe) => <li key={detalhe}>{detalhe}</li>)
+              : <li>Sem detalhes adicionais.</li>}
           </ul>
         )}
       </div>

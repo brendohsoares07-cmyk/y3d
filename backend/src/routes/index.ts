@@ -30,7 +30,9 @@ routes.put("/usuarios/:id", authMiddleware, usuarioController.update);
 routes.get("/admin/dashboard", authMiddleware, adminMiddleware, adminController.dashboard);
 routes.get("/admin/clientes", authMiddleware, adminMiddleware, adminController.clientes);
 
-routes.use("/categorias", authMiddleware, crudRouter(categoriaController));
-routes.use("/produtos", authMiddleware, crudRouter(produtoController));
-routes.use("/maquinas", authMiddleware, crudRouter(maquinaController));
+// Catálogo: qualquer usuário logado consulta, só administrador cria/edita/exclui.
+// Máquinas são de uso interno: só administrador. Pedidos: o próprio PedidoController separa cliente e admin.
+routes.use("/categorias", authMiddleware, crudRouter(categoriaController, { escritaSoAdmin: true }));
+routes.use("/produtos", authMiddleware, crudRouter(produtoController, { escritaSoAdmin: true }));
+routes.use("/maquinas", authMiddleware, crudRouter(maquinaController, { leituraSoAdmin: true, escritaSoAdmin: true }));
 routes.use("/pedidos", authMiddleware, crudRouter(pedidoController));

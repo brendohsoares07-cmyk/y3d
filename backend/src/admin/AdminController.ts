@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { AdminService } from "./AdminService";
 import { StatusCliente } from "../shared/types";
-import { parsePagination } from "../shared/utils/http";
+import { parsePagination } from "../shared/utils/requestParams";
 
 export class AdminController {
   constructor(private readonly service: AdminService) {}

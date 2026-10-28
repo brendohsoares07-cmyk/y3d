@@ -17,6 +17,7 @@ $email = $email ?? '';
 <?php if ($erro): ?><div class="lg-alert" role="alert"><?= htmlspecialchars($erro) ?></div><?php endif; ?>
 
 <form action="cadastro.php" method="post" novalidate>
+  <?= y3d_csrf_campo() ?>
   <div class="lg-input">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6"/><circle cx="12" cy="8" r="4"/></svg>
     <input type="text" id="<?= $lgPrefix ?>-nome" name="nome" placeholder="Digite seu nome" autocomplete="name" aria-label="Nome" value="<?= htmlspecialchars($nome) ?>" required>

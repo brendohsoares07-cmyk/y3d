@@ -3,11 +3,11 @@ import { useAuth } from "../../contexts/AuthContext";
 import { iniciais } from "../../utils/format";
 import { Button } from "../ui/Button";
 
-const LINKS = [
+const LINKS: { to: string; texto: string; admin?: boolean }[] = [
   { to: "/dashboard", texto: "Início" },
-  { to: "/produtos", texto: "Produtos" },
-  { to: "/categorias", texto: "Categorias" },
-  { to: "/maquinas", texto: "Máquinas" },
+  { to: "/produtos", texto: "Produtos", admin: true },
+  { to: "/categorias", texto: "Categorias", admin: true },
+  { to: "/maquinas", texto: "Máquinas", admin: true },
   { to: "/pedidos", texto: "Pedidos" },
   { to: "/perfil", texto: "Meu perfil" },
 ];
@@ -38,7 +38,7 @@ export function AppLayout() {
         </div>
         <nav>
           <Link to="/loja" className="nav-link">← Voltar à loja</Link>
-          {LINKS.map((l) => (
+          {LINKS.filter((l) => !l.admin || usuario?.admin).map((l) => (
             <NavItem key={l.to} to={l.to} texto={l.texto} />
           ))}
           {usuario?.admin && (

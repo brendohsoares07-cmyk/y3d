@@ -10,7 +10,12 @@ export function ProductImage({ produto, src, className = "" }: Props) {
     return <img className={`product-img ${className}`} src={imagem} alt={produto.nome} loading="lazy" />;
   }
   return (
-    <div className={`product-img product-placeholder ${className}`} style={{ background: gradienteDoProduto(produto) }} role="img" aria-label={produto.nome}>
+    <div
+      className={`product-img product-placeholder ${className}`}
+      style={{ background: gradienteDoProduto(produto) }}
+      role="img"
+      aria-label={produto.nome}
+    >
       <span>{produto.emoji ?? "🧊"}</span>
     </div>
   );

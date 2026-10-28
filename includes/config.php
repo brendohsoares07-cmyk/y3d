@@ -1,6 +1,14 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Pasta dos arquivos JSON (contas, pedidos, mensagens, avaliações).
+ * Em produção ela deve ficar FORA da pasta pública do servidor: informe o caminho na
+ * variável de ambiente Y3D_DATA_DIR (o docker-compose já faz isso). Sem a variável,
+ * usa ./data (só para desenvolvimento local, protegida pelo data/.htaccess).
+ */
+define('Y3D_PASTA_DADOS', rtrim((string) (getenv('Y3D_DATA_DIR') ?: __DIR__ . '/../data'), '/\\'));
+
 /** Link da loja no Instagram: usado no ícone do rodapé. */
 const INSTAGRAM_URL = 'https://www.instagram.com/y3d.creations';
 

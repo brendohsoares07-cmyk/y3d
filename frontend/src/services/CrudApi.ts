@@ -1,5 +1,5 @@
 import { Page } from "../types";
-import { request } from "./http";
+import { request } from "./apiClient";
 
 /** Contrato usado pelas listagens (só o que elas precisam). */
 export interface ListableApi<T> {

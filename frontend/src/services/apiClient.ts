@@ -1,3 +1,4 @@
+/** Shared API client, error handling, and authentication token storage. */
 const BASE_URL = "/api";
 const TOKEN_KEY = "y3d_token";
 
@@ -15,6 +16,10 @@ export class ApiError extends Error {
     super(message);
     this.name = "ApiError";
   }
+}
+
+export function getApiErrorMessage(error: unknown, fallback: string): string {
+  return error instanceof ApiError ? error.message : fallback;
 }
 
 let onUnauthorized: (() => void) | null = null;

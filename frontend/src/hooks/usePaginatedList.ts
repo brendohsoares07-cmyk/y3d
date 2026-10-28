@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { ApiError } from "../services/http";
+import { getApiErrorMessage } from "../services/apiClient";
 import { ListableApi } from "../services/CrudApi";
 import { Page } from "../types";
 
@@ -23,7 +23,7 @@ export function usePaginatedList<T extends { id: number }>(api: ListableApi<T>) 
         else setResult(r);
         setError(null);
       })
-      .catch((e: unknown) => !cancelado && setError(e instanceof ApiError ? e.message : "Erro ao carregar dados"))
+      .catch((e: unknown) => !cancelado && setError(getApiErrorMessage(e, "Erro ao carregar dados")))
       .finally(() => !cancelado && setLoading(false));
     return () => {
       cancelado = true;
@@ -36,7 +36,7 @@ export function usePaginatedList<T extends { id: number }>(api: ListableApi<T>) 
         await api.remove(id);
         setVersion((v) => v + 1);
       } catch (e) {
-        setError(e instanceof ApiError ? e.message : "Erro ao excluir");
+        setError(getApiErrorMessage(e, "Erro ao excluir"));
       }
     },
     [api],

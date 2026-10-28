@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CrudApi } from "../services/CrudApi";
-import { ApiError } from "../services/http";
+import { getApiErrorMessage } from "../services/apiClient";
 import { FieldErrors } from "../validations";
 import { useFormState } from "./useFormState";
 
@@ -30,7 +30,7 @@ export function useResourceForm<TEntity, TInput, TValues extends Record<string, 
     config.api
       .get(config.id)
       .then((entity) => setValues(config.fromEntity(entity)))
-      .catch((e: unknown) => setApiError(e instanceof ApiError ? e.message : "Erro ao carregar"))
+      .catch((e: unknown) => setApiError(getApiErrorMessage(e, "Erro ao carregar")))
       .finally(() => setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [config.id]);
@@ -49,7 +49,7 @@ export function useResourceForm<TEntity, TInput, TValues extends Record<string, 
       else await config.api.update(config.id, input);
       navigate(config.backTo);
     } catch (e) {
-      setApiError(e instanceof ApiError ? e.message : "Erro ao salvar");
+      setApiError(getApiErrorMessage(e, "Erro ao salvar"));
     } finally {
       setSaving(false);
     }

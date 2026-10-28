@@ -5,7 +5,7 @@
  * do mesmo jeito que as contas em data/usuarios.json. O painel admin (admin.php) lê esses arquivos.
  */
 
-const Y3D_PASTA_DADOS = __DIR__ . '/../data';
+require_once __DIR__ . '/config.php'; // define Y3D_PASTA_DADOS (pasta dos arquivos JSON)
 
 /** Status possíveis de um pedido (chave => texto mostrado no admin). */
 const Y3D_STATUS_PEDIDO = [
@@ -245,4 +245,10 @@ function y3d_csrf_token(): string
 function y3d_csrf_valido(?string $token): bool
 {
     return is_string($token) && $token !== '' && hash_equals(y3d_csrf_token(), $token);
+}
+
+/** Campo escondido com o token CSRF: vai logo depois de cada <form method="post">. */
+function y3d_csrf_campo(): string
+{
+    return '<input type="hidden" name="csrf" value="' . htmlspecialchars(y3d_csrf_token(), ENT_QUOTES, 'UTF-8') . '">';
 }

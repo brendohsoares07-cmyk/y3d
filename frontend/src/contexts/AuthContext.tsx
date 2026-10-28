@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { setUnauthorizedHandler, tokenStorage } from "../services/http";
+import { setUnauthorizedHandler, tokenStorage } from "../services/apiClient";
 import { authApi } from "../services/resources";
 import { Usuario } from "../types";
 

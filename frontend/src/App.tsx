@@ -58,19 +58,19 @@ export default function App() {
 
           <Route element={<AdminRoute />}>
             <Route path="/admin" element={<AdminPage />} />
+
+            <Route path="/categorias" element={<CategoriasListPage />} />
+            <Route path="/categorias/novo" element={<CategoriaFormPage />} />
+            <Route path="/categorias/:id/editar" element={<CategoriaFormPage />} />
+
+            <Route path="/produtos" element={<ProdutosListPage />} />
+            <Route path="/produtos/novo" element={<ProdutoFormPage />} />
+            <Route path="/produtos/:id/editar" element={<ProdutoFormPage />} />
+
+            <Route path="/maquinas" element={<MaquinasListPage />} />
+            <Route path="/maquinas/novo" element={<MaquinaFormPage />} />
+            <Route path="/maquinas/:id/editar" element={<MaquinaFormPage />} />
           </Route>
-
-          <Route path="/categorias" element={<CategoriasListPage />} />
-          <Route path="/categorias/novo" element={<CategoriaFormPage />} />
-          <Route path="/categorias/:id/editar" element={<CategoriaFormPage />} />
-
-          <Route path="/produtos" element={<ProdutosListPage />} />
-          <Route path="/produtos/novo" element={<ProdutoFormPage />} />
-          <Route path="/produtos/:id/editar" element={<ProdutoFormPage />} />
-
-          <Route path="/maquinas" element={<MaquinasListPage />} />
-          <Route path="/maquinas/novo" element={<MaquinaFormPage />} />
-          <Route path="/maquinas/:id/editar" element={<MaquinaFormPage />} />
 
           <Route path="/pedidos" element={<PedidosListPage />} />
           <Route path="/pedidos/novo" element={<PedidoFormPage />} />

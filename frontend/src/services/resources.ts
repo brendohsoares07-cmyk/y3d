@@ -17,7 +17,7 @@ import {
   Usuario,
 } from "../types";
 import { CrudApi } from "./CrudApi";
-import { request } from "./http";
+import { request } from "./apiClient";
 
 export const categoriasApi = new CrudApi<Categoria, CategoriaInput>("categorias");
 export const produtosApi = new CrudApi<Produto, ProdutoInput>("produtos");

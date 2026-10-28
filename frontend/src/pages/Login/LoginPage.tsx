@@ -6,10 +6,17 @@ import { Button } from "../../components/ui/Button";
 import { FormField } from "../../components/ui/FormField";
 import { useAuth } from "../../contexts/AuthContext";
 import { useFormState } from "../../hooks/useFormState";
-import { ApiError } from "../../services/http";
+import { getApiErrorMessage } from "../../services/apiClient";
 import { collectErrors, isEmail, requiredMsg } from "../../validations";
 
 type Values = { email: string; senha: string };
+
+function validarLogin(values: Values) {
+  return collectErrors<Values>([
+    ["email", !values.email.trim() ? "E-mail é obrigatório" : isEmail(values.email) ? null : "E-mail inválido"],
+    ["senha", requiredMsg(values.senha, "Senha")],
+  ]);
+}
 
 export function LoginPage() {
   const { usuario, login } = useAuth();
@@ -27,10 +34,7 @@ export function LoginPage() {
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
-    const encontrados = collectErrors<Values>([
-      ["email", !values.email.trim() ? "E-mail é obrigatório" : isEmail(values.email) ? null : "E-mail inválido"],
-      ["senha", requiredMsg(values.senha, "Senha")],
-    ]);
+    const encontrados = validarLogin(values);
     setErrors(encontrados);
     if (Object.keys(encontrados).length > 0) return;
 
@@ -40,7 +44,7 @@ export function LoginPage() {
       await login(values.email.trim(), values.senha);
       navigate(returnTo || "/loja"); // área logada, ou de volta pra onde o usuário estava
     } catch (e) {
-      setApiError(e instanceof ApiError ? e.message : "Não foi possível entrar. Tente novamente.");
+      setApiError(getApiErrorMessage(e, "Não foi possível entrar. Tente novamente."));
     } finally {
       setSaving(false);
     }

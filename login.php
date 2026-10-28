@@ -11,7 +11,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
     $senha = (string) ($_POST['senha'] ?? '');
 
-    if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    if (!y3d_csrf_valido($_POST['csrf'] ?? null)) {
+        $erro = 'Sessão expirada. Recarregue a página e tente de novo.';
+    } elseif ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $erro = 'Digite um e-mail válido.';
     } elseif (mb_strlen($senha) < 6) {
         $erro = 'A senha deve ter pelo menos 6 caracteres.';

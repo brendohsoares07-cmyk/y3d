@@ -15,6 +15,14 @@ const TIPOS = [
   { value: "FECHADA", label: "Fechada (CoreXY)" },
 ];
 
+function validarMaquina(values: Values) {
+  return collectErrors<Values>([
+    ["nome", requiredMsg(values.nome, "Nome")],
+    ["tipo", requiredMsg(values.tipo, "Tipo")],
+    ["volumeImpressao", requiredMsg(values.volumeImpressao, "Volume de impressão")],
+  ]);
+}
+
 export function MaquinaFormPage() {
   const { id } = useParams();
   const idNumerico = id ? Number(id) : undefined;
@@ -24,12 +32,7 @@ export function MaquinaFormPage() {
     api: maquinasApi,
     emptyValues: { nome: "", tipo: "", volumeImpressao: "" },
     fromEntity: (m) => ({ nome: m.nome, tipo: m.tipo, volumeImpressao: m.volumeImpressao }),
-    validate: (v) =>
-      collectErrors<Values>([
-        ["nome", requiredMsg(v.nome, "Nome")],
-        ["tipo", requiredMsg(v.tipo, "Tipo")],
-        ["volumeImpressao", requiredMsg(v.volumeImpressao, "Volume de impressão")],
-      ]),
+    validate: validarMaquina,
     toInput: (v) => ({ nome: v.nome.trim(), tipo: v.tipo as TipoMaquina, volumeImpressao: v.volumeImpressao.trim() }),
     backTo: "/maquinas",
   });

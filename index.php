@@ -30,13 +30,26 @@ $temVideoProducao = file_exists($videoProducao);
   <div class="hero-copy">
     <h1>Transforme suas ideias em <span class="grad">REALIDADE 3D</span></h1>
     <p>Modelos 3D de alta qualidade, prontos para seus projetos, impressões e animações.</p>
-    <a href="produtos.php" class="btn btn-grad">Explorar loja →</a>
+    <div class="hero-cta">
+      <a href="produtos.php" class="btn btn-grad">Explorar loja →</a>
+      <a href="#promo-bt21" class="btn btn-outline">Ver Coleção BT21</a>
+    </div>
     <ul class="hero-tags">
-      <li><span class="tag-ic">✨</span><span>Modelos Premium<br><b>Alta qualidade</b></span></li>
-      <li><span class="tag-ic">⚡</span><span>Entrega instantânea<br><b>Download imediato</b></span></li>
+      <li><span class="tag-ic">✨</span><span>Peças Premium<br><b>Alta qualidade</b></span></li>
+      <li><span class="tag-ic">🚚</span><span>Envio para todo o Brasil<br><b>Frete seguro</b></span></li>
       <li><span class="tag-ic">🛟</span><span>Suporte especializado<br><b>Sempre com você</b></span></li>
     </ul>
   </div>
+</section>
+
+<!-- FAIXA DE CONFIANÇA: pagamento, entrega, segurança e atendimento logo depois da hero -->
+<section class="sec" aria-label="Vantagens da loja">
+  <ul class="trust">
+    <li><span class="trust-ic">💳</span><span><b>Pix, cartão e boleto</b>Pague do seu jeito</span></li>
+    <li><span class="trust-ic">📦</span><span><b>Enviamos para todo o Brasil</b>Frete seguro e rastreio</span></li>
+    <li><span class="trust-ic">🔒</span><span><b>Compra 100% segura</b>Seus dados protegidos</span></li>
+    <li><a href="<?= htmlspecialchars(WHATSAPP_URL) ?>" target="_blank" rel="noopener noreferrer"><span class="trust-ic">💬</span><span><b>Atendimento no WhatsApp</b>Tire dúvidas antes de comprar</span></a></li>
+  </ul>
 </section>
 
 <!-- SOBRE: logo abaixo do vídeo de abertura -->
@@ -48,7 +61,7 @@ $temVideoProducao = file_exists($videoProducao);
 <?php if (!$usuarioLogado): ?>
 <!-- Acesse sua conta: fecha a página como convite final, sem cortar o fluxo de compra -->
 <section class="sec">
-  <div class="sec-h"><h2>Acesse sua conta</h2></div>
+  <div class="sec-h sec-h-centro"><h2>Acesse sua conta</h2></div>
   <div class="lg-embed">
     <div class="lg-art">
       <?php require __DIR__ . '/includes/login_arte.php'; ?>

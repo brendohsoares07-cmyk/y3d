@@ -14,6 +14,22 @@ type Values = { produtoId: string; quantidade: string; status: string };
 
 const STATUS = (Object.keys(ROTULO_STATUS) as StatusPedido[]).map((s) => ({ value: s, label: ROTULO_STATUS[s] }));
 
+function validarPedido(values: Values, editando: boolean) {
+  if (editando) {
+    return collectErrors<Values>([["status", requiredMsg(values.status, "Status")]]);
+  }
+
+  const quantidade = Number(values.quantidade);
+  return collectErrors<Values>([
+    ["produtoId", requiredMsg(values.produtoId, "Produto")],
+    [
+      "quantidade",
+      requiredMsg(values.quantidade, "Quantidade") ??
+        (Number.isInteger(quantidade) && quantidade >= 1 ? null : "Informe um número inteiro (1 ou mais)"),
+    ],
+  ]);
+}
+
 /** Cadastro: produto + quantidade (o valor é calculado pelo servidor). Edição: só o status muda. */
 export function PedidoFormPage() {
   const { id } = useParams();
@@ -26,14 +42,7 @@ export function PedidoFormPage() {
     api: pedidosApi,
     emptyValues: { produtoId: "", quantidade: "1", status: "PENDENTE" },
     fromEntity: (p) => ({ produtoId: "", quantidade: "1", status: p.status }),
-    validate: (v) => {
-      if (editando) return collectErrors<Values>([["status", requiredMsg(v.status, "Status")]]);
-      const qtd = Number(v.quantidade);
-      return collectErrors<Values>([
-        ["produtoId", requiredMsg(v.produtoId, "Produto")],
-        ["quantidade", requiredMsg(v.quantidade, "Quantidade") ?? (Number.isInteger(qtd) && qtd >= 1 ? null : "Informe um número inteiro (1 ou mais)")],
-      ]);
-    },
+    validate: (values) => validarPedido(values, editando),
     toInput: (v) =>
       editando
         ? { itens: [], status: v.status as StatusPedido }

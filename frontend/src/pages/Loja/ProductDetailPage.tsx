@@ -7,7 +7,7 @@ import { ProductInfo } from "../../components/store/ProductInfo";
 import { TrustStrip } from "../../components/store/TrustStrip";
 import { Alert } from "../../components/ui/Alert";
 import { useOptions } from "../../hooks/useOptions";
-import { ApiError } from "../../services/http";
+import { getApiErrorMessage } from "../../services/apiClient";
 import { categoriasApi, produtosApi } from "../../services/resources";
 import { Produto } from "../../types";
 
@@ -24,7 +24,7 @@ export function ProductDetailPage() {
     produtosApi
       .get(Number(id))
       .then(setProduto)
-      .catch((e: unknown) => setErro(e instanceof ApiError ? e.message : "Não foi possível carregar o produto"));
+      .catch((e: unknown) => setErro(getApiErrorMessage(e, "Não foi possível carregar o produto")));
   }, [id]);
 
   if (erro) {

@@ -18,6 +18,7 @@
     <div class="price-row">
       <span class="price"><?= y3d_formatar_preco($p['preco']) ?></span>
       <form action="handlers/carrinho.php" method="post">
+        <?= y3d_csrf_campo() ?>
         <input type="hidden" name="acao" value="adicionar">
         <input type="hidden" name="id" value="<?= $p['id'] ?>">
         <input type="hidden" name="quantidade" value="1">
