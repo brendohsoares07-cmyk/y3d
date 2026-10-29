@@ -5,7 +5,11 @@ import { RevenueChart } from "../../components/admin/RevenueChart";
 import { TopClients } from "../../components/admin/TopClients";
 import { Alert } from "../../components/ui/Alert";
 import { PageHeader } from "../../components/ui/PageHeader";
+<<<<<<< HEAD
 import { getApiErrorMessage } from "../../services/apiClient";
+=======
+import { getApiErrorMessage } from "../../services/http";
+>>>>>>> bd20297 (arrumando a parte de esqueci a senha)
 import { adminApi } from "../../services/resources";
 import { ResumoAdmin } from "../../types";
 import "../../styles/admin.css";

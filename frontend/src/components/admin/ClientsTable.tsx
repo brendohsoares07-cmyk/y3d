@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { useDebounce } from "../../hooks/useDebounce";
+<<<<<<< HEAD
 import { getApiErrorMessage } from "../../services/apiClient";
+=======
+import { getApiErrorMessage } from "../../services/http";
+>>>>>>> bd20297 (arrumando a parte de esqueci a senha)
 import { adminApi } from "../../services/resources";
 import { ClienteAdmin, Page, StatusCliente } from "../../types";
 import { formatMoney, iniciais } from "../../utils/format";

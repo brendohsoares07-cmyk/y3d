@@ -7,7 +7,11 @@ import { ProductInfo } from "../../components/store/ProductInfo";
 import { TrustStrip } from "../../components/store/TrustStrip";
 import { Alert } from "../../components/ui/Alert";
 import { useOptions } from "../../hooks/useOptions";
+<<<<<<< HEAD
 import { getApiErrorMessage } from "../../services/apiClient";
+=======
+import { getApiErrorMessage } from "../../services/http";
+>>>>>>> bd20297 (arrumando a parte de esqueci a senha)
 import { categoriasApi, produtosApi } from "../../services/resources";
 import { Produto } from "../../types";
 

@@ -15,6 +15,10 @@ php -S localhost:8000
 
 Contas ficam em `data/usuarios.json` (no Docker, a pasta `data/` é montada fora da raiz pública, em `/var/www/data`, via `Y3D_DATA_DIR`; em outros servidores, mantenha-a fora da pasta pública ou bloqueie o acesso). Para recompilar o TypeScript da loja: `npm run build`.
 
+Na tela de login da loja PHP, a recuperação de senha envia um link de uso único, válido por uma hora, via Gmail SMTP. O PHP carrega do `.env` local as configurações `Y3D_SMTP_USER`, `Y3D_EMAIL_FROM` e `Y3D_SMTP_PASSWORD`; use como senha uma senha de app do Google, nunca a senha normal da conta. Gere-a nas configurações de segurança do Google, com a verificação em duas etapas ativada, e guarde-a somente no `.env` local ou no gerenciador de segredos do servidor. Nunca a envie no chat nem a versione. O arquivo `.htaccess` bloqueia o acesso HTTP ao `.env`. O Docker instala o PHPMailer e permite a saída SMTP sem publicar portas da loja. `Y3D_BASE_URL` pode ficar vazia para detectar o endereço público da requisição; em proxy com URL diferente, informe a URL pública completa.
+
+Em servidor Apache fora do Docker, rode `composer install --no-dev --prefer-dist --optimize-autoloader` no diretório da loja e configure as variáveis SMTP no ambiente do Apache/servidor. O envio só funciona depois que essas credenciais estiverem configuradas.
+
 ## Rodar a aplicação TypeScript com Docker
 
 ```bash

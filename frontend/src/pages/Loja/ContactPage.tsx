@@ -11,7 +11,7 @@ export function ContactPage() {
       <p className="lead">
         Dúvidas sobre um pedido, orçamento para um modelo personalizado ou impressão 3D? Fale com a gente.
       </p>
-      <p>✉️ <a href="mailto:suporte@y3dcreations.com">suporte@y3dcreations.com</a></p>
+      <p>✉️ <a href="mailto:y3dsuporte@gmail.com">y3dsuporte@gmail.com</a></p>
       <p>📞 +55 44 9963-8985</p>
       <a className="whatsapp-btn" href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer"
         aria-label="Conversar com a Y3D no WhatsApp">

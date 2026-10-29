@@ -1,5 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
+<<<<<<< HEAD
 import { getApiErrorMessage } from "../services/apiClient";
+=======
+import { getApiErrorMessage } from "../services/http";
+>>>>>>> bd20297 (arrumando a parte de esqueci a senha)
 import { ListableApi } from "../services/CrudApi";
 import { Page } from "../types";
 

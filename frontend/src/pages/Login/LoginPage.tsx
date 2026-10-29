@@ -6,7 +6,11 @@ import { Button } from "../../components/ui/Button";
 import { FormField } from "../../components/ui/FormField";
 import { useAuth } from "../../contexts/AuthContext";
 import { useFormState } from "../../hooks/useFormState";
+<<<<<<< HEAD
 import { getApiErrorMessage } from "../../services/apiClient";
+=======
+import { getApiErrorMessage } from "../../services/http";
+>>>>>>> bd20297 (arrumando a parte de esqueci a senha)
 import { collectErrors, isEmail, requiredMsg } from "../../validations";
 
 type Values = { email: string; senha: string };

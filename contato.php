@@ -25,7 +25,7 @@ require_once __DIR__ . '/includes/header.php';
     <h1 style="font-size:clamp(22px,3vw,30px);margin:0 0 12px">Fale com a Y3D</h1>
     <p style="color:var(--mute);max-width:44ch">Dúvidas sobre um pedido, orçamento para um modelo personalizado ou impressão 3D? Envie sua mensagem.</p>
     <ul style="margin-top:22px;display:grid;gap:10px;color:var(--mute);font-size:14px">
-      <li>✉️ suporte@y3dcreations.com</li>
+      <li>✉️ <a href="mailto:y3dsuporte@gmail.com">y3dsuporte@gmail.com</a></li>
       <li>📞 +55 44 9963-8985</li>
     </ul>
     <a class="btn-whats" href="<?= htmlspecialchars(WHATSAPP_URL) ?>" target="_blank" rel="noopener noreferrer" aria-label="Conversar com a Y3D no WhatsApp">

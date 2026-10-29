@@ -36,7 +36,7 @@ $erro = $erro ?? null;
       <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i>
       Lembrar de mim
     </label>
-    <a href="#" class="lg-link">Esqueceu sua senha?</a>
+    <a href="login.php?acao=recuperar" class="lg-link">Esqueceu sua senha?</a>
   </div>
 
   <button type="submit" class="lg-btn">

@@ -80,6 +80,81 @@ function y3d_verificar_senha(array $conta, string $senha): bool
     return !empty($conta['senha_hash']) && password_verify($senha, (string) $conta['senha_hash']);
 }
 
+/** Cria um token temporário de recuperação e persiste apenas seu hash. */
+function y3d_token_senha_criar(string $email): ?string
+{
+    $email = y3d_email_normalizado($email);
+    $token = bin2hex(random_bytes(32));
+    $hash = hash('sha256', $token);
+    $encontrou = false;
+
+    $salvou = y3d_json_alterar('usuarios', function (array $contas) use ($email, $hash, &$encontrou): array {
+        foreach ($contas as $indice => $conta) {
+            if (y3d_email_normalizado((string) ($conta['email'] ?? '')) === $email) {
+                $contas[$indice]['token_senha_hash'] = $hash;
+                $contas[$indice]['token_senha_expira_em'] = time() + 3600;
+                $encontrou = true;
+                break;
+            }
+        }
+        return $contas;
+    });
+
+    if (!$salvou) {
+        error_log('Não foi possível salvar o token de recuperação de senha.');
+        return null;
+    }
+
+    return $encontrou ? $token : null;
+}
+
+function y3d_conta_por_token_senha(string $token): ?array
+{
+    if (preg_match('/\A[a-f0-9]{64}\z/', $token) !== 1) {
+        return null;
+    }
+
+    $hash = hash('sha256', $token);
+    foreach (y3d_contas_carregar() as $conta) {
+        $hashSalvo = (string) ($conta['token_senha_hash'] ?? '');
+        $expiraEm = (int) ($conta['token_senha_expira_em'] ?? 0);
+        if ($expiraEm > time() && $hashSalvo !== '' && hash_equals($hashSalvo, $hash)) {
+            return $conta;
+        }
+    }
+    return null;
+}
+
+function y3d_senha_redefinir_com_token(string $token, string $senha): bool
+{
+    if (preg_match('/\A[a-f0-9]{64}\z/', $token) !== 1) {
+        return false;
+    }
+
+    $hash = hash('sha256', $token);
+    $atualizou = false;
+    $salvou = y3d_json_alterar('usuarios', function (array $contas) use ($hash, $senha, &$atualizou): array {
+        foreach ($contas as $indice => $conta) {
+            $hashSalvo = (string) ($conta['token_senha_hash'] ?? '');
+            $expiraEm = (int) ($conta['token_senha_expira_em'] ?? 0);
+            if ($expiraEm > time() && $hashSalvo !== '' && hash_equals($hashSalvo, $hash)) {
+                $contas[$indice]['senha_hash'] = password_hash($senha, PASSWORD_DEFAULT);
+                unset($contas[$indice]['token_senha_hash'], $contas[$indice]['token_senha_expira_em']);
+                $contas[$indice]['atualizado_em'] = time();
+                $atualizou = true;
+                break;
+            }
+        }
+        return $contas;
+    });
+
+    if (!$salvou) {
+        error_log('Não foi possível salvar a nova senha da conta.');
+        return false;
+    }
+    return $atualizou;
+}
+
 /** Atualiza campos de uma conta (ex.: nome, foto) e devolve a conta já atualizada. */
 function y3d_conta_atualizar(int $id, array $campos): ?array
 {

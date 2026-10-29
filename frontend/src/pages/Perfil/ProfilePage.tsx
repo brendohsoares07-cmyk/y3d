@@ -5,7 +5,11 @@ import { FormField } from "../../components/ui/FormField";
 import { PageHeader } from "../../components/ui/PageHeader";
 import { useAuth } from "../../contexts/AuthContext";
 import { useFormState } from "../../hooks/useFormState";
+<<<<<<< HEAD
 import { getApiErrorMessage } from "../../services/apiClient";
+=======
+import { getApiErrorMessage } from "../../services/http";
+>>>>>>> bd20297 (arrumando a parte de esqueci a senha)
 import { authApi } from "../../services/resources";
 import { collectErrors, isCpf, maskCpf, passwordIssues, requiredMsg } from "../../validations";
 

@@ -8,7 +8,11 @@ import { Alert } from "../../components/ui/Alert";
 import { useAuth } from "../../contexts/AuthContext";
 import { useCart } from "../../contexts/CartContext";
 import { useFormState } from "../../hooks/useFormState";
+<<<<<<< HEAD
 import { getApiErrorMessage } from "../../services/apiClient";
+=======
+import { getApiErrorMessage } from "../../services/http";
+>>>>>>> bd20297 (arrumando a parte de esqueci a senha)
 import { pedidosApi } from "../../services/resources";
 import { FormaPagamento } from "../../types";
 import { collectErrors, requiredMsg } from "../../validations";
