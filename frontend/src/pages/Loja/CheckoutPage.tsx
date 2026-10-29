@@ -8,7 +8,7 @@ import { Alert } from "../../components/ui/Alert";
 import { useAuth } from "../../contexts/AuthContext";
 import { useCart } from "../../contexts/CartContext";
 import { useFormState } from "../../hooks/useFormState";
-<<<<<<< HEAD
+
 import { getApiErrorMessage } from "../../services/apiClient";
 =======
 import { getApiErrorMessage } from "../../services/http";
