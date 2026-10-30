@@ -14,7 +14,7 @@ Frontend: uma pasta por recurso em `frontend/src/pages/`, com `XListPage` (lista
 | Paginação | `shared/base/BaseRepository.findPage` · `shared/utils/http.ts` (`parsePagination`) |
 >>>>>>> bd20297 (arrumando a parte de esqueci a senha)
 | Não editar/deletar o que não existe | `shared/base/CrudService.getOrFail` → `NotFoundError` (404) |
-| Relacionamento entre recursos | `database/schema.sql` (FKs, `pedido_itens`) · `crud/pedido/PedidoService` (busca os produtos e calcula o total) |
+| Relacionamento entre recursos | `database/database.sql` (FKs, `pedido_itens`) · `crud/pedido/PedidoService` (busca os produtos e calcula o total) |
 
 ## Frontend
 | Item da rubrica | Onde está |

@@ -41,10 +41,21 @@ function y3d_email_smtp_status(): string
         : 'configuracao_ausente';
 }
 
-function y3d_email_enviar(string $destinatario, string $nome, string $assunto, string $mensagem): bool
+function y3d_email_enviar(
+    string $destinatario,
+    string $nome,
+    string $assunto,
+    string $mensagem,
+    ?string $responderPara = null,
+    ?string $nomeResponder = null
+): bool
 {
     if (!y3d_email_smtp_configurado()) {
         error_log('O SMTP da loja não está configurado para envio de e-mails.');
+        return false;
+    }
+    if ($responderPara !== null && filter_var($responderPara, FILTER_VALIDATE_EMAIL) === false) {
+        error_log('Endereço de resposta inválido para envio de e-mail.');
         return false;
     }
 
@@ -67,13 +78,16 @@ function y3d_email_enviar(string $destinatario, string $nome, string $assunto, s
             'Y3D Creations'
         );
         $mailer->addAddress($destinatario, $nome);
+        if ($responderPara !== null) {
+            $mailer->addReplyTo($responderPara, $nomeResponder ?? '');
+        }
         $mailer->isHTML(false);
         $mailer->Subject = $assunto;
         $mailer->Body = $mensagem;
 
         return $mailer->send();
     } catch (PHPMailerException $erro) {
-        error_log('Falha ao enviar e-mail de recuperação via SMTP.');
+        error_log('Falha ao enviar e-mail via SMTP.');
         return false;
     }
 }

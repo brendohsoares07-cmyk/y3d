@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/includes/funcoes.php';
+require_once __DIR__ . '/includes/email.php';
 $enviado = false;
 $erros = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -11,9 +12,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $erros['email'] = 'Digite um e-mail válido.';
     if (mb_strlen($mensagem) < 10) $erros['mensagem'] = 'Conte um pouco mais (mínimo 10 caracteres).';
     if (!$erros) {
-        // não envia e-mail: a mensagem fica guardada e aparece em Mensagens, no painel admin
-        $enviado = y3d_mensagem_registrar($nome, $email, $mensagem);
-        if (!$enviado) $erros['mensagem'] = 'Não foi possível enviar agora. Tente de novo em instantes.';
+        $salva = y3d_mensagem_registrar($nome, $email, $mensagem);
+        if (!$salva) {
+            $erros['mensagem'] = 'Não foi possível salvar sua mensagem. Tente de novo em instantes.';
+        } else {
+            $corpo = "Nova mensagem enviada pelo formulário do site Y3D Creations.\n\n"
+                . "Nome: {$nome}\n"
+                . "E-mail: {$email}\n\n"
+                . "Mensagem:\n{$mensagem}\n";
+            $enviado = y3d_email_enviar(
+                'y3dsuporte@gmail.com',
+                'Y3D Suporte',
+                'Nova mensagem pelo site da Y3D Creations',
+                $corpo,
+                $email,
+                $nome
+            );
+            if (!$enviado) {
+                $erros['mensagem'] = 'Não foi possível enviar o e-mail agora. Sua mensagem foi salva; tente novamente mais tarde.';
+            }
+        }
     }
 }
 $tituloPagina = 'Contato';
@@ -43,17 +61,17 @@ require_once __DIR__ . '/includes/header.php';
       <div class="fld">
         <label for="nome">Nome</label>
         <input id="nome" name="nome" value="<?= htmlspecialchars($_POST['nome'] ?? '') ?>">
-        <?php if (!empty($erros['nome'])): ?><small style="color:#ff6b6b"><?= $erros['nome'] ?></small><?php endif; ?>
+        <?php if (!empty($erros['nome'])): ?><small style="color:#ff6b6b"><?= htmlspecialchars($erros['nome']) ?></small><?php endif; ?>
       </div>
       <div class="fld">
         <label for="email">E-mail</label>
         <input type="email" id="email" name="email" value="<?= htmlspecialchars($_POST['email'] ?? '') ?>">
-        <?php if (!empty($erros['email'])): ?><small style="color:#ff6b6b"><?= $erros['email'] ?></small><?php endif; ?>
+        <?php if (!empty($erros['email'])): ?><small style="color:#ff6b6b"><?= htmlspecialchars($erros['email']) ?></small><?php endif; ?>
       </div>
       <div class="fld">
         <label for="mensagem">Mensagem</label>
         <textarea id="mensagem" name="mensagem" rows="5" style="width:100%;border-radius:10px;border:1px solid var(--line);background:var(--raise);color:var(--text);padding:12px"><?= htmlspecialchars($_POST['mensagem'] ?? '') ?></textarea>
-        <?php if (!empty($erros['mensagem'])): ?><small style="color:#ff6b6b"><?= $erros['mensagem'] ?></small><?php endif; ?>
+        <?php if (!empty($erros['mensagem'])): ?><small style="color:#ff6b6b"><?= htmlspecialchars($erros['mensagem']) ?></small><?php endif; ?>
       </div>
       <button type="submit" class="btn btn-grad btn-block">Enviar mensagem</button>
     </form>

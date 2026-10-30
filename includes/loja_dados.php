@@ -97,6 +97,68 @@ function y3d_pedido_registrar(array $dados): int
     return $ok ? $idNovo : 0;
 }
 
+function y3d_pedido_por_id(int $id): ?array
+{
+    foreach (y3d_json_ler('pedidos') as $pedido) {
+        if ((int) ($pedido['id'] ?? 0) === $id) {
+            return $pedido;
+        }
+    }
+    return null;
+}
+
+function y3d_pedido_vincular_asaas(int $id, string $paymentId): bool
+{
+    $vinculado = false;
+    $ok = y3d_json_alterar('pedidos', function (array $lista) use ($id, $paymentId, &$vinculado): array {
+        foreach ($lista as $indice => $pedido) {
+            if (
+                (int) ($pedido['id'] ?? 0) === $id
+                && ($pedido['status'] ?? '') === 'aguardando'
+                && ($pedido['pagamento'] ?? '') === 'pix'
+            ) {
+                $lista[$indice]['asaas_payment_id'] = $paymentId;
+                $vinculado = true;
+                break;
+            }
+        }
+        return $lista;
+    });
+    return $ok && $vinculado;
+}
+
+function y3d_pedido_confirmar_asaas(int $id, string $paymentId, float $valor): string
+{
+    $correspondente = false;
+    $ok = y3d_json_alterar('pedidos', function (array $lista) use ($id, $paymentId, $valor, &$correspondente): array {
+        foreach ($lista as $indice => $pedido) {
+            if ((int) ($pedido['id'] ?? 0) !== $id) {
+                continue;
+            }
+
+            $status = (string) ($pedido['status'] ?? '');
+            $correspondente = ($pedido['pagamento'] ?? '') === 'pix'
+                && ($pedido['asaas_payment_id'] ?? '') === $paymentId
+                && (int) round((float) ($pedido['total'] ?? 0) * 100) === (int) round($valor * 100)
+                && in_array($status, ['aguardando', 'pago', 'enviado', 'entregue'], true);
+
+            if ($correspondente && empty($pedido['pagamento_confirmado_em'])) {
+                $lista[$indice]['pagamento_confirmado_em'] = time();
+                if ($status === 'aguardando') {
+                    $lista[$indice]['status'] = 'pago';
+                }
+            }
+            break;
+        }
+        return $lista;
+    });
+
+    if (!$ok) {
+        return 'erro';
+    }
+    return $correspondente ? 'confirmado' : 'divergente';
+}
+
 function y3d_pedido_mudar_status(int $id, string $status): bool
 {
     if (!array_key_exists($status, Y3D_STATUS_PEDIDO)) {

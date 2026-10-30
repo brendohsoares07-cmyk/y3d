@@ -16,8 +16,7 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD}
     volumes:
       - db_data:/var/lib/mysql # persistência: os dados sobrevivem a reinícios
-      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro # cria as tabelas (só na 1ª vez)
-      # o catálogo NÃO entra mais aqui: o serviço db-sync abaixo aplica a cada up em que o arquivo mudou
+      - ./database/database.sql:/docker-entrypoint-initdb.d/01-database.sql:ro # estrutura e catálogo na primeira inicialização
     healthcheck:
       test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
       interval: 5s
@@ -26,10 +25,10 @@ services:
     networks:
       - db_net # só o backend enxerga o banco
 
-  # ---------- Sincroniza o catálogo (roda, atualiza o banco e termina) ----------
+  # ---------- Sincroniza o script único (roda, atualiza o banco e termina) ----------
   # O initdb do MySQL só roda quando o volume db_data é criado. Este serviço roda a cada
-  # `docker compose up`: se database/seeds/01-catalogo.sql mudou desde a última vez
-  # (compara o hash guardado na tabela catalogo_versao), reaplica o catálogo no banco.
+  # `docker compose up`: se database/database.sql mudou desde a última vez
+  # (compara o hash guardado na tabela catalogo_versao), reaplica estrutura e catálogo.
   # Se o arquivo não mudou, não faz nada (edições feitas pelo painel admin são preservadas).
   db-sync:
     image: mysql:8.4
@@ -39,23 +38,23 @@ services:
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
     volumes:
-      - ./database/seeds/01-catalogo.sql:/catalogo.sql:ro
+      - ./database/database.sql:/database.sql:ro
     entrypoint: ["sh", "-c"]
     command:
       - |
         set -eu
         M="mysql -h db -u$$DB_USER $$DB_NAME --default-character-set=utf8mb4"
-        NOVO=$$(sha256sum /catalogo.sql | cut -d" " -f1)
+        NOVO=$$(sha256sum /database.sql | cut -d" " -f1)
         $$M -e "CREATE TABLE IF NOT EXISTS catalogo_versao (id TINYINT PRIMARY KEY, hash CHAR(64) NOT NULL, aplicado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)"
         ANTIGO=$$($$M -N -B -e "SELECT hash FROM catalogo_versao WHERE id = 1")
         if [ "$$NOVO" = "$$ANTIGO" ]; then
-          echo "db-sync: catálogo já está atualizado."
+          echo "db-sync: banco já está atualizado."
           exit 0
         fi
-        echo "db-sync: aplicando catálogo novo..."
-        $$M < /catalogo.sql
+        echo "db-sync: aplicando script do banco..."
+        $$M < /database.sql
         $$M -e "REPLACE INTO catalogo_versao (id, hash) VALUES (1, '$$NOVO')"
-        echo "db-sync: catálogo atualizado."
+        echo "db-sync: script do banco aplicado."
     depends_on:
       db:
         condition: service_healthy
@@ -134,6 +133,9 @@ services:
       Y3D_SMTP_ENCRYPTION: ${Y3D_SMTP_ENCRYPTION:-tls}
       Y3D_SMTP_USER: ${Y3D_SMTP_USER:-y3dsuporte@gmail.com}
       Y3D_SMTP_PASSWORD: ${Y3D_SMTP_PASSWORD:-}
+      Y3D_ASAAS_API_KEY: ${Y3D_ASAAS_API_KEY:-}
+      Y3D_ASAAS_WEBHOOK_TOKEN: ${Y3D_ASAAS_WEBHOOK_TOKEN:-}
+      Y3D_ASAAS_API_URL: ${Y3D_ASAAS_API_URL:-https://api-sandbox.asaas.com/v3}
     networks:
       - app_net
       - public_net # saída para o SMTP; a loja continua sem portas publicadas

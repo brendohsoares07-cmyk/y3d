@@ -14,5 +14,5 @@ cp .env.example .env      # edite o .env e troque as senhas
 docker compose up --build
 ```
 - `docker/backend/Dockerfile` e `docker/frontend/Dockerfile`: imagens (o `docker-compose.yml` aponta para elas).
-- `database/schema.sql` + `database/seeds/`: rodam na primeira vez que o volume `db_data` é criado.
+- `database/database.sql`: contém a estrutura e os dados iniciais; o serviço `db-sync` reaplica o arquivo quando seu conteúdo muda.
 - **Não use `docker compose down -v`**: apaga o volume do MySQL.

@@ -22,6 +22,9 @@ function y3d_carregar_config_email(?string $arquivo = null): void
         'Y3D_SMTP_ENCRYPTION',
         'Y3D_SMTP_USER',
         'Y3D_SMTP_PASSWORD',
+        'Y3D_ASAAS_API_KEY',
+        'Y3D_ASAAS_WEBHOOK_TOKEN',
+        'Y3D_ASAAS_API_URL',
     ];
     $linhas = file($arquivo, FILE_IGNORE_NEW_LINES);
     if ($linhas === false) {

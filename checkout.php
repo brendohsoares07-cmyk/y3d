@@ -2,22 +2,37 @@
 $tituloPagina = 'Finalizar compra';
 require_once __DIR__ . '/includes/funcoes.php';
 require_once __DIR__ . '/includes/validacoes.php';
+require_once __DIR__ . '/includes/asaas.php';
 $pedidoConcluido = false;
+$pagamentoConfirmado = false;
+$pedidoPixDados = null;
+$pedidoIdExibido = 0;
+$nomeInformado = trim((string) ($_POST['nome'] ?? ''));
+$telefoneInformado = trim((string) ($_POST['telefone'] ?? ''));
 $cepInformado = trim($_POST['cep'] ?? '');
 $cpfInformado = trim($_POST['cpf'] ?? '');
 $erroCheckout = null;
 
-$formaPagamento = $_POST['pagamento'] ?? '';
+$formaPagamento = trim((string) ($_POST['pagamento'] ?? ''));
 $totalPedido = 0.0;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && y3d_total_itens_carrinho() > 0) {
     // CPF obrigatório e válido: sem isso o pedido não é concluído e o carrinho é mantido
     if (!y3d_csrf_valido($_POST['csrf'] ?? null)) {
         $erroCheckout = 'Sessão expirada. Recarregue a página e tente de novo.';
+    } elseif ($formaPagamento !== 'pix') {
+        $erroCheckout = 'No momento, aceitamos somente pagamento por Pix.';
+    } elseif ($nomeInformado === '') {
+        $erroCheckout = 'Informe seu nome completo.';
+    } elseif (!in_array(strlen(y3d_somente_digitos($telefoneInformado)), [10, 11], true)) {
+        $erroCheckout = 'Informe um telefone com DDD.';
     } elseif (y3d_somente_digitos($cpfInformado) === '') {
         $erroCheckout = 'Informe o CPF para finalizar o pedido.';
     } elseif (!y3d_cpf_valido($cpfInformado)) {
         $erroCheckout = 'CPF inválido. Confira os números e tente de novo.';
+    }
+    if ($erroCheckout === null) {
+        $erroCheckout = y3d_asaas_configuracao_erro();
     }
 }
 
@@ -35,11 +50,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && y3d_total_itens_carrinho() > 0 && $
         ];
     }
     $contaLogada = y3d_usuario();
-    $pedidoId = y3d_pedido_registrar([
+    $dadosPedido = [
         'usuario_id' => $contaLogada ? (int) $contaLogada['id'] : null,
-        'nome'       => trim($_POST['nome'] ?? ''),
+        'nome'       => $nomeInformado,
         'email'      => $contaLogada ? (string) $contaLogada['email'] : '',
-        'telefone'   => trim($_POST['telefone'] ?? ''),
+        'telefone'   => $telefoneInformado,
         'cpf'        => y3d_somente_digitos($cpfInformado),
         'cep'        => $cepInformado,
         'endereco'   => trim($_POST['endereco'] ?? ''),
@@ -48,13 +63,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && y3d_total_itens_carrinho() > 0 && $
         'pagamento'  => (string) $formaPagamento,
         'itens'      => $itensDoPedido,
         'total'      => $totalPedido,
-    ]);
+    ];
+    $pedidoId = y3d_pedido_registrar($dadosPedido);
     if ($pedidoId > 0) {
-        $_SESSION['pedido_para_avaliar'] = $pedidoId; // libera a avaliação do atendimento deste pedido
-        y3d_limpar_carrinho();
-        $pedidoConcluido = true;
+        $pedidoPixDados = y3d_asaas_criar_pix($pedidoId, $dadosPedido);
+        if (
+            $pedidoPixDados === null
+            || !y3d_pedido_vincular_asaas($pedidoId, $pedidoPixDados['payment_id'])
+        ) {
+            y3d_pedido_mudar_status($pedidoId, 'cancelado');
+            $erroCheckout = 'Não foi possível gerar a cobrança Pix. Seu carrinho foi mantido. Verifique a configuração e os logs do serviço de pagamento.';
+        } else {
+            $_SESSION['pedido_pix_asaas_id'] = $pedidoId;
+            $pedidosPix = $_SESSION['pedidos_pix_asaas'] ?? [];
+            if (!is_array($pedidosPix)) {
+                $pedidosPix = [];
+            }
+            $pedidosPix[$pedidoId] = true;
+            $_SESSION['pedidos_pix_asaas'] = array_slice($pedidosPix, -10, null, true);
+            $_SESSION['pedido_pix_asaas_dados'] = $pedidoPixDados;
+            $_SESSION['pedido_para_avaliar'] = $pedidoId;
+            y3d_limpar_carrinho();
+            header('Location: checkout.php?pagamento=aguardando', true, 303);
+            exit;
+        }
     } else {
         $erroCheckout = 'Não foi possível registrar o pedido agora. Seu carrinho foi mantido, tente de novo.';
+    }
+}
+
+if (
+    $_SERVER['REQUEST_METHOD'] === 'GET'
+    && ($_GET['pagamento'] ?? '') === 'aguardando'
+) {
+    $pedidoIdExibido = (int) ($_SESSION['pedido_pix_asaas_id'] ?? 0);
+    $pedido = $pedidoIdExibido > 0 ? y3d_pedido_por_id($pedidoIdExibido) : null;
+    $dadosPixSessao = $_SESSION['pedido_pix_asaas_dados'] ?? null;
+    if (
+        $pedido !== null
+        && ($pedido['pagamento'] ?? '') === 'pix'
+        && is_array($dadosPixSessao)
+        && ($pedido['asaas_payment_id'] ?? '') === ($dadosPixSessao['payment_id'] ?? null)
+        && is_string($dadosPixSessao['imagem'] ?? null)
+        && is_string($dadosPixSessao['payload'] ?? null)
+    ) {
+        $pedidoConcluido = true;
+        $formaPagamento = 'pix';
+        $totalPedido = (float) ($pedido['total'] ?? 0);
+        $pedidoPixDados = $dadosPixSessao;
+        $pagamentoConfirmado = !empty($pedido['pagamento_confirmado_em']);
     }
 }
 
@@ -65,14 +122,23 @@ $total = y3d_total_carrinho();
 ?>
 
 <?php if ($pedidoConcluido && $formaPagamento === 'pix' && $totalPedido > 0): ?>
-  <div class="checkout-success pix-box" data-pix-valor="<?= number_format($totalPedido, 2, '.', '') ?>">
-    <h1>Pedido recebido! Falta só o Pix</h1>
-    <p>Abra o app do seu banco, escolha <b>Pix → Ler QR Code</b> e confirme o pagamento de <b class="pix-valor"><?= y3d_formatar_preco($totalPedido) ?></b>.</p>
-    <div class="pix-qr" data-pix-qr aria-live="polite"></div>
-    <p class="pix-ou">Ou use o Pix copia e cola:</p>
-    <textarea class="pix-codigo" data-pix-codigo readonly rows="4" aria-label="Código Pix copia e cola"></textarea>
-    <button type="button" class="btn btn-outline" data-pix-copiar>Copiar código Pix</button>
-    <p class="pix-aviso">O valor já vem preenchido, não precisa digitar nada. Guarde o comprovante: ele confirma o seu pedido.</p>
+  <div class="checkout-success pix-box" data-pix-valor="<?= number_format($totalPedido, 2, '.', '') ?>" data-pix-status-url="handlers/pagamento-status.php?id=<?= $pedidoIdExibido ?>" data-pix-pago-inicial="<?= $pagamentoConfirmado ? 'true' : 'false' ?>">
+    <h1 data-pix-status role="status" aria-live="polite"><?= $pagamentoConfirmado ? 'Pagamento concluído!' : 'Pedido recebido! Aguardando pagamento' ?></h1>
+    <div data-pix-pendente<?= $pagamentoConfirmado ? ' hidden' : '' ?>>
+      <p>Abra o app do seu banco, escolha <b>Pix → Ler QR Code</b> e pague <b class="pix-valor"><?= y3d_formatar_preco($totalPedido) ?></b>.</p>
+      <div class="pix-qr" data-pix-qr>
+        <img src="data:image/png;base64,<?= htmlspecialchars((string) $pedidoPixDados['imagem']) ?>" alt="QR Code Pix da cobrança" style="width:100%;height:100%;display:block;object-fit:contain">
+      </div>
+      <p class="pix-ou">Ou use o Pix copia e cola:</p>
+      <textarea class="pix-codigo" data-pix-codigo readonly rows="4" aria-label="Código Pix copia e cola"><?= htmlspecialchars((string) $pedidoPixDados['payload']) ?></textarea>
+      <button type="button" class="btn btn-outline" data-pix-copiar>Copiar código Pix</button>
+      <p class="pix-aviso">A confirmação aparece automaticamente quando o pagamento for recebido na conta.</p>
+    </div>
+    <div data-pix-pago<?= $pagamentoConfirmado ? '' : ' hidden' ?>>
+      <p>O valor foi recebido e confirmado na conta. Seu pedido está pago.</p>
+    </div>
+    <p data-pix-erro role="status" aria-live="polite" hidden></p>
+    <p data-pix-copia-status role="status" aria-live="polite"></p>
     <a href="produtos.php" class="btn btn-grad">Continuar comprando</a>
   </div>
   <?php require __DIR__ . '/includes/avaliar_atendimento.php'; ?>
@@ -118,9 +184,7 @@ $total = y3d_total_carrinho();
       <div class="checkout-section">
         <div class="checkout-heading"><span>2</span><h2>Forma de pagamento</h2></div>
         <div class="payment-options">
-          <label><input type="radio" name="pagamento" value="pix" required> Pix <small>Pagamento imediato · QR Code ao finalizar</small></label>
-          <label><input type="radio" name="pagamento" value="cartao"> Cartão de crédito <small>Até 12x</small></label>
-          <label><input type="radio" name="pagamento" value="boleto"> Boleto bancário <small>Vencimento em 3 dias</small></label>
+          <label><input type="radio" name="pagamento" value="pix" required> Pix <small>Confirmação automática após o recebimento</small></label>
         </div>
       </div>
       <button type="submit" class="btn btn-grad checkout-submit">Finalizar pedido</button>
