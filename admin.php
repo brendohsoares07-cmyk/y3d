@@ -28,21 +28,82 @@ if (!isset($abas[$aba])) {
     $aba = 'dashboard';
 }
 
+$flashAdmin = $_SESSION['flash_admin'] ?? null;
+unset($_SESSION['flash_admin']);
+
 // ---------- ações (formulários do painel) ----------
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (y3d_csrf_valido($_POST['csrf'] ?? null)) {
-        $acao = (string) ($_POST['acao'] ?? '');
-        $idAcao = (int) ($_POST['id'] ?? 0);
+    $acao = (string) ($_POST['acao'] ?? '');
+    $idAcao = (int) ($_POST['id'] ?? 0);
+    if (!y3d_csrf_valido($_POST['csrf'] ?? null)) {
+        $_SESSION['flash_admin'] = ['tipo' => 'erro', 'mensagem' => 'Sessão expirada. Recarregue o painel e tente novamente.'];
+    } else {
         if ($acao === 'pedido_status') {
             y3d_pedido_mudar_status($idAcao, (string) ($_POST['status'] ?? ''));
         } elseif ($acao === 'mensagem_lida') {
             y3d_mensagem_marcar_lida($idAcao);
         } elseif ($acao === 'avaliacao_remover') {
             y3d_avaliacao_remover($idAcao);
+        } elseif ($acao === 'produto_salvar') {
+            $resultado = y3d_catalogo_produto_salvar($_POST, $idAcao);
+            $tipo = isset($resultado['sucesso']) ? 'sucesso' : 'erro';
+            $mensagem = (string) ($resultado['sucesso'] ?? $resultado['erro'] ?? 'Não foi possível salvar o produto.');
+            $_SESSION['flash_admin'] = ['tipo' => $tipo, 'mensagem' => $mensagem];
+            if ($tipo === 'erro') {
+                $_SESSION['produto_formulario'] = $_POST;
+                $produtoQuery = $idAcao > 0 ? (string) $idAcao : 'novo';
+                header('Location: admin.php?aba=produtos&produto=' . rawurlencode($produtoQuery));
+            } else {
+                unset($_SESSION['produto_formulario']);
+                header('Location: admin.php?aba=produtos');
+            }
+            exit;
+        } elseif ($acao === 'produto_excluir') {
+            $resultado = y3d_catalogo_produto_excluir($idAcao);
+            $tipo = isset($resultado['sucesso']) ? 'sucesso' : 'erro';
+            $_SESSION['flash_admin'] = [
+                'tipo' => $tipo,
+                'mensagem' => (string) ($resultado['sucesso'] ?? $resultado['erro'] ?? 'Não foi possível excluir o produto.'),
+            ];
         }
     }
     header('Location: admin.php?aba=' . $aba);
     exit;
+}
+
+$produtoFormulario = null;
+$produtoFormularioId = 0;
+$produtoFormularioAberto = $aba === 'produtos' && is_string($_GET['produto'] ?? null);
+if ($produtoFormularioAberto) {
+    $produtoQuery = (string) $_GET['produto'];
+    if ($produtoQuery === 'novo') {
+        $produtoFormulario = [
+            'nome' => '',
+            'categoria' => '',
+            'preco' => '',
+            'imagem' => '',
+            'emoji' => '📦',
+            'cor1' => '#3ddbf2',
+            'cor2' => '#7c5cff',
+            'descricao' => '',
+            'tamanho' => '',
+        ];
+    } elseif (ctype_digit($produtoQuery) && (int) $produtoQuery > 0) {
+        $produtoFormularioId = (int) $produtoQuery;
+        $produtoFormulario = y3d_produto_por_id($produtoFormularioId);
+        if ($produtoFormulario === null) {
+            $flashAdmin = ['tipo' => 'erro', 'mensagem' => 'O produto solicitado não foi encontrado.'];
+            $produtoFormularioAberto = false;
+        }
+    } else {
+        $produtoFormularioAberto = false;
+    }
+
+    $dadosFormularioSalvos = $_SESSION['produto_formulario'] ?? null;
+    unset($_SESSION['produto_formulario']);
+    if ($produtoFormularioAberto && is_array($dadosFormularioSalvos)) {
+        $produtoFormulario = array_replace($produtoFormulario ?? [], $dadosFormularioSalvos);
+    }
 }
 
 // ---------- dados ----------
@@ -241,6 +302,12 @@ $nomeAdmin = $contaAdmin ? (string) $contaAdmin['nome'] : 'Administrador';
     <div><h1>Painel <span>Administrativo</span></h1><p><?= e($subtitulos[$aba]) ?></p></div>
     <div class="user"><span><?= e($nomeAdmin) ?></span><div class="avatar"><?= e(adm_iniciais($nomeAdmin)) ?></div></div>
   </header>
+  <?php if (is_array($flashAdmin)): ?>
+    <div class="admin-notice <?= e((string) ($flashAdmin['tipo'] ?? 'erro')) ?>" role="status"><?= e((string) ($flashAdmin['mensagem'] ?? '')) ?></div>
+  <?php endif; ?>
+  <?php if ($aba === 'produtos' && !empty($Y3D_CATALOGO_ERRO)): ?>
+    <div class="admin-notice erro" role="alert"><?= e((string) $Y3D_CATALOGO_ERRO) ?></div>
+  <?php endif; ?>
 
 <?php if ($aba === 'dashboard'): ?>
 
@@ -334,9 +401,58 @@ $nomeAdmin = $contaAdmin ? (string) $contaAdmin['nome'] : 'Administrador';
 <?php elseif ($aba === 'produtos'): ?>
 
   <section class="panel">
-    <h2>Produtos <em><?= count($PRODUTOS) ?> no catálogo</em></h2>
+    <h2>
+      Produtos <em><?= count($PRODUTOS) ?> no catálogo</em>
+      <a class="mini" href="admin.php?aba=produtos&produto=novo">Adicionar produto</a>
+    </h2>
+    <?php if ($produtoFormularioAberto && is_array($produtoFormulario)): ?>
+      <form method="post" action="admin.php?aba=produtos" class="product-form">
+        <input type="hidden" name="csrf" value="<?= e($csrf) ?>">
+        <input type="hidden" name="acao" value="produto_salvar">
+        <input type="hidden" name="id" value="<?= $produtoFormularioId ?>">
+        <h3><?= $produtoFormularioId > 0 ? 'Editar produto' : 'Adicionar produto' ?></h3>
+        <div class="product-form-grid">
+          <label>Nome
+            <input name="nome" required maxlength="100" value="<?= e((string) ($produtoFormulario['nome'] ?? '')) ?>">
+          </label>
+          <label>Categoria
+            <select name="categoria" required>
+              <option value="">Selecione</option>
+              <?php foreach ($CATEGORIAS as $chaveCategoria => $categoria): ?>
+                <option value="<?= e($chaveCategoria) ?>"<?= ($produtoFormulario['categoria'] ?? '') === $chaveCategoria ? ' selected' : '' ?>><?= e($categoria['nome']) ?></option>
+              <?php endforeach; ?>
+            </select>
+          </label>
+          <label>Preço (R$)
+            <input name="preco" type="number" min="0.01" max="1000000" step="0.01" required value="<?= e((string) ($produtoFormulario['preco'] ?? '')) ?>">
+          </label>
+          <label>Imagem (caminho ou URL)
+            <input name="imagem" maxlength="500" placeholder="assets/img/produtos/produto.jpg" value="<?= e((string) ($produtoFormulario['imagem'] ?? '')) ?>">
+          </label>
+          <label>Ícone/emoji
+            <input name="emoji" maxlength="8" value="<?= e((string) ($produtoFormulario['emoji'] ?? '📦')) ?>">
+          </label>
+          <label>Tamanho ou formato
+            <input name="tamanho" maxlength="160" placeholder="Impressa em 3D pela Y3D Creations" value="<?= e((string) ($produtoFormulario['tamanho'] ?? '')) ?>">
+          </label>
+          <label>Cor principal
+            <input name="cor1" type="color" value="<?= e((string) ($produtoFormulario['cor1'] ?? '#3ddbf2')) ?>">
+          </label>
+          <label>Cor secundária
+            <input name="cor2" type="color" value="<?= e((string) ($produtoFormulario['cor2'] ?? '#7c5cff')) ?>">
+          </label>
+          <label class="product-form-wide">Descrição
+            <textarea name="descricao" rows="4" maxlength="2000"><?= e((string) ($produtoFormulario['descricao'] ?? '')) ?></textarea>
+          </label>
+        </div>
+        <div class="product-form-actions">
+          <button type="submit" class="mini">Salvar produto</button>
+          <a class="mini cancelar" href="admin.php?aba=produtos">Cancelar</a>
+        </div>
+      </form>
+    <?php endif; ?>
     <div class="wrap"><table>
-      <thead><tr><th>Produto</th><th>Categoria</th><th>Preço</th><th>Vendidos</th><th>Nota</th><th></th></tr></thead>
+      <thead><tr><th>Produto</th><th>Categoria</th><th>Preço</th><th>Vendidos</th><th>Nota</th><th>Ações</th></tr></thead>
       <tbody>
         <?php foreach ($PRODUTOS as $produto): ?>
           <?php
@@ -353,7 +469,18 @@ $nomeAdmin = $contaAdmin ? (string) $contaAdmin['nome'] : 'Administrador';
             <td><?= e(y3d_formatar_preco((float) $produto['preco'])) ?></td>
             <td><?= (int) ($vendidosPorProduto[$idP] ?? 0) ?></td>
             <td><?php if ($qtdAv > 0): ?><span class="estrelas"><?= y3d_estrelas_html((float) $media) ?></span> <?= e($media) ?> <small class="mudo">(<?= (int) $qtdAv ?>)</small><?php else: ?><span class="mudo">sem avaliações</span><?php endif; ?></td>
-            <td><a class="eye" href="produto.php?id=<?= $idP ?>" target="_blank" rel="noopener">ver na loja</a></td>
+            <td>
+              <div class="product-actions">
+                <a class="eye" href="produto.php?id=<?= $idP ?>" target="_blank" rel="noopener">ver</a>
+                <a class="mini" href="admin.php?aba=produtos&amp;produto=<?= $idP ?>">Editar</a>
+                <form method="post" action="admin.php?aba=produtos" onsubmit="return confirm('Excluir este produto do catálogo? Os pedidos anteriores serão mantidos.')">
+                  <input type="hidden" name="csrf" value="<?= e($csrf) ?>">
+                  <input type="hidden" name="acao" value="produto_excluir">
+                  <input type="hidden" name="id" value="<?= $idP ?>">
+                  <button type="submit" class="mini perigo">Excluir</button>
+                </form>
+              </div>
+            </td>
           </tr>
         <?php endforeach; ?>
       </tbody>

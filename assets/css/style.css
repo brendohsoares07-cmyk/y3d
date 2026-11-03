@@ -716,7 +716,7 @@ div.product-gallery-main{cursor:default}
   background:linear-gradient(135deg,var(--pink),var(--violet) 55%,var(--cyan));
   -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
   mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude}
-.sh-eyebrow{display:block;font-size:12px;font-weight:700;letter-spacing:.3em;color:var(--text);opacity:.85}
+.sh-eyebrow{display:block;text-align:center;font-size:12px;font-weight:700;letter-spacing:.3em;color:var(--text);opacity:.85}
 .sh-intro{display:grid;grid-template-columns:1.05fr 1fr;gap:40px;align-items:center;padding:54px 0 46px}
 .sh-logo{width:min(230px,60%);height:auto;margin:10px 0 18px}
 .sh-title{font-size:clamp(26px,3.2vw,38px);line-height:1.15;margin:0 0 18px;font-weight:800}
@@ -731,7 +731,7 @@ div.product-gallery-main{cursor:default}
 .sh-quote::after{content:"";display:block;width:70px;height:3px;margin:8px 0 0 auto;border-radius:3px;background:var(--violet)}
 
 .sh-steps-wrap{padding:38px 0;border-top:1px solid var(--line)}
-.sh-h3{font-size:clamp(24px,2.8vw,32px);margin:6px 0 24px;font-weight:800}
+.sh-h3{font-size:clamp(24px,2.8vw,32px);text-align:center;margin:6px 0 24px;font-weight:800}
 .sh-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:34px;counter-reset:passo}
 .sh-step{position:relative}
 .sh-step:not(:last-child)::after{content:"\2192";position:absolute;top:26%;right:-27px;font-size:20px;color:var(--violet)}

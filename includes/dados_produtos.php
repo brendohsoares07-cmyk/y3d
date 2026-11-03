@@ -274,6 +274,9 @@ $PRODUTOS = [
     ],
 ];
 
+require_once __DIR__ . '/catalogo_produtos.php';
+$PRODUTOS = y3d_catalogo_produtos_aplicar($PRODUTOS);
+
 function y3d_produto_por_id(int $id): ?array
 {
     global $PRODUTOS;
@@ -288,6 +291,14 @@ function y3d_arquivo_imagem_existe(string $imagem): bool
     $imagem = trim((string) $imagem);
     if ($imagem === '') {
         return false;
+    }
+    $partesUrl = parse_url($imagem);
+    if (
+        filter_var($imagem, FILTER_VALIDATE_URL) !== false
+        && is_array($partesUrl)
+        && strtolower((string) ($partesUrl['scheme'] ?? '')) === 'https'
+    ) {
+        return true;
     }
 
     $caminhoRelativo = $imagem;
@@ -346,6 +357,9 @@ function y3d_imagem_principal(array $produto): string
 /** Miniatura leve (pasta thumbs/ ao lado do original). Se não existir, usa o próprio original. */
 function y3d_miniatura(string $imagem): string
 {
+    if (filter_var($imagem, FILTER_VALIDATE_URL) !== false) {
+        return $imagem;
+    }
     $miniatura = dirname($imagem) . '/thumbs/' . basename($imagem);
     return y3d_arquivo_imagem_existe($miniatura) ? $miniatura : $imagem;
 }
