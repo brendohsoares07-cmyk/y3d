@@ -34,7 +34,7 @@ export function AppLayout() {
     <div className="shell">
       <aside className="sidebar">
         <div className="brand">
-          <img src="/logo-y3d-transparente.png" alt="Y3D Creations" />
+          <img src={`${import.meta.env.BASE_URL}logo-y3d-transparente.png`} alt="Y3D Creations" />
         </div>
         <nav>
           <Link to="/loja" className="nav-link">← Voltar à loja</Link>

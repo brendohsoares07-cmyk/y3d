@@ -29,6 +29,8 @@ import { RegisterPage } from "./pages/Cadastro/RegisterPage";
 export default function App() {
   return (
     <Routes>
+      <Route path="/" element={<Navigate to="/loja" replace />} />
+      <Route path="/loja-php/*" element={<Navigate to="/loja" replace />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/cadastro" element={<RegisterPage />} />
 

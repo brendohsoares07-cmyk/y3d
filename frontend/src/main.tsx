@@ -8,9 +8,11 @@ import "./styles/global.css";
 const container = document.getElementById("root");
 if (!container) throw new Error("Elemento #root não encontrado");
 
+const basename = import.meta.env.BASE_URL.replace(/\/$/, "");
+
 createRoot(container).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       <AuthProvider>
         <App />
       </AuthProvider>

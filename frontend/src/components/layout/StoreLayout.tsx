@@ -37,7 +37,7 @@ function Navbar() {
   return (
     <header className="store-nav">
       <Link to="/loja" className="store-brand">
-        <img src="/logo-y3d-transparente.png" alt="Y3D Creations" />
+        <img src={`${import.meta.env.BASE_URL}logo-y3d-transparente.png`} alt="Y3D Creations" />
       </Link>
       <nav className="store-links">
         {LINKS.map((l) => (
