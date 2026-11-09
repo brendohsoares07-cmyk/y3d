@@ -1,11 +1,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CrudApi } from "../services/CrudApi";
-<<<<<<< HEAD
 import { getApiErrorMessage } from "../services/apiClient";
-=======
-import { getApiErrorMessage } from "../services/http";
->>>>>>> bd20297 (arrumando a parte de esqueci a senha)
 import { FieldErrors } from "../validations";
 import { useFormState } from "./useFormState";
 
