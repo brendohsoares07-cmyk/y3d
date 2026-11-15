@@ -1,0 +1,7 @@
+# Arquivos que agentes de IA não devem ler
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/

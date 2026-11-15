@@ -1,0 +1,38 @@
+<svg viewBox="0 0 600 450" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ilustração de impressora 3D FDM">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#151a3f"/><stop offset="1" stop-color="#0a0d22"/></linearGradient><radialGradient id="glow" cx=".5" cy=".62" r=".5"><stop offset="0" stop-color="#8b5cf6" stop-opacity=".38"/><stop offset="1" stop-color="#8b5cf6" stop-opacity="0"/></radialGradient><linearGradient id="vio" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#4b3bd6"/></linearGradient><linearGradient id="pk" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff4fd8"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient><linearGradient id="cy" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3ddbf2"/><stop offset="1" stop-color="#4b6bff"/></linearGradient></defs><rect width="600" height="450" rx="26" fill="url(#bg)"/><rect width="600" height="450" rx="26" fill="url(#glow)"/><g stroke="#8b5cf6" stroke-opacity=".16" stroke-width="1"><path d="M40 400h520M70 420h460M100 438h400"/><path d="M300 380V450M200 380L120 450M400 380L480 450"/></g>
+<ellipse cx="300" cy="392" rx="210" ry="18" fill="#000" opacity=".45"/>
+<!-- base -->
+<rect x="105" y="336" width="390" height="46" rx="10" fill="#1b2148" stroke="#8b5cf6" stroke-opacity=".7"/>
+<rect x="128" y="348" width="70" height="22" rx="4" fill="#0a0d22" stroke="#3ddbf2"/><path d="M136 356h40M136 363h26" stroke="#3ddbf2" stroke-width="2" stroke-linecap="round"/>
+<circle cx="222" cy="359" r="7" fill="url(#pk)"/>
+<!-- Y bed -->
+<rect x="150" y="304" width="300" height="24" rx="5" fill="#252c5c"/>
+<rect x="165" y="292" width="270" height="14" rx="4" fill="#3a4386" stroke="#3ddbf2" stroke-opacity=".8"/>
+<!-- frame -->
+<rect x="170" y="70" width="24" height="236" rx="5" fill="url(#vio)"/>
+<rect x="406" y="70" width="24" height="236" rx="5" fill="url(#vio)"/>
+<rect x="170" y="62" width="260" height="20" rx="6" fill="#2a3170" stroke="#8b5cf6" stroke-opacity=".6"/>
+<!-- X rail -->
+<rect x="194" y="146" width="212" height="14" rx="4" fill="url(#cy)"/>
+<!-- filament -->
+<path d="M486 88 C486 40 400 40 330 100 S318 150 312 158" fill="none" stroke="#ff4fd8" stroke-width="4" stroke-linecap="round"/>
+<!-- spool -->
+<circle cx="500" cy="118" r="50" fill="url(#pk)"/><circle cx="500" cy="118" r="50" fill="none" stroke="#fff" stroke-opacity=".25" stroke-width="3"/>
+<circle cx="500" cy="118" r="34" fill="none" stroke="#0a0d22" stroke-opacity=".35" stroke-width="10"/>
+<circle cx="500" cy="118" r="15" fill="#0a0d22"/><circle cx="500" cy="118" r="6" fill="#3ddbf2"/>
+<!-- extruder -->
+<rect x="272" y="132" width="60" height="64" rx="10" fill="#171c3d" stroke="#ff4fd8" stroke-width="2"/>
+<circle cx="302" cy="160" r="17" fill="#0a0d22" stroke="#3ddbf2" stroke-width="2"/>
+<path d="M302 146v28M288 160h28M292 150l20 20M312 150l-20 20" stroke="#3ddbf2" stroke-width="2" stroke-opacity=".8"/>
+<polygon points="292,196 312,196 306,214 298,214" fill="#ffb03a"/>
+<circle cx="302" cy="216" r="3" fill="#fff"/>
+<!-- printed vase -->
+<g>
+<polygon points="278,292 326,292 334,262 270,262" fill="#3ddbf2" opacity=".95"/>
+<polygon points="270,262 334,262 326,236 278,236" fill="#4b6bff"/>
+<polygon points="278,236 326,236 320,222 284,222" fill="#8b5cf6"/>
+<path d="M270 262h64M278 236h48M278 292h48" stroke="#fff" stroke-opacity=".3"/>
+<path d="M286 292l-6-30M298 292l-2-30M310 292l2-30M322 292l6-30" stroke="#0a0d22" stroke-opacity=".28"/>
+</g>
+<circle cx="302" cy="218" r="26" fill="#3ddbf2" opacity=".07"/>
+</svg>

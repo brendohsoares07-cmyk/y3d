@@ -1,0 +1,66 @@
+import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
+import { iniciais } from "../../utils/format";
+import { Button } from "../ui/Button";
+
+const LINKS: { to: string; texto: string; admin?: boolean }[] = [
+  { to: "/dashboard", texto: "Início" },
+  { to: "/produtos", texto: "Produtos", admin: true },
+  { to: "/categorias", texto: "Categorias", admin: true },
+  { to: "/maquinas", texto: "Máquinas", admin: true },
+  { to: "/pedidos", texto: "Pedidos" },
+  { to: "/perfil", texto: "Meu perfil" },
+];
+
+function NavItem({ to, texto }: { to: string; texto: string }) {
+  return (
+    <NavLink to={to} className={({ isActive }) => (isActive ? "nav-link on" : "nav-link")}>
+      {texto}
+    </NavLink>
+  );
+}
+
+/** Estrutura da área logada: menu lateral + topo com o usuário + conteúdo da página. */
+export function AppLayout() {
+  const { usuario, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const sair = () => {
+    logout();
+    navigate("/login");
+  };
+
+  return (
+    <div className="shell">
+      <aside className="sidebar">
+        <div className="brand">
+          <img src={`${import.meta.env.BASE_URL}logo-y3d-transparente.png`} alt="Y3D Creations" />
+        </div>
+        <nav>
+          <Link to="/loja" className="nav-link">← Voltar à loja</Link>
+          {LINKS.filter((l) => !l.admin || usuario?.admin).map((l) => (
+            <NavItem key={l.to} to={l.to} texto={l.texto} />
+          ))}
+          {usuario?.admin && (
+            <>
+              <span className="nav-section">Administração</span>
+              <NavItem to="/admin" texto="Painel admin" />
+            </>
+          )}
+        </nav>
+      </aside>
+      <div className="main">
+        <div className="topbar">
+          <span className="avatar">{usuario ? iniciais(usuario.nome) : ""}</span>
+          <span>{usuario?.nome}</span>
+          <Button variant="outline" onClick={sair}>
+            Sair
+          </Button>
+        </div>
+        <div className="content">
+          <Outlet />
+        </div>
+      </div>
+    </div>
+  );
+}
