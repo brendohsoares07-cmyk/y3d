@@ -1,43 +1,54 @@
-# Y3D Creations
+# Y3D Creations — site em React + TypeScript
 
-Projeto com **duas partes** no mesmo repositório:
+Migração do site em PHP para **React + TypeScript** (front) e **Express + TypeScript** (API, no lugar do PHP).
+O visual é o mesmo: o `style.css` e o `admin.css` originais foram copiados sem alterações.
 
-| Parte | Tecnologias | Onde |
-|---|---|---|
-| **Loja (site em PHP)** | PHP + TypeScript compilado para `assets/js/` | arquivos `*.php` na raiz, `includes/`, `handlers/`, `ts/`, `assets/`, `data/` |
-| **Aplicação TypeScript (rubrica)** | Express + MySQL (backend), React + Vite (frontend), Docker + Nginx | `backend/`, `frontend/`, `docker/`, `nginx/`, `database/`, `docker-compose.yml` |
-
-## Rodar a loja em PHP
+## Como rodar
 
 ```bash
-php -S localhost:8000
+npm install
+cp .env.example .env     # ajuste ADMIN_EMAILS e, se quiser e-mail, o SMTP
+npm run dev              # site em http://localhost:5173 (API em :3001)
 ```
 
-Contas ficam em `data/usuarios.json` (no Docker, a pasta `data/` é montada fora da raiz pública, em `/var/www/data`, via `Y3D_DATA_DIR`; em outros servidores, mantenha-a fora da pasta pública ou bloqueie o acesso). Para recompilar o TypeScript da loja: `npm run build`.
+Produção: `npm run build` e `NODE_ENV=production SESSION_SECRET=... npm start` (a API serve o site compilado).
 
-Na aba **Produtos** do painel admin é possível adicionar, editar e excluir produtos. As alterações do catálogo são mantidas em `data/catalogo_produtos.json`; imagens devem usar um caminho em `assets/img/produtos/` ou uma URL HTTPS.
+## Administrador
+Cadastre-se no site com um e-mail listado em `ADMIN_EMAILS` e depois entre pelo **login** (o cadastro nunca concede admin, igual ao PHP). Contas com `"admin": true` em `data/usuarios.json` também valem.
 
-O formulário da página de contato envia as mensagens para `y3dsuporte@gmail.com` via SMTP; as mensagens também continuam salvas no painel admin. A recuperação de senha envia um link de uso único, válido por uma hora, pelo mesmo serviço. Configure no `.env` as variáveis `Y3D_SMTP_USER`, `Y3D_EMAIL_FROM` e `Y3D_SMTP_PASSWORD`; para Gmail, use uma senha de app do Google, nunca a senha normal da conta. Gere-a nas configurações de segurança do Google, com a verificação em duas etapas ativada, e guarde-a somente no `.env` local ou no gerenciador de segredos do servidor. Nunca a envie no chat nem a versione. O arquivo `.htaccess` bloqueia o acesso HTTP ao `.env`. O Docker instala o PHPMailer e permite a saída SMTP sem publicar portas da loja. `Y3D_BASE_URL` pode ficar vazia para detectar o endereço público da requisição; em proxy com URL diferente, informe a URL pública completa.
+## Dados
+Mesmos arquivos JSON do PHP, em `data/` (`usuarios`, `pedidos`, `mensagens`, `avaliacoes`, `catalogo_produtos`).
+Se copiar o `data/` do site antigo, as contas continuam funcionando (senhas bcrypt `$2y$` são aceitas).
+Fotos de perfil ficam em `data/avatares/`. A pasta `data/` não vai para o git.
 
-Em servidor Apache fora do Docker, rode `composer install --no-dev --prefer-dist --optimize-autoloader` no diretório da loja e configure as variáveis SMTP no ambiente do Apache/servidor. O envio só funciona depois que essas credenciais estiverem configuradas.
-
-## Rodar a aplicação TypeScript com Docker
-
-```bash
-cp .env.example .env     # ajuste as senhas
-docker compose up --build
-```
-
-O Nginx recebe tudo na porta `HTTP_PORT` (padrão 80) e encaminha para o serviço certo:
-
-| Endereço | Vai para |
+## Onde ficou cada coisa do PHP
+| PHP | Agora |
 |---|---|
-| `http://localhost/` | React (frontend) |
-| `http://localhost/api/...` | API (backend) |
-| `http://localhost/loja-php/` | loja em PHP |
+| `index/produtos/produto/carrinho/checkout/conta/favoritos/contato/sobre/login/cadastro/admin.php` | `src/paginas/*.tsx` |
+| `includes/header, footer, card_produto, form_*` | `src/componentes/*.tsx` |
+| `includes/dados_produtos.php` | `server/produtos-padrao.json` |
+| `includes/contas, loja_dados, catalogo_produtos, email, validacoes` | `server/*.ts` |
+| `handlers/*.php` | `server/rotas/*.ts` |
+| `ts/main.ts`, `ts/pix.ts` | contextos e componentes React, `src/pix.ts` |
+| sessão PHP (carrinho) | `localStorage` (carrinho e favoritos) |
 
-Só o Nginx fica exposto; backend e banco ficam em redes internas. Veja `docs/` para arquitetura, autenticação, CRUDs, DevOps, IA generativa e `docs/avaliacao.md` (onde está cada item da rubrica).
+## Diferenças em relação ao PHP
+- O checkout agora exige todos os campos de endereço e a forma de pagamento (antes só o CPF era validado).
+- As 3 ilustrações de `assets/img/maquinas/` não estavam no zip original; foram criadas ilustrações simples.
+- O carrinho fica no navegador, não no servidor.
 
-## Agentes de IA
+## Validação contra o repositório (brendohsoares07-cmyk/y3d)
+- Catálogo: agora tem os 30 produtos do repositório com os **mesmos ids** (inclui Porta-Óculos Coelhinho, Bailarina Azul, Clipes BT21, Suporte para Lightstick, Chaveiros Emblema BTS, Koya BT21, Estátua Guerreira, Grinch e Bailarina Rosa) mais os 4 produtos extras que já existiam neste projeto (ids 31 a 34). Assim pedidos antigos do PHP continuam apontando para o produto certo.
+- Coiote, Frajola e Harry Potter voltaram para os ids 26, 27 e 28 (como no repositório) e a promoção de personagens usa 26, 27, 28 e 29.
+- Combo Personagens: R$ 349,00 (as quatro peças separadas somam R$ 675,00; economia de R$ 326,00, 48% OFF), igual ao vídeo do site.
+- Carrossel BT21: voltou o Koya (7 personagens, como diz o texto da coleção).
+- Imagens que faltavam foram copiadas do repositório: segunda foto de produtos, galeria de fotos reservas (assets/img/produtos/galeria/, usada quando um produto fica sem foto), logo-y3d.png e rodape-malha.svg (o CSS do rodapé já apontava para ele). Fotos de perfil de usuários do repositório não foram copiadas.
+- O servidor passou a usar a galeria reserva quando o produto não tem nenhuma imagem válida (igual a y3d_imagens_fallback_arquivos do PHP).
+- A parte "rubrica" do repositório (backend/, frontend/, docker/, docs/, MySQL) é outro aplicativo e não foi misturada aqui.
 
-`AGENTS.md` define as regras; `.claude/skills/` tem as 3 skills (`novo-crud`, `docker-compose-seguro`, `revisao-poo-solid`) e `.claude/settings.json` os guardrails (incluindo bloqueio de leitura do `.env`). `.cursorignore` também protege o `.env`.
+## Rodar a loja no Docker
+```
+docker compose -f docker-compose.loja.yml up --build
+```
+Abra http://localhost:8080 (troque a porta com `LOJA_PORT` no `.env`). Os dados (contas, pedidos, mensagens) ficam na pasta `data/`.
+O `docker-compose.yml` da raiz continua sendo o do sistema de gestão (rubrica), sem alterações.

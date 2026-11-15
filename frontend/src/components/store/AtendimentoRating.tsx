@@ -1,0 +1,7 @@
+import { FormEvent, useState } from "react";
+import { request } from "../../services/apiClient";
+export function AtendimentoRating({ pedidoId }: { pedidoId: number }) {
+  const [nota,setNota] = useState(5); const [comentario,setComentario] = useState(""); const [status,setStatus] = useState(""); const [enviando,setEnviando] = useState(false);
+  const enviar = async (event: FormEvent) => { event.preventDefault(); setEnviando(true); setStatus(""); try { const result = await request<{message:string}>(`/pedidos/${pedidoId}/avaliacao-atendimento`, {method:"POST",body:{nota,comentario}}); setStatus(result.message); } catch(e) { setStatus(e instanceof Error ? e.message : "Não foi possível enviar sua avaliação."); } finally { setEnviando(false); } };
+  return <form className="service-rating" onSubmit={enviar}><h3>O nosso atendimento foi bom?</h3><p className="muted">Avalie sua experiência com a Y3D.</p><label>Nota <select value={nota} onChange={e=>setNota(Number(e.target.value))}><option value={5}>★★★★★ Excelente</option><option value={4}>★★★★ Muito bom</option><option value={3}>★★★ Bom</option><option value={2}>★★ Regular</option><option value={1}>★ Ruim</option></select></label><textarea rows={2} maxLength={600} placeholder="Quer contar mais? (opcional)" value={comentario} onChange={e=>setComentario(e.target.value)}/><button className="btn btn-outline" disabled={enviando}>{enviando ? "Enviando..." : "Enviar avaliação"}</button>{status && <small role="status">{status}</small>}</form>;
+}

@@ -7,16 +7,18 @@ export type UsuarioProps = {
   id?: number;
   nome: string;
   email: string;
-  cpf: string;
+  cpf: string | null;
   senhaHash: string;
+  foto?: string | null;
 };
 
 export class Usuario extends BaseEntity {
   private _nome = "";
   private _email = "";
-  private _cpf = "";
+  private _cpf: string | null = null;
   /** Só o hash bcrypt é guardado; a senha em texto nunca entra na entidade. */
   public readonly senhaHash: string;
+  public readonly foto: string | null;
 
   constructor(props: UsuarioProps) {
     super(props.id ?? 0);
@@ -24,6 +26,7 @@ export class Usuario extends BaseEntity {
     this.email = props.email;
     this.cpf = props.cpf;
     this.senhaHash = props.senhaHash;
+    this.foto = props.foto ?? null;
   }
 
   get nome(): string {
@@ -43,20 +46,21 @@ export class Usuario extends BaseEntity {
   }
 
   get cpf(): string {
-    return this._cpf;
+    return this._cpf ?? "";
   }
-  set cpf(valor: string) {
+  set cpf(valor: string | null) {
+    if (valor === null || valor.trim() === "") { this._cpf = null; return; }
     const cpf = onlyDigits(requireText(valor, "CPF", 11, 14));
     if (!isCpf(cpf)) throw new ValidationError("CPF inválido");
     this._cpf = cpf; // guardado só com dígitos
   }
 
   toRow(): Row {
-    return { nome: this._nome, email: this._email, cpf: this._cpf, senha_hash: this.senhaHash };
+    return { nome: this._nome, email: this._email, cpf: this._cpf, senha_hash: this.senhaHash, foto: this.foto };
   }
 
   /** Nunca inclui o hash da senha. */
   toJSON(): Record<string, unknown> {
-    return { id: this.id, nome: this._nome, email: this._email, cpf: this._cpf };
+    return { id: this.id, nome: this._nome, email: this._email, cpf: this.cpf, foto: this.foto };
   }
 }

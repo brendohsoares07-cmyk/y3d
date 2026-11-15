@@ -60,6 +60,7 @@ export function LoginPage() {
         <FormField label="Senha" name="senha" type="password" autoComplete="current-password" value={values.senha}
           onChange={(v) => setField("senha", v)} error={errors.senha} />
         <Button type="submit" disabled={saving}>{saving ? "Entrando..." : "Entrar"}</Button>
+        <p className="muted center"><Link to="/login/esqueci-senha">Esqueci minha senha</Link></p>
         <p className="muted center">
           Ainda não tem conta?{" "}
           <Link to={returnTo ? `/cadastro?returnTo=${encodeURIComponent(returnTo)}` : "/cadastro"}>Cadastre-se</Link>

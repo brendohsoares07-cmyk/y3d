@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { Alert } from "../../components/ui/Alert";
 import { Button } from "../../components/ui/Button";
 import { FormField } from "../../components/ui/FormField";
@@ -7,6 +7,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useFormState } from "../../hooks/useFormState";
 import { getApiErrorMessage } from "../../services/apiClient";
 import { authApi } from "../../services/resources";
+import { request } from "../../services/apiClient";
 import { collectErrors, isCpf, maskCpf, passwordIssues, requiredMsg } from "../../validations";
 
 type Values = { nome: string; cpf: string; senha: string; confirmarSenha: string };
@@ -32,8 +33,19 @@ export function ProfilePage() {
   const [apiError, setApiError] = useState<string | null>(null);
   const [sucesso, setSucesso] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [fotoErro, setFotoErro] = useState("");
+  const [fotoSaving, setFotoSaving] = useState(false);
 
   if (!usuario) return null;
+
+  const enviarFoto = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]; if (!file) return;
+    setFotoErro(""); if (!/[.]?(png|jpe?g|webp)$/i.test(file.name) || !["image/png","image/jpeg","image/webp"].includes(file.type)) { setFotoErro("Escolha uma imagem PNG, JPG ou WebP."); return; }
+    if (file.size > 2 * 1024 * 1024) { setFotoErro("A imagem deve ter no máximo 2 MB."); return; }
+    setFotoSaving(true);
+    try { const arquivo = await new Promise<string>((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>typeof reader.result === "string" ? resolve(reader.result) : reject(new Error("Não foi possível ler a imagem."));reader.onerror=()=>reject(new Error("Não foi possível ler a imagem."));reader.readAsDataURL(file);}); await request("/usuarios/me/foto",{method:"POST",body:{arquivo}}); atualizarUsuario(await authApi.me()); }
+    catch(e) { setFotoErro(getApiErrorMessage(e,"Não foi possível atualizar a foto.")); } finally { setFotoSaving(false); event.target.value=""; }
+  };
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
@@ -65,6 +77,8 @@ export function ProfilePage() {
     <>
       <PageHeader titulo="Meu perfil" subtitulo="Atualize seus dados. O e-mail não pode ser alterado." />
       <form className="card form" onSubmit={submit} noValidate>
+        <div className="profile-photo-editor">{usuario.foto ? <img src={usuario.foto} alt="Foto do perfil"/> : <span>{usuario.nome.slice(0,1).toUpperCase()}</span>}<label className="btn btn-outline">{fotoSaving ? "Enviando foto..." : "Alterar foto"}<input type="file" accept="image/png,image/jpeg,image/webp" onChange={enviarFoto} hidden disabled={fotoSaving}/></label></div>
+        {fotoErro && <Alert>{fotoErro}</Alert>}
         {apiError && <Alert>{apiError}</Alert>}
         {sucesso && <Alert tipo="sucesso">{sucesso}</Alert>}
         <FormField label="E-mail" name="email" type="email" value={usuario.email} onChange={() => undefined} disabled />

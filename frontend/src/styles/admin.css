@@ -64,3 +64,4 @@
 .admin .inativo { background: rgba(255, 159, 67, .15); color: var(--orange); }
 
 @media (max-width: 900px) { .admin .admin-grid { grid-template-columns: 1fr; } }
+.admin-message-list{display:grid;gap:14px}.admin-message-list article>div{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.admin-message-list small{color:var(--mute);margin-left:auto}.admin-message-list p{white-space:pre-wrap}

@@ -3,6 +3,7 @@ import { Pedido, Produto } from "../../types";
 import { formatMoney } from "../../utils/format";
 import { formatDate, ROTULO_STATUS } from "../../utils/store";
 import { ChevronIcon } from "./Icons";
+import { AtendimentoRating } from "./AtendimentoRating";
 
 const PAGAMENTO = { PIX: "Pix", CARTAO: "Cartão de crédito", BOLETO: "Boleto" } as const;
 
@@ -48,6 +49,7 @@ export function OrderCard({ pedido, produtos }: { pedido: Pedido; produtos: Prod
         <span className={aberto ? "chev open" : "chev"}><ChevronIcon size={18} /></span>
       </button>
       {aberto && <OrderDetails pedido={pedido} produtos={produtos} />}
+      {pedido.status === "ENTREGUE" && <AtendimentoRating pedidoId={pedido.id} />}
     </li>
   );
 }

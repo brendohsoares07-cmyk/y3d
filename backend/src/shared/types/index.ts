@@ -31,11 +31,17 @@ export type ProdutoInput = {
   detalhes?: string[];
   avaliacao?: number | null;
   totalAvaliacoes?: number;
+  cor1?: string | null;
+  cor2?: string | null;
+  formatos?: string[];
+  tamanho?: string | null;
+  vendidos?: number;
 };
 export type MaquinaInput = { nome: string; tipo: TipoMaquina; volumeImpressao: string };
 export type EntregaInput = {
   nome: string;
   telefone: string;
+  cpf: string;
   cep: string;
   endereco: string;
   bairro: string;
