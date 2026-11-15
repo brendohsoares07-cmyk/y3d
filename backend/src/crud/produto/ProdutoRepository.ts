@@ -22,6 +22,7 @@ export class ProdutoRepository extends BaseRepository<Produto> {
       detalhes: parseJsonList(row.detalhes),
       avaliacao: row.avaliacao === null ? null : Number(row.avaliacao),
       totalAvaliacoes: row.total_avaliacoes,
+      cor1: row.cor1, cor2: row.cor2, formatos: parseJsonList(row.formatos), tamanho: row.tamanho, vendidos: row.vendidos,
     });
   }
 }

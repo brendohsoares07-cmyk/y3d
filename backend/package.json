@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "ts-node-dev --files --respawn src/server.ts",
     "build": "tsc",
-    "start": "node dist/server.js"
+    "start": "node dist/server.js",
+    "import:legacy": "node --env-file=../.env scripts/import-legacy-data.mjs"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

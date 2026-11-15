@@ -21,6 +21,11 @@ export class Produto extends BaseEntity {
   public readonly imagens: readonly string[];
   public readonly personalizacoes: readonly string[];
   public readonly detalhes: readonly string[];
+  public readonly cor1: string | null;
+  public readonly cor2: string | null;
+  public readonly formatos: readonly string[];
+  public readonly tamanho: string | null;
+  public readonly vendidos: number;
 
   constructor(props: ProdutoInput & { id?: number }) {
     super(props.id ?? 0);
@@ -35,6 +40,11 @@ export class Produto extends BaseEntity {
     this.imagens = requireStringList(props.imagens, "imagens", 10);
     this.personalizacoes = requireStringList(props.personalizacoes, "personalizações", 10, 80);
     this.detalhes = requireStringList(props.detalhes, "detalhes", 15);
+    this.cor1 = optionalText(props.cor1, 7);
+    this.cor2 = optionalText(props.cor2, 7);
+    this.formatos = requireStringList(props.formatos, "formatos", 10, 80);
+    this.tamanho = optionalText(props.tamanho, 160);
+    this.vendidos = requireInt(props.vendidos ?? 0, "vendidos", 0, 100000000);
   }
 
   get nome(): string {
@@ -100,6 +110,7 @@ export class Produto extends BaseEntity {
       detalhes: JSON.stringify(this.detalhes),
       avaliacao: this._avaliacao,
       total_avaliacoes: this._totalAvaliacoes,
+      cor1: this.cor1, cor2: this.cor2, formatos: JSON.stringify(this.formatos), tamanho: this.tamanho, vendidos: this.vendidos,
     };
   }
 
@@ -117,6 +128,7 @@ export class Produto extends BaseEntity {
       detalhes: this.detalhes,
       avaliacao: this._avaliacao,
       totalAvaliacoes: this._totalAvaliacoes,
+      cor1: this.cor1, cor2: this.cor2, formatos: this.formatos, tamanho: this.tamanho, vendidos: this.vendidos,
     };
   }
 }

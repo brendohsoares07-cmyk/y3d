@@ -1,16 +1,7 @@
-# segredos
-.env
-.env.*
-!.env.example
-
-# dependências e builds
 node_modules/
 dist/
-vendor/
-*.log
-.DS_Store
-
-# dados da loja PHP (contas, pedidos com CPF e endereço, mensagens): não vão para o controle de versão
-/data/*.json
-/data/*.lock
-/data/.*.lock
+dist-server/
+.env
+data/*.json
+data/.*.lock
+data/avatares/

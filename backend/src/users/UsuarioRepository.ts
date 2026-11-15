@@ -15,6 +15,7 @@ export class UsuarioRepository extends BaseRepository<Usuario> {
       email: row.email,
       cpf: row.cpf,
       senhaHash: row.senha_hash,
+      foto: row.foto ?? null,
     });
   }
 

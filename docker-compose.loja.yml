@@ -1,0 +1,36 @@
+# Sobe a LOJA Y3D (site React + API Express) em um único container.
+# Para rodar:  docker compose -f docker-compose.loja.yml up --build
+# Depois abra: http://localhost:8080  (ou a porta que você colocar em LOJA_PORT no .env)
+name: y3d-loja
+
+services:
+  loja:
+    build:
+      context: .
+      dockerfile: docker/loja/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "${LOJA_PORT:-8080}:3001"
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      # Chave que assina o login. Usa SESSION_SECRET do .env; se não tiver, usa o JWT_SECRET;
+      # se também não tiver, usa uma chave de teste (serve para rodar no seu computador).
+      # Se for colocar o site na internet, defina SESSION_SECRET no .env com um texto longo e secreto.
+      SESSION_SECRET: ${SESSION_SECRET:-${JWT_SECRET:-y3d-chave-de-teste-so-no-meu-computador}}
+      ADMIN_EMAILS: ${ADMIN_EMAILS:-}
+      Y3D_BASE_URL: ${Y3D_BASE_URL:-}
+      Y3D_EMAIL_FROM: ${Y3D_EMAIL_FROM:-}
+      Y3D_SMTP_HOST: ${Y3D_SMTP_HOST:-smtp.gmail.com}
+      Y3D_SMTP_PORT: ${Y3D_SMTP_PORT:-587}
+      Y3D_SMTP_ENCRYPTION: ${Y3D_SMTP_ENCRYPTION:-tls}
+      Y3D_SMTP_USER: ${Y3D_SMTP_USER:-}
+      Y3D_SMTP_PASSWORD: ${Y3D_SMTP_PASSWORD:-}
+    volumes:
+      # Os dados (contas, pedidos, mensagens) ficam na sua pasta ./data e não se perdem ao recriar o container.
+      - ./data:/app/data
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3001/api/saude').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 5

@@ -43,6 +43,7 @@ export class UsuarioService {
       email: atual.email,
       cpf: input.cpf,
       senhaHash: await this.hasher.hash(input.senha),
+      foto: atual.foto,
     }); // valida nome e CPF
 
     const donoDoCpf = await this.usuarios.findByCpf(editado.cpf);

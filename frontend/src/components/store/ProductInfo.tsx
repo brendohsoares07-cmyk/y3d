@@ -59,6 +59,9 @@ export function ProductInfo({ produto, categoria }: { produto: Produto; categori
       <StarRating nota={produto.avaliacao} total={produto.totalAvaliacoes} />
       <p className="big-price">{formatMoney(produto.preco)}</p>
       {produto.descricao && <p className="lead">{produto.descricao}</p>}
+      {produto.tamanho && <p className="muted">{produto.tamanho}</p>}
+      {!!produto.formatos?.length && <p className="muted">Formato: {produto.formatos.join(", ")}</p>}
+      {(produto.cor1 || produto.cor2) && <div className="product-colors"><span>Cores de referência:</span>{produto.cor1 && <i title={produto.cor1} style={{backgroundColor:produto.cor1}}/>}{produto.cor2 && <i title={produto.cor2} style={{backgroundColor:produto.cor2}}/>}</div>}
 
       {produto.personalizacoes.length > 0 && (
         <div className="field">

@@ -1,0 +1,13 @@
+node_modules
+dist
+dist-server
+data
+.env
+.env.*
+.git
+backend
+frontend
+nginx
+database
+docs
+.qodo

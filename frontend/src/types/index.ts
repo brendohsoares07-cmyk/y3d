@@ -1,4 +1,4 @@
-export type Usuario = { id: number; nome: string; email: string; cpf: string; admin: boolean };
+export type Usuario = { id: number; nome: string; email: string; cpf: string; admin: boolean; foto?: string | null };
 
 export type Page<T> = { data: T[]; page: number; limit: number; total: number; totalPages: number };
 
@@ -18,6 +18,11 @@ export type Produto = {
   detalhes: string[];
   avaliacao: number | null;
   totalAvaliacoes: number;
+  cor1?: string | null;
+  cor2?: string | null;
+  formatos?: string[];
+  tamanho?: string | null;
+  vendidos?: number;
 };
 export type ProdutoInput = Omit<Produto, "id">;
 

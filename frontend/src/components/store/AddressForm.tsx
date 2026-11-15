@@ -1,10 +1,12 @@
 import { FormField } from "../ui/FormField";
 import { FieldErrors } from "../../validations";
 import { maskCep, maskTelefone } from "../../utils/store";
+import { maskCpf } from "../../validations/cpf";
 
 export type AddressValues = {
   nome: string;
   telefone: string;
+  cpf: string;
   cep: string;
   endereco: string;
   bairro: string;
@@ -25,9 +27,10 @@ export function AddressForm({ values, errors, onChange }: Props) {
       <div className="two-cols">
         <FormField label="Telefone*" name="telefone" value={values.telefone} placeholder="(00) 00000-0000"
           onChange={(v) => onChange("telefone", maskTelefone(v))} error={errors.telefone} />
-        <FormField label="CEP*" name="cep" value={values.cep} placeholder="00000-000"
-          onChange={(v) => onChange("cep", maskCep(v))} error={errors.cep} />
+        <FormField label="CPF*" name="cpf" value={values.cpf} placeholder="000.000.000-00" onChange={(v) => onChange("cpf", maskCpf(v))} error={errors.cpf} />
       </div>
+      <FormField label="CEP*" name="cep" value={values.cep} placeholder="00000-000"
+          onChange={(v) => onChange("cep", maskCep(v))} error={errors.cep} />
       <FormField label="Endereço*" name="endereco" value={values.endereco} placeholder="Rua, número e complemento"
         onChange={(v) => onChange("endereco", v)} error={errors.endereco} />
       <div className="two-cols">

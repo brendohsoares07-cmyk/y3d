@@ -10,8 +10,10 @@ const POR_PAGINA = 12;
 /** Todos os produtos, com busca (?q=) e filtro de categoria (?categoria=). */
 export function ProductsPage() {
   const [params, setParams] = useSearchParams();
-  const termo = (params.get("q") ?? "").trim().toLowerCase();
-  const categoriaId = Number(params.get("categoria")) || 0;
+  const termo = (params.get("q") ?? params.get("busca") ?? "").trim().toLowerCase();
+  const categoriaValor = params.get("categoria") ?? "";
+  const categoriasLegadas: Record<string, number> = { personagens: 1, objetos: 2, animais: 3, personalizados: 10 };
+  const categoriaId = Number(categoriaValor) || categoriasLegadas[categoriaValor.toLowerCase()] || 0;
   const [page, setPage] = useState(1);
 
   const produtos = useOptions(produtosApi);
@@ -29,6 +31,7 @@ export function ProductsPage() {
 
   const escolherCategoria = (id: number) => {
     const novo = new URLSearchParams(params);
+    novo.delete("busca");
     if (id === 0) novo.delete("categoria");
     else novo.set("categoria", String(id));
     setParams(novo);

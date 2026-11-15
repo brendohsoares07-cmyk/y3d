@@ -20,6 +20,11 @@ type Values = {
   detalhes: string;
   avaliacao: string;
   totalAvaliacoes: string;
+  cor1: string;
+  cor2: string;
+  formatos: string;
+  tamanho: string;
+  vendidos: string;
 };
 
 function separarLinhas(texto: string): string[] {
@@ -81,6 +86,7 @@ export function ProdutoFormPage() {
     emptyValues: {
       nome: "", descricao: "", preco: "", estoque: "", categoriaId: "", emoji: "",
       imagens: "", personalizacoes: "", detalhes: "", avaliacao: "", totalAvaliacoes: "",
+      cor1: "", cor2: "", formatos: "", tamanho: "", vendidos: "0",
     },
     fromEntity: (p) => ({
       nome: p.nome,
@@ -94,6 +100,8 @@ export function ProdutoFormPage() {
       detalhes: p.detalhes.join("\n"),
       avaliacao: p.avaliacao === null ? "" : String(p.avaliacao),
       totalAvaliacoes: String(p.totalAvaliacoes),
+      cor1: p.cor1 ?? "", cor2: p.cor2 ?? "", formatos: (p.formatos ?? []).join("\n"),
+      tamanho: p.tamanho ?? "", vendidos: String(p.vendidos ?? 0),
     }),
     validate: validarProduto,
     toInput: (v) => ({
@@ -108,6 +116,9 @@ export function ProdutoFormPage() {
       detalhes: separarLinhas(v.detalhes),
       avaliacao: v.avaliacao.trim() === "" ? null : Number(v.avaliacao),
       totalAvaliacoes: v.totalAvaliacoes.trim() === "" ? 0 : Number(v.totalAvaliacoes),
+      cor1: v.cor1.trim() || null, cor2: v.cor2.trim() || null,
+      formatos: separarLinhas(v.formatos), tamanho: v.tamanho.trim() || null,
+      vendidos: Number(v.vendidos) || 0,
     }),
     backTo: "/produtos",
   });
@@ -140,7 +151,7 @@ export function ProdutoFormPage() {
           label="Fotos (uma por linha)"
           type="textarea"
           {...campo("imagens")}
-          hint="Ex.: /img/produtos/varinha-magica.png"
+          hint="Ex.: /img/produtos/leque-bts.jpg"
         />
         <FormField
           label="Opções de personalização (uma por linha)"
@@ -154,6 +165,11 @@ export function ProdutoFormPage() {
         />
         <FormField label="Avaliação média (0 a 5)" type="number" {...campo("avaliacao")} />
         <FormField label="Quantidade de avaliações" type="number" {...campo("totalAvaliacoes")} />
+        <FormField label="Cor principal (hexadecimal)" {...campo("cor1")} />
+        <FormField label="Cor secundária (hexadecimal)" {...campo("cor2")} />
+        <FormField label="Formatos disponíveis (um por linha)" type="textarea" {...campo("formatos")} />
+        <FormField label="Tamanho / observação" {...campo("tamanho")} />
+        <FormField label="Quantidade vendida" type="number" {...campo("vendidos")} />
       </ResourceForm>
     </>
   );

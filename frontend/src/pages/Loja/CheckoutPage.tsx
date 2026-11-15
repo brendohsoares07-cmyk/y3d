@@ -13,6 +13,7 @@ import { getApiErrorMessage } from "../../services/apiClient";
 import { pedidosApi } from "../../services/resources";
 import { FormaPagamento } from "../../types";
 import { collectErrors, requiredMsg } from "../../validations";
+import { isCpf } from "../../validations/cpf";
 
 function validar(v: AddressValues) {
   const telefone = v.telefone.replace(/\D/g, "");
@@ -20,6 +21,7 @@ function validar(v: AddressValues) {
   return collectErrors<AddressValues>([
     ["nome", requiredMsg(v.nome, "Nome completo")],
     ["telefone", requiredMsg(v.telefone, "Telefone") ?? (telefone.length >= 10 ? null : "Telefone inválido")],
+    ["cpf", requiredMsg(v.cpf, "CPF") ?? (isCpf(v.cpf) ? null : "CPF inválido")],
     ["cep", requiredMsg(v.cep, "CEP") ?? (cep.length === 8 ? null : "CEP inválido")],
     ["endereco", requiredMsg(v.endereco, "Endereço")],
     ["bairro", requiredMsg(v.bairro, "Bairro")],
@@ -33,7 +35,7 @@ export function CheckoutPage() {
   const { itens, subtotal, alterarQuantidade, remover, limpar } = useCart();
   const navigate = useNavigate();
   const { values, errors, setErrors, setField } = useFormState<AddressValues>({
-    nome: usuario?.nome ?? "", telefone: "", cep: "", endereco: "", bairro: "", cidade: "",
+    nome: usuario?.nome ?? "", telefone: "", cpf: usuario?.cpf ?? "", cep: "", endereco: "", bairro: "", cidade: "",
   });
   const [pagamento, setPagamento] = useState<FormaPagamento>("PIX");
   const [erro, setErro] = useState<string | null>(null);

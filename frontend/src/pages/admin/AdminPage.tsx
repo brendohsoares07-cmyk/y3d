@@ -9,6 +9,7 @@ import { getApiErrorMessage } from "../../services/apiClient";
 import { adminApi } from "../../services/resources";
 import { ResumoAdmin } from "../../types";
 import "../../styles/admin.css";
+import { Link } from "react-router-dom";
 
 /** Painel administrativo. A tela é montada nesta ordem: 1) KPIs · 2) gráfico + top clientes · 3) clientes. */
 export function AdminPage() {
@@ -25,6 +26,7 @@ export function AdminPage() {
   return (
     <div className="admin">
       <PageHeader titulo="Painel Administrativo" subtitulo="Visão geral da loja de modelos 3D" />
+      <p className="admin-feedback-links"><Link className="btn btn-outline" to="/admin/mensagens">Mensagens de contato</Link><Link className="btn btn-outline" to="/admin/avaliacoes">Avaliações dos clientes</Link></p>
       {erro && <Alert>{erro}</Alert>}
       {resumo && (
         <>

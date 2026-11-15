@@ -1,42 +1,32 @@
-# Y3D Creations — 4 serviços: nginx (proxy) → frontend + backend → mysql
-# Uso: cp .env.example .env  e depois  docker compose up --build   (ou só `docker compose up`)
-
 name: y3d-creations
 
 services:
-  # ---------- Banco de dados ----------
   db:
     image: mysql:8.4
     restart: unless-stopped
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${DB_NAME}
-      MYSQL_USER: ${DB_USER}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?Defina DB_ROOT_PASSWORD no .env}
+      MYSQL_DATABASE: ${DB_NAME:-y3d}
+      MYSQL_USER: ${DB_USER:-y3d_user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:?Defina DB_PASSWORD no .env}
     volumes:
-      - db_data:/var/lib/mysql # persistência: os dados sobrevivem a reinícios
-      - ./database/database.sql:/docker-entrypoint-initdb.d/01-database.sql:ro # estrutura e catálogo na primeira inicialização
+      - db_data:/var/lib/mysql
+      - ./database/database.sql:/docker-entrypoint-initdb.d/01-database.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
       interval: 5s
       timeout: 5s
       retries: 20
-    networks:
-      - db_net # só o backend enxerga o banco
+    networks: [db_net]
 
-  # ---------- Sincroniza o script único (roda, atualiza o banco e termina) ----------
-  # O initdb do MySQL só roda quando o volume db_data é criado. Este serviço roda a cada
-  # `docker compose up`: se database/database.sql mudou desde a última vez
-  # (compara o hash guardado na tabela catalogo_versao), reaplica estrutura e catálogo.
-  # Se o arquivo não mudou, não faz nada (edições feitas pelo painel admin são preservadas).
   db-sync:
     image: mysql:8.4
     restart: "no"
     environment:
       MYSQL_PWD: ${DB_PASSWORD}
-      DB_NAME: ${DB_NAME}
-      DB_USER: ${DB_USER}
+      DB_NAME: ${DB_NAME:-y3d}
+      DB_USER: ${DB_USER:-y3d_user}
     volumes:
       - ./database/database.sql:/database.sql:ro
     entrypoint: ["sh", "-c"]
@@ -47,85 +37,30 @@ services:
         NOVO=$$(sha256sum /database.sql | cut -d" " -f1)
         $$M -e "CREATE TABLE IF NOT EXISTS catalogo_versao (id TINYINT PRIMARY KEY, hash CHAR(64) NOT NULL, aplicado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)"
         ANTIGO=$$($$M -N -B -e "SELECT hash FROM catalogo_versao WHERE id = 1")
-        if [ "$$NOVO" = "$$ANTIGO" ]; then
-          echo "db-sync: banco já está atualizado."
-          exit 0
-        fi
-        echo "db-sync: aplicando script do banco..."
+        if [ "$$NOVO" = "$$ANTIGO" ]; then echo 'Banco já atualizado.'; exit 0; fi
         $$M < /database.sql
         $$M -e "REPLACE INTO catalogo_versao (id, hash) VALUES (1, '$$NOVO')"
-        echo "db-sync: script do banco aplicado."
+        echo 'Banco atualizado.'
     depends_on:
       db:
         condition: service_healthy
-    networks:
-      - db_net # só conversa com o banco
+    networks: [db_net]
 
-  # ---------- API (Express + TypeScript) ----------
   backend:
     build:
       context: ./backend
       dockerfile: ../docker/backend/Dockerfile
-    pull_policy: build # sempre reconstrói a imagem no `up` (o cache do Docker deixa rápido se nada mudou)
     restart: unless-stopped
     environment:
       PORT: 3000
       DB_HOST: db
       DB_PORT: 3306
-      DB_NAME: ${DB_NAME}
-      DB_USER: ${DB_USER}
+      DB_NAME: ${DB_NAME:-y3d}
+      DB_USER: ${DB_USER:-y3d_user}
       DB_PASSWORD: ${DB_PASSWORD}
-      JWT_SECRET: ${JWT_SECRET}
+      JWT_SECRET: ${JWT_SECRET:?Defina JWT_SECRET no .env}
       JWT_EXPIRES_SECONDS: ${JWT_EXPIRES_SECONDS:-7200}
       ADMIN_EMAILS: ${ADMIN_EMAILS:-}
-    depends_on:
-      db:
-        condition: service_healthy
-      db-sync:
-        condition: service_completed_successfully
-    networks:
-      - app_net
-      - db_net
-
-  # ---------- Frontend (React compilado, servido por um Nginx interno) ----------
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: ../docker/frontend/Dockerfile
-    pull_policy: build # sempre reconstrói o React no `up`, assim o site nunca fica com a versão antiga
-    restart: unless-stopped
-    networks:
-      - app_net
-
-  # ---------- Loja em PHP (o site com vídeo e coleção BT21): servido em /loja-php/ ----------
-  # Os arquivos são montados direto da pasta do projeto: salvou o arquivo, o site já mostra a mudança
-  # (sem rebuild). Não montamos a raiz inteira para o .env, .git e o código da API nunca ficarem acessíveis.
-  loja:
-    build:
-      context: .
-      dockerfile: docker/php/Dockerfile
-    restart: unless-stopped
-    volumes:
-      - ./index.php:/var/www/html/index.php:ro
-      - ./produtos.php:/var/www/html/produtos.php:ro
-      - ./produto.php:/var/www/html/produto.php:ro
-      - ./sobre.php:/var/www/html/sobre.php:ro
-      - ./contato.php:/var/www/html/contato.php:ro
-      - ./login.php:/var/www/html/login.php:ro
-      - ./logout.php:/var/www/html/logout.php:ro
-      - ./cadastro.php:/var/www/html/cadastro.php:ro
-      - ./conta.php:/var/www/html/conta.php:ro
-      - ./favoritos.php:/var/www/html/favoritos.php:ro
-      - ./carrinho.php:/var/www/html/carrinho.php:ro
-      - ./checkout.php:/var/www/html/checkout.php:ro
-      - ./admin.php:/var/www/html/admin.php:ro
-      - ./admin.css:/var/www/html/admin.css:ro
-      - ./includes:/var/www/html/includes:ro
-      - ./handlers:/var/www/html/handlers:ro
-      - ./assets:/var/www/html/assets # leitura e escrita: fotos de perfil vão para assets/img/avatares
-      - ./data:/var/www/data # contas, pedidos etc. FORA da pasta pública (/var/www/html): ninguém baixa pelo navegador
-    environment:
-      Y3D_DATA_DIR: /var/www/data # a loja PHP lê/grava os JSON aqui (ver includes/config.php)
       Y3D_BASE_URL: ${Y3D_BASE_URL:-}
       Y3D_EMAIL_FROM: ${Y3D_EMAIL_FROM:-y3dsuporte@gmail.com}
       Y3D_SMTP_HOST: ${Y3D_SMTP_HOST:-smtp.gmail.com}
@@ -133,11 +68,23 @@ services:
       Y3D_SMTP_ENCRYPTION: ${Y3D_SMTP_ENCRYPTION:-tls}
       Y3D_SMTP_USER: ${Y3D_SMTP_USER:-y3dsuporte@gmail.com}
       Y3D_SMTP_PASSWORD: ${Y3D_SMTP_PASSWORD:-}
-    networks:
-      - app_net
-      - public_net # saída para o SMTP; a loja continua sem portas publicadas
+    volumes:
+      - ./data:/app/data:ro
+      - ./backend/uploads:/app/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+      db-sync:
+        condition: service_completed_successfully
+    networks: [app_net, db_net]
 
-  # ---------- Proxy reverso: ÚNICO serviço exposto fora do Docker ----------
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ../docker/frontend/Dockerfile
+    restart: unless-stopped
+    networks: [app_net]
+
   nginx:
     image: nginx:1.27-alpine
     restart: unless-stopped
@@ -145,19 +92,14 @@ services:
       - "${HTTP_PORT:-80}:80"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
-    depends_on:
-      - frontend
-      - backend
-      - loja
-    networks:
-      - public_net
-      - app_net
+    depends_on: [frontend, backend]
+    networks: [public_net, app_net]
 
 networks:
-  public_net: # com acesso externo: apenas o nginx
-  app_net: # nginx ↔ frontend ↔ backend, sem acesso à internet
+  public_net:
+  app_net:
     internal: true
-  db_net: # backend ↔ mysql, sem acesso à internet
+  db_net:
     internal: true
 
 volumes:

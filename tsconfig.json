@@ -1,15 +1,19 @@
 {
   "compilerOptions": {
-    "target": "ES2019",
-    "module": "esnext",
-    "rootDir": "./ts",
-    "outDir": "./assets/js",
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
     "strict": true,
-    "lib": ["ES2019", "DOM"],
-    "forceConsistentCasingInFileNames": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
     "skipLibCheck": true,
-    "sourceMap": false,
-    "noEmitOnError": true
+    "noEmit": true,
+    "types": ["vite/client"]
   },
-  "include": ["ts/**/*.ts"]
+  "include": ["src", "shared"]
 }
