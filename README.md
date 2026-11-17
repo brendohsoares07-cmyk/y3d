@@ -21,21 +21,6 @@ Mesmos arquivos JSON do PHP, em `data/` (`usuarios`, `pedidos`, `mensagens`, `av
 Se copiar o `data/` do site antigo, as contas continuam funcionando (senhas bcrypt `$2y$` são aceitas).
 Fotos de perfil ficam em `data/avatares/`. A pasta `data/` não vai para o git.
 
-## Onde ficou cada coisa do PHP
-| PHP | Agora |
-|---|---|
-| `index/produtos/produto/carrinho/checkout/conta/favoritos/contato/sobre/login/cadastro/admin.php` | `src/paginas/*.tsx` |
-| `includes/header, footer, card_produto, form_*` | `src/componentes/*.tsx` |
-| `includes/dados_produtos.php` | `server/produtos-padrao.json` |
-| `includes/contas, loja_dados, catalogo_produtos, email, validacoes` | `server/*.ts` |
-| `handlers/*.php` | `server/rotas/*.ts` |
-| `ts/main.ts`, `ts/pix.ts` | contextos e componentes React, `src/pix.ts` |
-| sessão PHP (carrinho) | `localStorage` (carrinho e favoritos) |
-
-## Diferenças em relação ao PHP
-- O checkout agora exige todos os campos de endereço e a forma de pagamento (antes só o CPF era validado).
-- As 3 ilustrações de `assets/img/maquinas/` não estavam no zip original; foram criadas ilustrações simples.
-- O carrinho fica no navegador, não no servidor.
 
 ## Validação contra o repositório (brendohsoares07-cmyk/y3d)
 - Catálogo: agora tem os 30 produtos do repositório com os **mesmos ids** (inclui Porta-Óculos Coelhinho, Bailarina Azul, Clipes BT21, Suporte para Lightstick, Chaveiros Emblema BTS, Koya BT21, Estátua Guerreira, Grinch e Bailarina Rosa) mais os 4 produtos extras que já existiam neste projeto (ids 31 a 34). Assim pedidos antigos do PHP continuam apontando para o produto certo.
