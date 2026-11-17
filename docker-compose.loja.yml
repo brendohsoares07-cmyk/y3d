@@ -1,6 +1,6 @@
 # Sobe a LOJA Y3D (site React + API Express) em um único container.
 # Para rodar:  docker compose -f docker-compose.loja.yml up --build
-# Depois abra: http://localhost:8080  (ou a porta que você colocar em LOJA_PORT no .env)
+# Depois abra: http://localhost  (ou a porta que você colocar em HTTP_PORT no .env)
 name: y3d-loja
 
 services:
@@ -10,7 +10,7 @@ services:
       dockerfile: docker/loja/Dockerfile
     restart: unless-stopped
     ports:
-      - "${LOJA_PORT:-8080}:3001"
+      - "${HTTP_PORT:-80}:3001"
     environment:
       NODE_ENV: production
       PORT: 3001

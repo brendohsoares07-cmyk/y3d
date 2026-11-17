@@ -50,5 +50,7 @@ Fotos de perfil ficam em `data/avatares/`. A pasta `data/` não vai para o git.
 ```
 docker compose -f docker-compose.loja.yml up --build
 ```
-Abra http://localhost:8080 (troque a porta com `LOJA_PORT` no `.env`). Os dados (contas, pedidos, mensagens) ficam na pasta `data/`.
+Abra http://localhost (troque a porta com `HTTP_PORT` no `.env`). Essa configuração usa somente uma porta HTTP publicada e salva os dados (contas, pedidos, mensagens) em arquivos na pasta `data/`; ela não usa MySQL.
+
+O sistema principal (`docker-compose.yml`) também usa apenas a porta HTTP publicada por `HTTP_PORT` (padrão 80); o MySQL fica acessível somente dentro da rede Docker, sem porta exposta no computador. As duas configurações são alternativas: execute apenas uma por vez.
 O `docker-compose.yml` da raiz continua sendo o do sistema de gestão (rubrica), sem alterações.
