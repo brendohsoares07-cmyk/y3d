@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Loja Y3D Creations — site React + TypeScript (migração do site em PHP) com API Express + TypeScript.",
+  "description": "Loja Y3D Creations — site React + TypeScript com API Express + TypeScript.",
   "scripts": {
     "dev": "concurrently -n api,web -c cyan,magenta \"npm:dev:api\" \"npm:dev:web\"",
     "dev:api": "tsx watch server/index.ts",
     "dev:web": "vite",
     "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.server.json",
+    "test:analytics": "tsx --test backend/test/admin/linearRegression.test.ts",
     "build": "npm run typecheck && vite build && tsc -p tsconfig.server.json",
     "start": "node dist-server/server/index.js"
   },

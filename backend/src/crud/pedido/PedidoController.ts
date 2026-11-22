@@ -53,4 +53,9 @@ export class PedidoController extends CrudController<Pedido, PedidoInput> {
     await this.pedidos.remove(parseId(req.params.id));
     res.status(204).send();
   };
+
+  informarPagamentoPix = async (req: Request, res: Response): Promise<void> => {
+    await this.pedidos.informarPagamentoPix(Number(req.params.id), req.userId);
+    res.json({ message: "Pagamento informado. A equipe irá conferir o comprovante." });
+  };
 }

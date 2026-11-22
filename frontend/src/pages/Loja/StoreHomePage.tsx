@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import { ProductCard } from "../../components/store/ProductCard";
 import { useOptions } from "../../hooks/useOptions";
-import { categoriasApi, produtosApi } from "../../services/resources";
+import { catalogoApi } from "../../services/resources";
 
 export function StoreHomePage() {
-  const produtos = useOptions(produtosApi);
-  const categorias = useOptions(categoriasApi);
+  const produtos = useOptions(catalogoApi.produtos);
+  const categorias = useOptions(catalogoApi.categorias);
   const destaques = [...produtos].sort((a, b) => b.totalAvaliacoes - a.totalAvaliacoes).slice(0, 8);
   const bt21 = produtos.filter((p) => p.nome.toUpperCase().includes("BT21") && p.id !== 25);
   const comboBt21 = produtos.find((p) => p.id === 25);

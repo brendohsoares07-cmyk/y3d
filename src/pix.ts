@@ -1,5 +1,5 @@
 // Pix estático (BR Code) + gerador de QR Code, sem dependências externas.
-// Este arquivo também é a fonte de ts/pix.ts (site PHP): se mudar aqui, mude lá.
+// Este arquivo acompanha frontend/src/utils/pix.ts; mantenha ambos alinhados.
 
 /** Dados do recebedor. A chave é a do Pix da Y3D (aqui, um CPF, só dígitos). */
 export const PIX_CHAVE = "10792059930";

@@ -3,7 +3,7 @@ import { createHash, randomBytes, timingSafeEqual } from "node:crypto";
 import { EMAILS_ADMIN } from "./config.js";
 import { agora, alterarLista, lerLista, proximoId } from "./armazenamento.js";
 
-/** Mesmo formato de data/usuarios.json do site PHP (as senhas bcrypt "$2y$" continuam valendo). */
+/** Contas armazenadas em data/usuarios.json; senhas bcrypt "$2y$" continuam válidas. */
 export interface Conta {
   id: number;
   nome: string;

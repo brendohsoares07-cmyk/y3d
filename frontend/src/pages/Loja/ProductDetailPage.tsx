@@ -10,7 +10,7 @@ import { useOptions } from "../../hooks/useOptions";
 import { useAuth } from "../../contexts/AuthContext";
 import { request } from "../../services/apiClient";
 import { getApiErrorMessage } from "../../services/apiClient";
-import { categoriasApi, produtosApi } from "../../services/resources";
+import { catalogoApi } from "../../services/resources";
 import { Produto } from "../../types";
 
 /** Detalhe do produto. Funciona para qualquer produto do catálogo: /loja/produtos/:id */
@@ -18,7 +18,7 @@ type Avaliacao = { id: number; nome: string; nota: number; comentario: string; c
 
 export function ProductDetailPage() {
   const { id } = useParams();
-  const categorias = useOptions(categoriasApi);
+  const categorias = useOptions(catalogoApi.categorias);
   const { usuario } = useAuth();
   const [avaliacoes, setAvaliacoes] = useState<Avaliacao[]>([]);
   const [nota, setNota] = useState(5);
@@ -30,7 +30,7 @@ export function ProductDetailPage() {
   useEffect(() => {
     setProduto(null);
     setErro(null);
-    produtosApi
+    catalogoApi.produtos
       .get(Number(id))
       .then(setProduto)
       .catch((e: unknown) => setErro(getApiErrorMessage(e, "Não foi possível carregar o produto")));
@@ -38,7 +38,7 @@ export function ProductDetailPage() {
 
   useEffect(() => {
     if (!id) return;
-    request<Avaliacao[]>(`/produtos/${id}/avaliacoes`).then(setAvaliacoes).catch(() => setAvaliacoes([]));
+    request<Avaliacao[]>(`/catalogo/produtos/${id}/avaliacoes`).then(setAvaliacoes).catch(() => setAvaliacoes([]));
   }, [id]);
 
   const enviarAvaliacao = async (event: FormEvent) => {
@@ -46,7 +46,7 @@ export function ProductDetailPage() {
     try {
       const result = await request<{ message: string }>(`/produtos/${id}/avaliacoes`, { method: "POST", body: { nota, comentario } });
       setMensagemAvaliacao(result.message);
-      const lista = await request<Avaliacao[]>(`/produtos/${id}/avaliacoes`); setAvaliacoes(lista); setComentario("");
+      const lista = await request<Avaliacao[]>(`/catalogo/produtos/${id}/avaliacoes`); setAvaliacoes(lista); setComentario("");
     } catch (e) { setMensagemAvaliacao(e instanceof Error ? e.message : "Não foi possível salvar a avaliação."); }
   };
 

@@ -4,7 +4,7 @@ import path from "node:path";
 /** Raiz do projeto: os scripts do npm sempre rodam a partir dela. */
 export const RAIZ = process.cwd();
 
-/** Pasta dos arquivos JSON (contas, pedidos, mensagens, avaliações, catálogo). Mesmo formato do site em PHP. */
+/** Pasta dos arquivos JSON (contas, pedidos, mensagens, avaliações, catálogo). */
 export const PASTA_DADOS = path.resolve(process.env.Y3D_DATA_DIR || path.join(RAIZ, "data"));
 export const PASTA_PUBLICA = path.join(RAIZ, "public");
 export const PASTA_DIST = path.join(RAIZ, "dist");

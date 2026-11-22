@@ -1,4 +1,4 @@
-/** Formatação de preços, datas, estrelas e iniciais (equivale às funções de includes/funcoes.php). */
+/** Formatação de preços, datas, estrelas e iniciais. */
 
 const moeda = new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 

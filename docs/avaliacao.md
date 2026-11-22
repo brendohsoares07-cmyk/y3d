@@ -8,25 +8,34 @@
 | Cadastro (nome, e-mail, senha, CPF) + validações de CPF, senha e e-mail | `AuthService.register` · `users/Usuario.ts` (setters) · `shared/validators/validators.ts` |
 | Edição: rota autenticada, só o próprio usuário | `routes/index.ts` (`authMiddleware`) · `UsuarioService.update` (403 se `id` ≠ token) |
 | Edição: campos obrigatórios, CPF, senha, e-mail imutável | `UsuarioService.update` |
-| 4 CRUDs completos, todos autenticados | Categorias, Produtos, Máquinas, Pedidos — `routes/index.ts` |
+| 4 CRUDs completos, todas as rotas CRUD autenticadas | Categorias, Produtos, Máquinas, Pedidos — `routes/index.ts`; consultas públicas somente leitura em `/catalogo/*` |
 | Paginação | `shared/base/BaseRepository.findPage` · `shared/utils/requestParams.ts` (`parsePagination`) |
 | Não editar/deletar o que não existe | `shared/base/CrudService.getOrFail` → `NotFoundError` (404) |
 | Relacionamento entre recursos | `database/database.sql` (FKs, `pedido_itens`) · `crud/pedido/PedidoService` (busca os produtos e calcula o total) |
-| AGENTS.md + 3 skills + guardrails + proteção do `.env` | `AGENTS.md` · `.claude/skills/*` · `.claude/settings.json` · `.gitignore` · `.cursorignore` |
+| AGENTS.md + 3 skills + guardrails + proteção do `.env` | `AGENTS.md` · `.claude/skills/*/SKILL.md` · `.gitignore` · `.cursorignore` |
 
 ## 2. Front-end
 | Item da rubrica | Onde está |
 |---|---|
-| Login: campos, regex, token no localStorage, erros amigáveis, redirecionamento | `pages/Login/LoginPage.tsx` · `services/apiClient.ts` (`tokenStorage`, `friendlyMessage`) |
-| Cadastro: obrigatórios, senha dupla, CPF, e-mail, redireciona ao login, erros da API | `pages/Cadastro/RegisterPage.tsx` |
-| Edição: Context global, CPF, nível de senha, confirmação, e-mail bloqueado | `contexts/AuthContext.tsx` · `pages/Perfil/ProfilePage.tsx` |
-| 4 CRUDs, paginação, validação de obrigatórios, listagem e formulário em telas separadas | `pages/{Categorias,Produtos,Maquinas,Pedidos}/` (`XListPage` + `XFormPage`) |
-| Componentes genéricos e reutilizáveis | `components/ui/` (`DataTable`, `FormField`, `Pagination`, `ResourceForm`...) · `hooks/` |
+| Login: campos, regex, token no localStorage, erros amigáveis, redirecionamento | `frontend/src/pages/Login/LoginPage.tsx` · `frontend/src/services/apiClient.ts` (`tokenStorage`, `friendlyMessage`) |
+| Cadastro: obrigatórios, senha dupla, CPF, e-mail, redireciona ao login, erros da API | `frontend/src/pages/Cadastro/RegisterPage.tsx` |
+| Edição: Context global, CPF, nível de senha, confirmação, e-mail bloqueado | `frontend/src/contexts/AuthContext.tsx` · `frontend/src/pages/Perfil/ProfilePage.tsx` |
+| 4 CRUDs, paginação, validação de obrigatórios, listagem e formulário em telas separadas | `frontend/src/pages/{categorias,produtos,maquinas,pedidos}/` (`XListPage` + `XFormPage`) |
+| Componentes genéricos e reutilizáveis | `frontend/src/components/ui/` (`DataTable`, `FormField`, `Pagination`, `ResourceForm`...) · `frontend/src/hooks/` |
 | Telas compostas por vários componentes | ex.: `ProdutosListPage` = `PageHeader` + `DataTable` + `Pagination` |
-| Componentes e páginas em pastas separadas | `src/components/` e `src/pages/` |
+| Componentes e páginas em pastas separadas | `frontend/src/components/` e `frontend/src/pages/` |
 | Componentes exclusivos da página em funções separadas | `CategoriaTag`, `StatusTag`, `TipoTag`, `SenhaChecklist`, `AtalhoCard` |
 
-## 3. Ferramentas DevOps
+## 3. Probabilidade e Estatística Aplicada
+| Item da rubrica | Onde está |
+|---|---|
+| Métricas do negócio | KPIs de clientes, pedidos, receita e ticket médio em `frontend/src/components/admin/KpiCards.tsx` |
+| Série temporal e regressão linear | Faturamento mensal dos últimos 6 meses e tendência calculada em `backend/src/admin/AdminService.ts`, exibidos em `frontend/src/components/admin/RevenueChart.tsx` |
+| Histograma | Distribuição do valor dos pedidos em `frontend/src/components/admin/OrderHistogram.tsx` |
+| Dispersão | Quantidade de pedidos × gasto por cliente em `frontend/src/components/admin/CustomerScatterPlot.tsx` |
+| Barras por categoria | Receita de produtos por categoria (sem frete) em `frontend/src/components/admin/CategoryRevenueChart.tsx` |
+
+## 4. Ferramentas DevOps
 | Critério | Onde está |
 |---|---|
 | Organização do docker-compose | `docker-compose.yml` (serviços, volumes, redes, variáveis comentados) |
@@ -35,7 +44,7 @@
 | Nginx como proxy reverso | `nginx/nginx.conf` |
 | Isolamento por Docker Network | Só `nginx` tem `ports`; `app_net` e `db_net` são `internal: true` |
 
-## 4. Tech Forge
+## 5. Tech Forge
 | Critério | Onde está |
 |---|---|
 | Encapsulamento e proteção do estado | Campos `private _x` nas entidades; `readonly`; construtores que inicializam tudo (`crud/*/` e `users/`) |
@@ -52,7 +61,7 @@
 | Detalhe do produto (mockup 3) | `pages/Loja/ProductDetailPage.tsx` + `components/store/{Breadcrumb,ProductGallery,ProductInfo,ProductAside,TrustStrip}.tsx` |
 | Finalizar compra (mockup 7) | `pages/Loja/CheckoutPage.tsx` + `components/store/{AddressForm,PaymentOptions,OrderSummary}.tsx` |
 | Minha conta (mockup 8) | `pages/Loja/Account*.tsx` + `components/store/{AccountSidebar,OrderCard}.tsx` |
-| Painel admin (ordem da tela: KPIs → gráfico + top clientes → clientes) | `pages/Admin/AdminPage.tsx` + `components/admin/{KpiCards,RevenueChart,TopClients,ClientsTable}.tsx` · backend `AdminService`, `AdminRepository`, `adminMiddleware` |
+| Painel admin (KPIs → gráficos estatísticos → top clientes → clientes) | `frontend/src/pages/admin/AdminPage.tsx` + `frontend/src/components/admin/` · backend `AdminService`, `AdminRepository`, `adminMiddleware` |
 | Pedido com vários itens em transação | `crud/pedido/Pedido.ts`, `crud/pedido/Entrega.ts`, `crud/pedido/PedidoRepository.ts` |
 
 ## O que depende de você

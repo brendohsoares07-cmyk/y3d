@@ -16,7 +16,7 @@ function anoMes(segundos: number): { ano: number; mes: number } {
 const chaveMes = (ano: number, mes: number): string => `${ano}-${String(mes).padStart(2, "0")}`;
 const maisNovosPrimeiro = <T extends { criado_em?: number }>(a: T, b: T): number => Number(b.criado_em ?? 0) - Number(a.criado_em ?? 0);
 
-/** Reúne tudo o que as abas do painel admin mostram (mesmas contas do admin.php). */
+/** Reúne os dados exibidos pelas abas do painel administrativo. */
 export async function montarPainel(): Promise<PainelAdmin> {
   const [pedidosBrutos, mensagensBrutas, avaliacoesBrutas, contas, catalogo] = await Promise.all([
     pedidosListar(), mensagensListar(), avaliacoesListar(), contasCarregar(), carregarCatalogo(),

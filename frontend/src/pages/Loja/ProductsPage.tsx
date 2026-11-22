@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { ProductCard } from "../../components/store/ProductCard";
 import { Pagination } from "../../components/ui/Pagination";
 import { useOptions } from "../../hooks/useOptions";
-import { categoriasApi, produtosApi } from "../../services/resources";
+import { catalogoApi } from "../../services/resources";
 
 const POR_PAGINA = 12;
 
@@ -16,8 +16,8 @@ export function ProductsPage() {
   const categoriaId = Number(categoriaValor) || categoriasLegadas[categoriaValor.toLowerCase()] || 0;
   const [page, setPage] = useState(1);
 
-  const produtos = useOptions(produtosApi);
-  const categorias = useOptions(categoriasApi);
+  const produtos = useOptions(catalogoApi.produtos);
+  const categorias = useOptions(catalogoApi.categorias);
 
   useEffect(() => setPage(1), [termo, categoriaId]);
 

@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 
 interface Avisos {
-  /** Aviso de sessão no topo da loja ("Você saiu da sua conta" etc.), como o flash do PHP. */
+  /** Aviso de sessão no topo da loja ("Você saiu da sua conta" etc.). */
   flash: string | null;
   avisar: (mensagem: string) => void;
   fecharFlash: () => void;

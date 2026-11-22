@@ -1,16 +1,23 @@
+import { createHash, randomBytes } from "node:crypto";
 import jwt from "jsonwebtoken";
 import { env } from "../config/env";
 import { Usuario } from "../users/Usuario";
-import { ConflictError, UnauthorizedError, ValidationError } from "../errors/AppError";
+import {
+  ConflictError,
+  ServiceUnavailableError,
+  UnauthorizedError,
+  ValidationError,
+} from "../errors/AppError";
 import { LoginInput, RegisterInput, UsuarioPerfil } from "../shared/types";
-import { UsuarioRepository } from "../users/UsuarioRepository";
+import { IUsuarioRepository } from "../users/IUsuarioRepository";
 import { isEmail, requireText } from "../shared/validators/validators";
 import { AdminPolicy } from "../admin/AdminPolicy";
 import { PasswordHasher } from "./PasswordHasher";
+import { enviarEmail } from "../shared/email/EmailSender";
 
 export class AuthService {
   constructor(
-    private readonly usuarios: UsuarioRepository,
+    private readonly usuarios: IUsuarioRepository,
     private readonly hasher: PasswordHasher,
     private readonly policy: AdminPolicy,
   ) {}
@@ -55,5 +62,53 @@ export class AuthService {
       expiresIn: env.jwtExpiresInSeconds,
     });
     return { token, usuario: this.policy.toPerfil(usuario) };
+  }
+
+  async forgotPassword(emailInformado: unknown, fallbackUrl: string): Promise<string> {
+    const email = String(emailInformado ?? "").trim().toLowerCase();
+    if (!/^\S+@\S+\.\S+$/.test(email)) throw new ValidationError("Informe um e-mail válido.");
+    if (!env.smtp.host || !env.smtp.user || !env.smtp.password || !env.smtp.from) {
+      throw new ServiceUnavailableError(
+        "A recuperação por e-mail ainda não está configurada. Entre em contato com y3dsuporte@gmail.com.",
+      );
+    }
+
+    const usuario = await this.usuarios.findByEmail(email);
+    if (usuario) {
+      const token = randomBytes(32).toString("hex");
+      const tokenHash = createHash("sha256").update(token).digest("hex");
+      await this.usuarios.criarTokenRedefinicao(usuario.id, tokenHash);
+      const base = env.baseUrl.replace(/\/$/, "") || fallbackUrl;
+      const link = `${base}/login/redefinir-senha?token=${token}`;
+      try {
+        await enviarEmail(
+          env.smtp,
+          email,
+          "Recuperação de senha — Y3D Creations",
+          `Olá, ${usuario.nome}.\n\nPara criar uma nova senha, acesse o link abaixo em até 20 minutos:\n${link}\n\nSe você não solicitou esta alteração, ignore este e-mail.`,
+        );
+      } catch (erro) {
+        await this.usuarios.removerTokenRedefinicao(usuario.id);
+        console.error("Falha ao enviar e-mail de recuperação:", erro);
+        throw new ServiceUnavailableError("Não foi possível enviar o e-mail agora. Tente novamente mais tarde.");
+      }
+    }
+    return "Se o e-mail estiver cadastrado, enviaremos as instruções de recuperação.";
+  }
+
+  async resetPassword(tokenInformado: unknown, senhaInformada: unknown): Promise<string> {
+    const token = String(tokenInformado ?? "");
+    if (token.length < 32 || token.length > 256) {
+      throw new ValidationError("Link de recuperação inválido ou expirado.");
+    }
+    this.hasher.assertStrong(senhaInformada);
+    const tokenHash = createHash("sha256").update(token).digest("hex");
+    const usuarioId = await this.usuarios.buscarUsuarioPorTokenValido(tokenHash);
+    if (!usuarioId) throw new ValidationError("Link de recuperação inválido ou expirado.");
+
+    const senhaHash = await this.hasher.hash(senhaInformada);
+    await this.usuarios.atualizarSenhaHash(usuarioId, senhaHash);
+    await this.usuarios.removerTokenRedefinicao(usuarioId);
+    return "Senha alterada com sucesso.";
   }
 }

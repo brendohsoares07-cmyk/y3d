@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 
 /**
- * Cada tela do PHP carregava só o CSS dela (style.css na loja e no login, admin.css no painel).
- * Aqui o mesmo CSS é ligado quando a tela entra e desligado quando sai, para um não afetar o outro.
+ * Cada tela carrega apenas seu CSS para evitar conflitos entre loja, login e painel.
  * A remoção é adiada um instante: ao trocar de tela dentro da loja o arquivo não é descarregado à toa.
  */
 interface Registro { el: HTMLLinkElement; usos: number; carregado: boolean; timer?: number; ouvintes: Set<() => void> }
@@ -57,7 +56,7 @@ export function useFolhaDeEstilo(href: string): boolean {
   return pronto;
 }
 
-/** Título da aba, no mesmo formato do PHP: "Página · Y3D Creations". */
+/** Atualiza o título da aba no formato "Página · Y3D Creations". */
 export function useTitulo(titulo?: string): void {
   useEffect(() => {
     document.title = titulo ? `${titulo} · Y3D Creations` : "Y3D Creations";

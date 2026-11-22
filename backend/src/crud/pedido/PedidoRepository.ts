@@ -92,4 +92,12 @@ export class PedidoRepository extends BaseRepository<Pedido> implements IPedidoR
     );
     return this.toPage(rows, Number(contagem[0].total), page, limit);
   }
+
+  async informarPix(id: number, usuarioId: number): Promise<boolean> {
+    const [resultado] = await pool.execute<ResultSetHeader>(
+      "UPDATE pedidos SET pix_informado_em = COALESCE(pix_informado_em, CURRENT_TIMESTAMP) WHERE id = ? AND usuario_id = ? AND forma_pagamento = 'PIX' AND status = 'PENDENTE'",
+      [id, usuarioId],
+    );
+    return resultado.affectedRows > 0;
+  }
 }

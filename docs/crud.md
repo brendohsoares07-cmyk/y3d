@@ -6,8 +6,8 @@ Frontend: uma pasta por recurso em `frontend/src/pages/`, com `XListPage` (lista
 ## Backend
 | Item da rubrica | Onde está |
 |---|---|
-| 4 CRUDs completos, todos autenticados | Categorias, Produtos, Máquinas, Pedidos — `routes/index.ts` |
-| Quem pode usar | Produtos e Categorias: qualquer usuário logado lê, só administrador cria/edita/apaga. Máquinas: só administrador. Pedidos: o `PedidoController` decide (`routes/crudRouter.ts`, `routes/index.ts`) |
+| 4 CRUDs completos | Categorias, Produtos, Máquinas, Pedidos — `routes/index.ts` |
+| Quem pode usar | Alterações de categorias e produtos exigem JWT + administrador; máquinas exigem JWT; pedidos usam o `PedidoController` para separar cliente e administrador (`routes/crudRouter.ts`, `routes/index.ts`) |
 | Paginação | `shared/base/BaseRepository.findPage` · `shared/utils/requestParams.ts` (`parsePagination`) |
 | Não editar/deletar o que não existe | `shared/base/CrudService.getOrFail` → `NotFoundError` (404) |
 | Relacionamento entre recursos | `database/database.sql` (FKs, `pedido_itens`) · `crud/pedido/PedidoService` (busca os produtos e calcula o total) |
@@ -20,6 +20,10 @@ Frontend: uma pasta por recurso em `frontend/src/pages/`, com `XListPage` (lista
 | Telas compostas por vários componentes | ex.: `ProdutosListPage` = `PageHeader` + `DataTable` + `Pagination` |
 | Componentes e páginas em pastas separadas | `src/components/` e `src/pages/` |
 | Componentes exclusivos da página em funções separadas | `CategoriaTag`, `StatusTag`, `TipoTag`, `SenhaChecklist`, `AtalhoCard` |
+
+## Catálogo público
+
+As consultas `GET /api/catalogo/categorias`, `GET /api/catalogo/categorias/:id`, `GET /api/catalogo/produtos` e `GET /api/catalogo/produtos/:id` são públicas e somente leitura. As rotas para criar, editar ou excluir categorias e produtos exigem JWT e autorização de administrador.
 
 ## Como criar um novo CRUD
 Use a skill `.claude/skills/novo-crud/SKILL.md` (passo a passo de backend + frontend).

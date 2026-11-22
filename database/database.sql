@@ -179,7 +179,7 @@ DELETE FROM produtos
 UPDATE produtos SET estoque = 0
   WHERE id IN (5, 9, 12, 13, 17, 26, 27, 28);
 
--- Recursos migrados da loja PHP: mensagens, avaliações e dados de entrega.
+-- Dados da loja: mensagens, avaliações e dados de entrega.
 CREATE TABLE IF NOT EXISTS mensagens (
   id INT AUTO_INCREMENT PRIMARY KEY,
   nome VARCHAR(120) NOT NULL,

@@ -3,6 +3,9 @@ import { ClientsTable } from "../../components/admin/ClientsTable";
 import { KpiCards } from "../../components/admin/KpiCards";
 import { RevenueChart } from "../../components/admin/RevenueChart";
 import { TopClients } from "../../components/admin/TopClients";
+import { OrderHistogram } from "../../components/admin/OrderHistogram";
+import { CategoryRevenueChart } from "../../components/admin/CategoryRevenueChart";
+import { CustomerScatterPlot } from "../../components/admin/CustomerScatterPlot";
 import { Alert } from "../../components/ui/Alert";
 import { PageHeader } from "../../components/ui/PageHeader";
 import { getApiErrorMessage } from "../../services/apiClient";
@@ -34,6 +37,9 @@ export function AdminPage() {
           <section className="admin-grid">
             <RevenueChart dados={resumo.faturamentoMensal} />
             <TopClients clientes={resumo.topClientes} />
+            <OrderHistogram dados={resumo.distribuicaoPedidos} />
+            <CategoryRevenueChart dados={resumo.receitaPorCategoria} />
+            <CustomerScatterPlot dados={resumo.dispersaoClientes} />
           </section>
         </>
       )}

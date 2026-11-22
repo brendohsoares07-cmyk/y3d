@@ -1,4 +1,4 @@
-// GERADO por scripts/gerar-icones.mjs a partir dos SVGs do site PHP. Conteúdo estático e confiável.
+// Ícones estáticos usados pela interface.
 export interface DadosIcone { attrs: Record<string, string>; inner: string }
 export const ICONES: Record<string, DadosIcone> = {
   "casa": {

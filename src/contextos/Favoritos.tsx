@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
-/** Favoritos ficam só no navegador (localStorage), como no site PHP. */
+/** Favoritos ficam só no navegador (localStorage). */
 const CHAVE = "y3d_favoritos";
 
 interface ContextoFavoritos {

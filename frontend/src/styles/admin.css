@@ -42,6 +42,28 @@
 .admin .top li > span { color: var(--cyan); font-weight: 600; }
 .admin .rank { display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 8px; background: var(--grad); font-size: 12px; margin-right: 10px; font-weight: 700; color: #fff; }
 
+/* Análise descritiva: série temporal, histograma, categorias e dispersão. */
+.admin .analytics-wide { grid-column: 1 / -1; }
+.admin .analytics-svg { display: block; width: 100%; height: auto; overflow: visible; }
+.admin .analytics-gridline { stroke: rgba(139, 146, 196, .2); stroke-dasharray: 4 5; }
+.admin .analytics-gridline.vertical { stroke-dasharray: 2 6; }
+.admin .analytics-axis-label { fill: var(--mut); font-size: 11px; }
+.admin .analytics-axis-title { fill: var(--mut); font-size: 12px; }
+.admin .regression-line { fill: none; stroke: var(--cyan); stroke-width: 3; stroke-dasharray: 7 5; }
+.admin .regression-point { fill: var(--cyan); stroke: var(--card); stroke-width: 2; }
+.admin .chart-legend { display: flex; align-items: center; gap: 7px; color: var(--mut); font-size: 12px; margin: 4px 0 0; }
+.admin .legend-column { width: 12px; height: 12px; border-radius: 3px; background: var(--grad); }
+.admin .legend-regression { width: 20px; border-top: 2px dashed var(--cyan); margin-left: 12px; }
+.admin .distribution-chart { display: grid; gap: 17px; padding: 8px 0; }
+.admin .distribution-row { display: grid; grid-template-columns: minmax(88px, 1fr) minmax(70px, 2fr) minmax(48px, auto); align-items: center; gap: 10px; color: var(--mut); font-size: 12px; }
+.admin .distribution-row > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.admin .distribution-row strong { text-align: right; color: var(--txt); font-variant-numeric: tabular-nums; }
+.admin .distribution-track { height: 12px; overflow: hidden; border-radius: 999px; background: var(--bg2); }
+.admin .distribution-bar, .admin .category-bar { height: 100%; min-width: 2px; border-radius: inherit; background: linear-gradient(90deg, var(--pink), var(--purple)); transition: width .4s ease; }
+.admin .category-bar { background: linear-gradient(90deg, var(--cyan), var(--purple)); }
+.admin .scatter-point { fill: var(--pink); fill-opacity: .75; stroke: #fff; stroke-opacity: .5; stroke-width: 1; transition: r .15s, fill-opacity .15s; }
+.admin .scatter-point:hover { r: 8; fill-opacity: 1; }
+
 /* 3) tabela de clientes */
 .admin .tools { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
 .admin .tools input, .admin .tools select { width: auto; background: var(--bg2); border: 1px solid var(--line); color: var(--txt); padding: 11px 16px; border-radius: 999px; font-size: 14px; }
@@ -63,5 +85,8 @@
 .admin .ativo { background: rgba(52, 211, 153, .15); color: var(--green); }
 .admin .inativo { background: rgba(255, 159, 67, .15); color: var(--orange); }
 
-@media (max-width: 900px) { .admin .admin-grid { grid-template-columns: 1fr; } }
+@media (max-width: 900px) {
+  .admin .admin-grid { grid-template-columns: 1fr; }
+  .admin .analytics-wide { grid-column: auto; }
+}
 .admin-message-list{display:grid;gap:14px}.admin-message-list article>div{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.admin-message-list small{color:var(--mute);margin-left:auto}.admin-message-list p{white-space:pre-wrap}

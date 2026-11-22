@@ -1,5 +1,8 @@
 import { AdminController } from "./admin/AdminController";
 import { AuthController } from "./auth/AuthController";
+import { ContactController } from "./contact/ContactController";
+import { ContactRepository } from "./contact/ContactRepository";
+import { ContactService } from "./contact/ContactService";
 import { CategoriaController } from "./crud/categoria/CategoriaController";
 import { MaquinaController } from "./crud/maquina/MaquinaController";
 import { PedidoController } from "./crud/pedido/PedidoController";
@@ -20,6 +23,10 @@ import { PasswordHasher } from "./auth/PasswordHasher";
 import { PedidoService } from "./crud/pedido/PedidoService";
 import { ProdutoService } from "./crud/produto/ProdutoService";
 import { UsuarioService } from "./users/UsuarioService";
+import { FeedbackController } from "./feedback/FeedbackController";
+import { FeedbackRepository } from "./feedback/FeedbackRepository";
+import { FeedbackService } from "./feedback/FeedbackService";
+import { env } from "./config/env";
 
 /** Raiz de composição: cria repositórios → serviços → controllers (injeção de dependência). */
 const hasher = new PasswordHasher();
@@ -33,10 +40,13 @@ const pedidoRepository = new PedidoRepository();
 
 export const authController = new AuthController(new AuthService(usuarioRepository, hasher, adminPolicy));
 const usuarioService = new UsuarioService(usuarioRepository, hasher, adminPolicy);
+const adminRepository = new AdminRepository();
 
 export const usuarioController = new UsuarioController(usuarioService);
-export const adminController = new AdminController(new AdminService(new AdminRepository()));
+export const adminController = new AdminController(new AdminService(adminRepository));
 export const categoriaController = new CategoriaController(new CategoriaService(categoriaRepository));
 export const produtoController = new ProdutoController(new ProdutoService(produtoRepository));
 export const maquinaController = new MaquinaController(new MaquinaService(maquinaRepository));
 export const pedidoController = new PedidoController(new PedidoService(pedidoRepository, produtoRepository));
+export const contactController = new ContactController(new ContactService(new ContactRepository(), env.smtp));
+export const feedbackController = new FeedbackController(new FeedbackService(new FeedbackRepository()));

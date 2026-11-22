@@ -15,7 +15,7 @@ const COOKIE_PEDIDO = "y3d_pedido";
 
 interface DadosSessao { id: number; loginEm: number; admin: boolean }
 
-/** Estado do pedido recém-feito (equivale a $_SESSION['pedido_*'] do PHP). */
+/** Estado do pedido recém-feito. */
 export interface EstadoPedido { avaliar?: number; pix?: number; pixInformado?: number }
 
 const opcoes = (req: Request) => ({ httpOnly: true, sameSite: "lax" as const, secure: req.secure, signed: true, path: "/" });

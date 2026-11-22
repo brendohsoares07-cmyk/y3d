@@ -74,13 +74,52 @@ export type ClienteAdmin = {
   gasto: number;
   status: StatusCliente;
 };
-export type FaturamentoMes = { mes: string; valor: number };
+export type FaturamentoMes = { mes: string; valor: number; tendencia: number };
+export type FaixaPedido = { faixa: string; quantidade: number };
+export type DispersaoCliente = { id: number; nome: string; pedidos: number; gasto: number };
+export type ReceitaCategoria = { categoria: string; receita: number };
 export type TopCliente = { id: number; nome: string; gasto: number };
+export type AvaliacaoProdutoPublica = {
+  id: number;
+  nome: string;
+  nota: number;
+  comentario: string;
+  criadoEm: string;
+};
+export type AvaliacaoAtendimentoAdmin = {
+  id: number;
+  pedidoId: number;
+  nota: number;
+  comentario: string;
+  criadoEm: string;
+  nome: string;
+  email: string;
+};
+export type AvaliacaoProdutoAdmin = {
+  id: number;
+  produtoId: number;
+  produto: string;
+  nome: string;
+  nota: number;
+  comentario: string;
+  criadoEm: string;
+};
+export type MensagemAdmin = {
+  id: number;
+  nome: string;
+  email: string;
+  mensagem: string;
+  lida: number;
+  criadoEm: string;
+};
 export type ResumoAdmin = {
   totalClientes: number;
   pedidos: number;
   receita: number;
   ticketMedio: number;
   faturamentoMensal: FaturamentoMes[];
+  distribuicaoPedidos: FaixaPedido[];
+  dispersaoClientes: DispersaoCliente[];
+  receitaPorCategoria: ReceitaCategoria[];
   topClientes: TopCliente[];
 };

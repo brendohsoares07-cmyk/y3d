@@ -2,7 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState, t
 import type { Produto } from "../../shared/tipos";
 import { useCatalogo } from "./Catalogo";
 
-/** O carrinho do PHP ficava na sessão; aqui fica no navegador (localStorage), no mesmo formato id → quantidade. */
+/** O carrinho fica no navegador (localStorage), no formato id → quantidade. */
 const CHAVE = "y3d_carrinho";
 type Mapa = Record<number, number>;
 

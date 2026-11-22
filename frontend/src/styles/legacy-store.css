@@ -365,7 +365,7 @@ div.product-gallery-main{cursor:default}
 .lg-back svg{width:15px;height:15px}
 
 /* painel de arte */
-.lg-art{--art:url('../img/login/login-art.jpg');position:relative;background:radial-gradient(600px 420px at 30% 35%,rgba(101,68,240,.22),transparent 70%),#080a16;display:flex;align-items:flex-end;overflow:hidden}
+.lg-art{--art:url('/assets/img/login/login-art.jpg');position:relative;background:radial-gradient(600px 420px at 30% 35%,rgba(101,68,240,.22),transparent 70%),#080a16;display:flex;align-items:flex-end;overflow:hidden}
 /* foto real da oficina, ancorada no topo e dissolvendo nas bordas */
 .lg-art::before{content:"";position:absolute;left:50%;top:0;transform:translateX(-50%);z-index:1;height:70%;aspect-ratio:692/782;background:var(--art) center top/cover no-repeat;
   -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 16%,#000 78%,transparent 100%),linear-gradient(180deg,#000 76%,transparent 100%);
@@ -449,7 +449,7 @@ div.product-gallery-main{cursor:default}
 /* ===================== RODAPÉ ===================== */
 .ftr{--ftr-blue:#1f7bff;position:relative;overflow:hidden;margin-top:40px;background:radial-gradient(700px 300px at 100% 100%,rgba(31,123,255,.12),transparent 65%),#070d1a;color:#dbe3f5}
 .ftr::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--pink),var(--violet),var(--cyan))}
-.ftr::after{content:"";position:absolute;right:-20px;top:0;bottom:0;width:200px;background:url(../img/rodape-malha.svg) no-repeat right bottom/200px auto;opacity:.32;pointer-events:none;-webkit-mask-image:linear-gradient(90deg,transparent,#000 55%);mask-image:linear-gradient(90deg,transparent,#000 55%)}
+.ftr::after{content:"";position:absolute;right:-20px;top:0;bottom:0;width:200px;background:url('/assets/img/rodape-malha.svg') no-repeat right bottom/200px auto;opacity:.32;pointer-events:none;-webkit-mask-image:linear-gradient(90deg,transparent,#000 55%);mask-image:linear-gradient(90deg,transparent,#000 55%)}
 .ftr .wrap{position:relative;z-index:1}
 .ftr-main{display:grid;grid-template-columns:1.4fr .8fr .9fr 1.25fr 1.1fr 1.1fr;gap:26px;padding:34px 0 26px}
 .ftr h4{margin:0 0 4px;font-size:14px;font-weight:700;color:#fff;letter-spacing:0;text-transform:none}

@@ -26,30 +26,30 @@ cd frontend && npm install && npm run build      # checa tipos + build do React
 
 ## Arquitetura do backend (siga o padrão)
 
-`routes → controllers → services → repositories → MySQL`, com entidades em `entities/`.
+`backend/src/routes/ → controllers → services → repositories → MySQL`. Os CRUDs ficam em `backend/src/crud/<recurso>/`, com entidade, repositório, serviço e controller no mesmo diretório.
 
-- `entities/`: classes com campos privados, getters/setters **só quando há validação**, herdam de `BaseEntity` (abstrata).
-- `repositories/`: estendem `BaseRepository<T>` (genérico). SQL fica só aqui.
-- `services/`: estendem `CrudService<T, TInput>`. Regras de negócio ficam aqui.
-- `controllers/`: estendem `CrudController<T, TInput>`. Só lidam com HTTP.
-- `errors/AppError.ts`: erros customizados (`ValidationError`, `NotFoundError`...). Nunca lance `Error` genérico para erro de negócio.
-- `container.ts`: única raiz de composição (injeção de dependência manual).
+- Entidades CRUD herdam de `backend/src/shared/base/BaseEntity.ts`; mantenha campos encapsulados e getters/setters apenas quando houver validação.
+- Repositórios CRUD estendem `BaseRepository<T>` (`backend/src/shared/base/BaseRepository.ts`); SQL fica nos repositórios.
+- Serviços CRUD estendem `CrudService<T, TInput>` (`backend/src/shared/base/CrudService.ts`); regras de negócio ficam nos serviços.
+- Controllers CRUD estendem `CrudController<T, TInput>` (`backend/src/shared/base/CrudController.ts`); controllers específicos podem definir operações adicionais.
+- Autenticação, usuários e administração ficam em `backend/src/auth/`, `backend/src/users/` e `backend/src/admin/`; módulos específicos também podem usar `backend/src/contact/` e `backend/src/feedback/`.
+- `backend/src/errors/AppError.ts`: erros customizados (`ValidationError`, `NotFoundError`...). Nunca lance `Error` genérico para erro de negócio.
+- `backend/src/container.ts`: única raiz de composição (injeção de dependência manual).
 
 ## Arquitetura do frontend
 
-- `pages/`: uma pasta por recurso, com `XListPage` (listagem paginada) e `XFormPage` (cadastro/edição) em telas separadas.
+- `frontend/src/pages/`: CRUDs em `categorias/`, `produtos/`, `maquinas/` e `pedidos/`, com listagem paginada e formulário em telas separadas; a loja fica em `Loja/` e o painel em `admin/`.
 - `components/ui/`: componentes genéricos e reutilizáveis (`DataTable`, `FormField`, `Pagination`...).
 - `components/layout/`: estrutura de tela. Componentes usados por uma única página ficam como função separada no arquivo dessa página.
-- `pages/store/` + `components/store/`: loja (detalhe do produto, checkout, minha conta). `pages/admin/` + `components/admin/`: painel admin.
-- `context/CartContext.tsx` e `FavoritesContext.tsx`: carrinho e favoritos por usuário (no `localStorage`).
-- `context/AuthContext.tsx`: usuário logado global. Token JWT no `localStorage` (via `services/http.ts`).
-- `services/`: acesso à API. `hooks/`: lógica reutilizável de listagem e formulário.
+- `frontend/src/pages/Loja/` e `frontend/src/components/store/`: loja (detalhe do produto, checkout, minha conta); `frontend/src/pages/admin/` e `frontend/src/components/admin/`: painel admin.
+- `frontend/src/contexts/CartContext.tsx`, `FavoritesContext.tsx` e `AuthContext.tsx`: carrinho, favoritos e usuário logado global. O token JWT é armazenado no `localStorage`.
+- `frontend/src/services/apiClient.ts` e `CrudApi.ts`: acesso à API. `frontend/src/hooks/`: lógica reutilizável de listagem e formulário.
 
 ## Convenções de código
 
 - TypeScript estrito. **Proibido `any`** e proibido criar arquivos `.js`/`.jsx` de código-fonte.
 - Nomes: classes `PascalCase`, variáveis/funções `camelCase`, tabelas e colunas `snake_case`, textos da interface em português.
-- Toda rota, exceto `/api/auth/*` e `/api/health`, exige JWT. `/api/admin/*` exige também o claim `admin` do JWT (e-mails em `ADMIN_EMAILS`).
+- Toda rota exige JWT, exceto `/api/auth/*`, `/api/health`, as consultas somente leitura `GET /api/catalogo/*` e o envio público `POST /api/contact/messages`. Todas as rotas CRUD de categorias, produtos, máquinas e pedidos exigem JWT; `/api/admin/*` exige também o claim `admin` do JWT (e-mails em `ADMIN_EMAILS`).
 - Preço, frete e total de pedidos são sempre calculados no servidor; nunca confie em valores vindos do cliente.
 - Listagens sempre paginadas (`?page=&limit=`).
 - Editar/excluir recurso inexistente responde 404.

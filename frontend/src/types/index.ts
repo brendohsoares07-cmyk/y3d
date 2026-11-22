@@ -68,11 +68,17 @@ export type ClienteAdmin = {
   gasto: number;
   status: StatusCliente;
 };
+export type FaixaPedido = { faixa: string; quantidade: number };
+export type DispersaoCliente = { id: number; nome: string; pedidos: number; gasto: number };
+export type ReceitaCategoria = { categoria: string; receita: number };
 export type ResumoAdmin = {
   totalClientes: number;
   pedidos: number;
   receita: number;
   ticketMedio: number;
-  faturamentoMensal: Array<{ mes: string; valor: number }>;
+  faturamentoMensal: Array<{ mes: string; valor: number; tendencia: number }>;
+  distribuicaoPedidos: FaixaPedido[];
+  dispersaoClientes: DispersaoCliente[];
+  receitaPorCategoria: ReceitaCategoria[];
   topClientes: Array<{ id: number; nome: string; gasto: number }>;
 };

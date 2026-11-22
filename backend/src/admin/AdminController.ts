@@ -17,4 +17,21 @@ export class AdminController {
       req.query.status === "ativo" || req.query.status === "inativo" ? req.query.status : undefined;
     res.json(await this.service.clientes(page, limit, busca, status));
   };
+
+  avaliacoesAtendimento = async (_req: Request, res: Response): Promise<void> => {
+    res.json(await this.service.avaliacoesAtendimento());
+  };
+
+  avaliacoesProdutos = async (_req: Request, res: Response): Promise<void> => {
+    res.json(await this.service.avaliacoesProdutos());
+  };
+
+  mensagens = async (_req: Request, res: Response): Promise<void> => {
+    res.json(await this.service.mensagens());
+  };
+
+  marcarMensagemLida = async (req: Request, res: Response): Promise<void> => {
+    await this.service.marcarMensagemLida(Number(req.params.id));
+    res.json({ message: "Mensagem marcada como lida." });
+  };
 }

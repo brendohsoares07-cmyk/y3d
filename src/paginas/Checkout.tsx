@@ -95,7 +95,7 @@ export function PaginaCheckout() {
 
   const definir = (campo: keyof typeof campos) => (e: ChangeEvent<HTMLInputElement>) => setCampos((c) => ({ ...c, [campo]: e.target.value }));
 
-  // CPF: máscara + validação (mesma regra do PHP)
+  // CPF: máscara + validação.
   const conferirCpf = (valor: string, mostrarVazio: boolean): boolean => {
     const d = somenteDigitos(valor);
     let msg = "";

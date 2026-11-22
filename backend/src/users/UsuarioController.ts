@@ -17,4 +17,10 @@ export class UsuarioController {
     const usuario = await this.service.update(req.userId, parseId(req.params.id), req.body as UpdateUsuarioInput);
     res.json(usuario);
   };
+
+  atualizarFoto = async (req: Request, res: Response): Promise<void> => {
+    const body = req.body as Record<string, unknown>;
+    const arquivo = String(body?.arquivo ?? "");
+    res.json({ foto: await this.service.atualizarFoto(req.userId, arquivo) });
+  };
 }

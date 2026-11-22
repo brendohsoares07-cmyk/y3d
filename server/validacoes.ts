@@ -1,4 +1,4 @@
-/** Mesmas regras de includes/validacoes.php. A regra de CPF também existe em src/cpf.ts: se mudar aqui, mude lá. */
+/** Regras de validação compartilhadas; a regra de CPF também existe em src/cpf.ts. */
 
 export const somenteDigitos = (valor: string): string => valor.replace(/\D+/g, "");
 

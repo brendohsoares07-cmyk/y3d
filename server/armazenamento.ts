@@ -3,7 +3,7 @@ import path from "node:path";
 import { randomBytes } from "node:crypto";
 import { PASTA_DADOS } from "./config.js";
 
-/** Fila por arquivo: duas alterações ao mesmo tempo nunca se sobrescrevem (equivale ao flock do PHP). */
+/** Fila por arquivo: impede que duas alterações simultâneas se sobrescrevam. */
 const filas = new Map<string, Promise<void>>();
 
 async function comTrava<T>(nome: string, fn: () => Promise<T>): Promise<T> {

@@ -14,4 +14,5 @@ export interface IRepository<T extends BaseEntity> {
 /** Pedidos também podem ser listados por dono. */
 export interface IPedidoRepository extends IRepository<Pedido> {
   findPageByUsuario(usuarioId: number, page: number, limit: number): Promise<Page<Pedido>>;
+  informarPix(id: number, usuarioId: number): Promise<boolean>;
 }

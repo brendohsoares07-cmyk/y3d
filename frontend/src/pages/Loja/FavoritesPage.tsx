@@ -2,12 +2,12 @@ import { Link } from "react-router-dom";
 import { ProductCard } from "../../components/store/ProductCard";
 import { useFavorites } from "../../contexts/FavoritesContext";
 import { useOptions } from "../../hooks/useOptions";
-import { categoriasApi, produtosApi } from "../../services/resources";
+import { catalogoApi } from "../../services/resources";
 
 export function FavoritesPage() {
   const { ids } = useFavorites();
-  const produtos = useOptions(produtosApi);
-  const categorias = useOptions(categoriasApi);
+  const produtos = useOptions(catalogoApi.produtos);
+  const categorias = useOptions(catalogoApi.categorias);
   const favoritos = produtos.filter((p) => ids.includes(p.id));
 
   return (

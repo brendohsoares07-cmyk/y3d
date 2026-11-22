@@ -13,4 +13,15 @@ export class AuthController {
   login = async (req: Request, res: Response): Promise<void> => {
     res.json(await this.service.login(req.body as LoginInput));
   };
+
+  forgotPassword = async (req: Request, res: Response): Promise<void> => {
+    const body = req.body as Record<string, unknown>;
+    const fallbackUrl = `${req.protocol}://${req.get("host")}`;
+    res.json({ message: await this.service.forgotPassword(body?.email, fallbackUrl) });
+  };
+
+  resetPassword = async (req: Request, res: Response): Promise<void> => {
+    const body = req.body as Record<string, unknown>;
+    res.json({ message: await this.service.resetPassword(body?.token, body?.senha) });
+  };
 }

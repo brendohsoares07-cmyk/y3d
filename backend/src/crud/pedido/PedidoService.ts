@@ -60,4 +60,11 @@ export class PedidoService extends CrudService<Pedido, PedidoInput> {
   listByUsuario(usuarioId: number, page: number, limit: number): Promise<Page<Pedido>> {
     return this.pedidos.findPageByUsuario(usuarioId, page, limit);
   }
+
+  async informarPagamentoPix(id: number, usuarioId: number | undefined): Promise<void> {
+    if (!Number.isInteger(id) || id <= 0 || !usuarioId) throw new ValidationError("Pedido inválido.");
+    if (!(await this.pedidos.informarPix(id, usuarioId))) {
+      throw new NotFoundError("Pedido não encontrado ou não está aguardando confirmação de Pix.");
+    }
+  }
 }

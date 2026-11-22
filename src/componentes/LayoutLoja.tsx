@@ -166,7 +166,7 @@ export function LayoutAutenticacao() {
   );
 }
 
-/** Painel admin: usa só o admin.css, igual ao admin.php. */
+/** Painel admin: usa só o admin.css. */
 export function LayoutAdmin() {
   const pronto = useFolhaDeEstilo("/assets/css/admin.css");
   // o admin.css espera a barra lateral e o conteúdo como filhos diretos do body (body { display: flex });

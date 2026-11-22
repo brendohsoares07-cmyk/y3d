@@ -1,7 +1,7 @@
 import type { Request } from "express";
 import nodemailer from "nodemailer";
 
-/** Configuração SMTP (mesmas variáveis do site PHP). Para Gmail use uma "senha de app" do Google, nunca a senha normal. */
+/** Configuração SMTP. Para Gmail use uma "senha de app" do Google, nunca a senha normal. */
 function configuracao() {
   const host = (process.env.Y3D_SMTP_HOST || "smtp.gmail.com").trim();
   const usuario = (process.env.Y3D_SMTP_USER || "").trim();

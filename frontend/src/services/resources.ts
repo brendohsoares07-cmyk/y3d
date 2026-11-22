@@ -16,13 +16,30 @@ import {
   UpdateUsuarioInput,
   Usuario,
 } from "../types";
-import { CrudApi } from "./CrudApi";
+import { CrudApi, ListableApi } from "./CrudApi";
 import { request } from "./apiClient";
 
 export const categoriasApi = new CrudApi<Categoria, CategoriaInput>("categorias");
 export const produtosApi = new CrudApi<Produto, ProdutoInput>("produtos");
 export const maquinasApi = new CrudApi<Maquina, MaquinaInput>("maquinas");
 export const pedidosApi = new CrudApi<Pedido, PedidoInput>("pedidos");
+
+function catalogoPaginado<T>(recurso: string): Pick<ListableApi<T>, "list"> {
+  return {
+    list: (page, limit = 100) => {
+      const query = new URLSearchParams({ page: String(page), limit: String(limit) });
+      return request<Page<T>>(`/${recurso}?${query.toString()}`);
+    },
+  };
+}
+
+export const catalogoApi = {
+  categorias: catalogoPaginado<Categoria>("catalogo/categorias"),
+  produtos: {
+    ...catalogoPaginado<Produto>("catalogo/produtos"),
+    get: (id: number) => request<Produto>(`/catalogo/produtos/${id}`),
+  },
+};
 
 export const authApi = {
   login: (email: string, senha: string) =>
